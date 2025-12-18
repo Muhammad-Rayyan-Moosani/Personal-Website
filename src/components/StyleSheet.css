@@ -1,0 +1,245 @@
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.hero h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.hero h2 {
+  font-size: 28px;
+  opacity: 0.7;
+}
+
+.hero p {
+  font-size: 22px;
+  opacity: 0.5;
+}
+
+.about {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  max-width: 1000px; /* Limits how wide the text can go */
+  margin: 0 auto;   /* Centers the div horizontally */
+  text-align: center; /* Centers the text inside */
+  padding: 2rem;
+}
+
+.about h1 {
+  font-size: 64px;
+  margin-bottom: 40px;
+}
+
+.about p {
+  font-size: 30px;
+  opacity: 0.8;
+}
+
+.experience {
+  height: 100vh;
+  
+  
+
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  max-width: 1000px; /* Limits how wide the text can go */
+  margin: 0 auto;   /* Centers the div horizontally */
+  text-align: center; /* Centers the text inside */
+  padding: 2rem;
+}
+
+.experience h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.experience p {
+  font-size: 22px;
+  opacity: 0.8;
+}
+
+
+.experience-container {
+  display: flex;
+  flex-wrap: wrap;       /* allows wrapping to next row */
+  gap: 30px;             /* space between cards */
+  justify-content: center; /* center the row */
+}
+
+/* Each card will take ~45% width so two fit per row */
+.card {
+  flex: 1 1 45%; /* grow, shrink, basis */
+  max-width: 45%; /* ensure no more than 2 per row */
+  box-sizing: border-box;
+}
+
+/* Responsive: on small screens, 1 per row */
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+
+.projects {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.projects h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.projects p {
+  font-size: 22px;
+  opacity: 0.8;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px 0;
+  font-size: 20px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 100px;
+}
+
+.navbar ul li a {
+  color: #00eaff;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  transition: colour 0.15s, textshadow 0.15s;
+}
+
+.navbar ul li a:hover {
+  color: #00ff99;
+  text-shadow: 0 0 8px #00eaff, 0 0 15px #00ff99;
+}
+
+.navbar img {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+
+  /* Adjust position */
+  margin-left: 10px;   /* move right */
+  margin-right: 100px;  /* move left */
+  margin-top: -5px;     /* move down */
+  margin-bottom: 5px;
+}
+
+
+.contacts {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.contacts h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.contacts p {
+  font-size: 22px;
+  opacity: 0.8;
+}
+
+
+
+
+/* =========================
+   REUSABLE CARD COMPONENT
+   ========================= */
+
+.card {
+  position: relative;
+  width: 300px;
+  padding: 25px;
+  border-radius: 16px;
+  background-color: #0a122a; /* dark bluish background */
+  border: 2px solid white;
+  color: #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(96, 165, 250, 0.4);
+}
+
+.card-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-title a {
+  color: #60a5fa; /* link color */
+  text-decoration: none;
+}
+
+.card-title a:hover {
+  text-decoration: underline;
+  color: #38bdf8;
+}
+
+.card-role {
+  font-size: 1.2rem;
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+
+.card-date {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  font-size: 1rem;
+  white-space: pre-line;
+  color: #cbd5e1;
+  line-height: 1.6;
+  white-space: normal; /* ensure full text shows */
+}
