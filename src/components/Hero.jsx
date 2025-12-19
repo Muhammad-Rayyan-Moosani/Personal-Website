@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import "./StyleSheet.css";
 
 export default function Hero() {
-  const words = [" I am a Software Developer", " I am a Problem Solver", " I am a Learner"];
+  const words = ["a Software Developer", "a Problem Solver", "a Learner"];
   const [text, setText] = useState("");
   const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
@@ -15,21 +16,28 @@ export default function Hero() {
         setTimeout(() => {
           setText("");
           setCharIndex(0);
-          setIndex((index + 1) % words.length);
+          setIndex((prev) => (prev + 1) % words.length);
         }, 1500);
       }
     }, 100);
 
     return () => clearTimeout(timeout);
-  }, [charIndex, index]);
+  }, [charIndex, index, words]);
 
   return (
     <section className="hero">
+      {/* Static title (no typing) */}
       <h1 className="hero-title">
         Hey, I am Rayyan Moosani
       </h1>
-      <h2> Computer Science UnderGrad @ University Of Waterloo</h2>
-      <p className="hero-subtitle">{text}|</p>
+
+      <h2>Computer Science Undergrad @ University of Waterloo</h2>
+
+      {/* Static "I am" + dynamic typing */}
+      <p className="hero-subtitle">
+        I am <span className="typing">{text}</span>
+        <span className="cursor">|</span>
+      </p>
     </section>
   );
 }

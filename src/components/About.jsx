@@ -2,11 +2,16 @@ import "./StyleSheet.css";
 
 export default function About() {
   return (
-    <section className="about" id= "about">
-      <h1>About Me</h1>
-      <p> Hi! I’m Muhammad Rayyan, a passionate software developer and problem solver. I love creating interactive and visually appealing web applications, exploring new technologies, and building projects that make a real impact. From designing sleek user interfaces to writing clean, efficient code, I enjoy turning ideas into functional digital experiences.
+    <section className="about-section" id="about">
+      <h1 className="about-heading">About Me</h1>
 
-When I’m not coding, you can find me playing cricket, learning about AI and cybersecurity, or exploring innovative tech solutions. I aim to combine creativity and logic to build applications that are not only functional but also enjoyable to use.</p>
+      <div className="about-box">
+        <p>
+          I am a Computer Science undergraduate at University of Waterloo, passionate about AI, 
+          cybersecurity, and software development. I enjoy building projects that solve real-world 
+          problems and contribute positively to technology.
+        </p>
+      </div>
     </section>
   );
 }

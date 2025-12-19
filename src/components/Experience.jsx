@@ -11,7 +11,7 @@ export default function Experience() {
     },
     {
       title: "Scitra",
-      description: "Software Developer \n Built automation tools and improved system performance...",
+      description: "Software Developer\nBuilt automation tools and improved system performance...",
       date: "Aug 2024 – Sep 2024",
       link: "https://www.iicuwaterloo.com/"
     },
@@ -27,23 +27,23 @@ export default function Experience() {
       date: "Aug 2024 – Sep 2025",
       link: "https://www.iicuwaterloo.com/"
     }
-
   ];
 
   return (
     <section className="experience" id="experience">
       <h1>Experience</h1>
 
-      {/* 👇 THIS container makes them side-by-side */}
-      <div className="experience-container">
+      <div className="timeline">
         {experiences.map((exp, index) => (
-          <Card
-            key={index}
-            title={exp.title}
-            description={exp.description}
-            date={exp.date}
-            link={exp.link}
-          />
+          <div className="timeline-item" key={index}>
+            <div className="timeline-dot" />
+            <Card
+              title={exp.title}
+              description={exp.description}
+              date={exp.date}
+              link={exp.link}
+            />
+          </div>
         ))}
       </div>
     </section>

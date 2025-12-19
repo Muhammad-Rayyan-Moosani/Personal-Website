@@ -1,3 +1,6 @@
+/* =========================
+   HERO SECTION
+   ========================= */
 .hero {
   height: 100vh;
   display: flex;
@@ -24,48 +27,70 @@
   opacity: 0.5;
 }
 
-.about {
-  height: 100vh;
+/* =========================
+   ABOUT SECTION
+   ========================= */
+.about-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
+  margin: 50px auto;
   font-family: 'Orbitron', sans-serif;
-  max-width: 1000px; /* Limits how wide the text can go */
-  margin: 0 auto;   /* Centers the div horizontally */
-  text-align: center; /* Centers the text inside */
-  padding: 2rem;
+  color: white;
 }
 
-.about h1 {
+.about-heading {
   font-size: 64px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  display: inline-block;
+  position: relative;
 }
 
-.about p {
-  font-size: 30px;
+/* Optional underline */
+.about-heading::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #00eaff;
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+/* The actual box for content */
+.about-box {
+  max-width: 800px;
+  background-color: #0a122a;
+  border: 2px solid #00eaff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 234, 255, 0.2);
+  margin-bottom: 190px;
+}
+
+.about-box p {
+  font-size: 22px;
   opacity: 0.8;
+  line-height: 1.6;
+  text-align: center;
 }
 
+/* =========================
+   EXPERIENCE SECTION
+   ========================= */
 .experience {
   height: 100vh;
-  
-  
-
   color: white;
   text-align: center;
   font-family: 'Orbitron', sans-serif;
-  max-width: 1000px; /* Limits how wide the text can go */
-  margin: 0 auto;   /* Centers the div horizontally */
-  text-align: center; /* Centers the text inside */
+  max-width: 1000px;
+  margin: 150px auto 0 auto; /* space above section */
   padding: 2rem;
 }
 
 .experience h1 {
   font-size: 64px;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
 }
 
 .experience p {
@@ -73,32 +98,18 @@
   opacity: 0.8;
 }
 
-
 .experience-container {
   display: flex;
-  flex-wrap: wrap;       /* allows wrapping to next row */
-  gap: 30px;             /* space between cards */
-  justify-content: center; /* center the row */
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
 }
 
-/* Each card will take ~45% width so two fit per row */
-.card {
-  flex: 1 1 45%; /* grow, shrink, basis */
-  max-width: 45%; /* ensure no more than 2 per row */
-  box-sizing: border-box;
-}
-
-/* Responsive: on small screens, 1 per row */
-@media (max-width: 768px) {
-  .card {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
-}
-
-
+/* =========================
+   PROJECTS SECTION
+   ========================= */
 .projects {
-  height: 40vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,6 +117,9 @@
   color: white;
   text-align: center;
   font-family: 'Orbitron', sans-serif;
+  max-width: 1000px;
+  margin: 500px auto 0 auto;
+  padding: 2rem;
 }
 
 .projects h1 {
@@ -118,88 +132,51 @@
   opacity: 0.8;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.8);
+/* Container for project cards */
+.projects-grid {
   display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
   justify-content: center;
-  z-index: 10;
-  padding: 20px 0;
-  font-size: 20px;
+  margin-top: 2rem;
 }
 
-.navbar ul {
-  list-style: none;
-  display: flex;
-  gap: 100px;
-}
-
-.navbar ul li a {
-  color: #00eaff;
-  text-decoration: none;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  transition: colour 0.15s, textshadow 0.15s;
-}
-
-.navbar ul li a:hover {
-  color: #00ff99;
-  text-shadow: 0 0 8px #00eaff, 0 0 15px #00ff99;
-}
-
-.navbar img {
-  height: 40px;
-  width: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-
-  /* Adjust position */
-  margin-left: 10px;   /* move right */
-  margin-right: 100px;  /* move left */
-  margin-top: -5px;     /* move down */
-  margin-bottom: 5px;
-}
-
-
-.contacts {
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.contacts h1 {
-  font-size: 64px;
-  margin-bottom: 20px;
-}
-
-.contacts p {
-  font-size: 22px;
-  opacity: 0.8;
-}
-
-
-
-
-/* =========================
-   REUSABLE CARD COMPONENT
-   ========================= */
-
-.card {
-  position: relative;
-  width: 300px;
+/* Project cards: two per row, wide rectangles */
+.projects-grid .card {
+  flex: 1 1 45%;
+  max-width: 45%;
   padding: 25px;
   border-radius: 16px;
-  background-color: #0a122a; /* dark bluish background */
+  background-color: #0a122a;
+  border: 2px solid #00eaff;
+  color: #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.projects-grid .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(96, 165, 250, 0.4);
+}
+
+/* =========================
+   CARD STYLING
+   ========================= */
+.card {
+  flex: 1 1 45%;
+  max-width: 45%;
+  box-sizing: border-box;
+  padding: 25px;
+  border-radius: 16px;
+  background-color: #0a122a;
   border: 2px solid white;
   color: #e5e7eb;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .card:hover {
@@ -212,10 +189,27 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 5px;
+  position: relative;
+  display: inline-block;
+}
+
+.card-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background-color: #00eaff;
+  transition: width 0.3s ease;
+}
+
+.card-title:hover::after {
+  width: 100%;
 }
 
 .card-title a {
-  color: #60a5fa; /* link color */
+  color: #60a5fa;
   text-decoration: none;
 }
 
@@ -238,8 +232,293 @@
 
 .card-description {
   font-size: 1rem;
-  white-space: pre-line;
   color: #cbd5e1;
   line-height: 1.6;
-  white-space: normal; /* ensure full text shows */
+  white-space: pre-line;
+}
+
+/* =========================
+   NAVBAR
+   ========================= */
+.navbar {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 10;
+  padding: 30px 0 10px;
+  font-size: 20px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 100px;
+}
+
+.navbar ul li a {
+  color: #00eaff;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+}
+
+.navbar ul li a:hover {
+  color: #00ff99;
+  text-shadow: 0 0 8px #00eaff, 0 0 15px #00ff99;
+}
+
+.navbar img {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 100px;
+  margin-top: -5px;
+  margin-bottom: 5px;
+}
+
+/* =========================
+   CONTACTS
+   ========================= */
+.contacts {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.contacts h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.contacts p {
+  font-size: 22px;
+  opacity: 0.8;
+}
+
+.contacts .social-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =========================
+   TIMELINE
+   ========================= */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 40px;
+  margin-left: -50px;
+  margin-top: 2rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 4px;
+  height: 100%;
+  background-color: #00eaff;
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #00eaff;
+  border: 3px solid white;
+  border-radius: 50%;
+}
+
+.timeline-item .card {
+  flex: 1;
+  width: 100%;
+  max-width: 800px;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #0a122a;
+  border: 2px solid #00eaff;
+  margin-left: 40px;
+}
+
+/* =========================
+   TYPING CURSOR
+   ========================= */
+.typing {
+  color: #00eaff;
+  font-weight: bold;
+}
+
+.cursor {
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+/* =========================
+   UNDERLINE FOR HEADINGS
+   ========================= */
+.experience h1,
+.projects h1,
+.about h1,
+.contacts h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.experience h1::after,
+.projects h1::after,
+.about h1::after,
+.contacts h1::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #00eaff;
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+/* =========================
+   SCROLL MARGIN FOR FIXED NAVBAR
+   ========================= */
+#about,
+#experience,
+#projects,
+#contacts {
+  scroll-margin-top: 100px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Hero */
+  .hero h1 {
+    font-size: 40px;
+  }
+  .hero h2 {
+    font-size: 20px;
+  }
+  .hero p {
+    font-size: 16px;
+  }
+
+  /* About Section */
+  .about-heading {
+    font-size: 40px;
+  }
+  .about-box {
+    max-width: 95%;
+    padding: 20px;
+    margin-bottom: 80px;
+  }
+  .about-box p {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  /* Experience Section */
+  .experience {
+    margin-top: 100px;
+    padding: 1rem;
+  }
+  .experience h1 {
+    font-size: 40px;
+    margin-bottom: 40px;
+  }
+
+  /* Timeline adjustments */
+  .timeline {
+    padding-left: 20px;
+    margin-left: 0;
+  }
+  .timeline::before {
+    left: 12px;
+  }
+  .timeline-dot {
+    left: 4px;
+  }
+  .timeline-item .card {
+    margin-left: 30px;
+    width: calc(100% - 30px);
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  /* Projects Section */
+  .projects {
+    margin-top: 100px;
+    padding: 1rem;
+  }
+  .projects h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .projects p {
+    font-size: 16px;
+  }
+  .projects-grid .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  /* Navbar */
+  .navbar {
+    padding: 15px 0;
+    font-size: 18px;
+  }
+  .navbar ul {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .navbar img {
+    margin-right: 20px;
+  }
+
+  /* Contacts Section */
+  .contacts h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  .contacts p {
+    font-size: 16px;
+  }
+  .contacts .social-links {
+    gap: 15px;
+  }
 }
