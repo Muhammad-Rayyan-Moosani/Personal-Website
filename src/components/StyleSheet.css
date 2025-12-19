@@ -595,3 +595,83 @@
   font-weight: bold;
   color: #00eaff; /* or another color of your choice */
 }
+
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 768px) {
+  
+  /* Hero section */
+  .hero h1 {
+    font-size: 36px;
+  }
+  .hero h2 {
+    font-size: 20px;
+  }
+  .hero p {
+    font-size: 16px;
+  }
+
+  /* About section */
+  .about-heading {
+    font-size: 36px;
+  }
+  .about-box {
+    max-width: 95%;
+    padding: 20px;
+  }
+  .about-box p {
+    font-size: 18px;
+  }
+
+  /* Experience heading */
+  .experience h1 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  .timeline-item .card {
+    margin-left: 20px;
+    width: calc(100% - 40px);
+    padding: 20px;
+  }
+  .timeline::before {
+    left: 10px;
+  }
+  .timeline-dot {
+    left: 4px;
+  }
+
+  /* Projects heading */
+  .projects h1 {
+    font-size: 36px;
+  }
+  .projects p {
+    font-size: 18px;
+  }
+  .projects-grid .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  /* Navbar */
+  .navbar ul {
+    gap: 20px;
+    font-size: 16px;
+  }
+  .navbar img {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+  }
+
+  /* Contacts */
+  .contacts h1 {
+    font-size: 36px;
+  }
+  .contacts p {
+    font-size: 18px;
+  }
+  .contacts .social-links a {
+    font-size: 18px;
+  }
+}
