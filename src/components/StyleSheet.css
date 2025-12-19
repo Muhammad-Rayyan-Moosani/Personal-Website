@@ -493,44 +493,46 @@
 @media (max-width: 768px) {
 
   /* Hero */
+  .hero {
+    padding: 2rem 1rem;
+  }
   .hero h1 {
-    font-size: 40px;
+    font-size: 42px;
+    line-height: 1.2;
   }
   .hero h2 {
     font-size: 20px;
+    line-height: 1.2;
   }
   .hero p {
     font-size: 16px;
   }
 
   /* About Section */
-  .about-heading {
-    font-size: 40px;
-  }
   .about-box {
     max-width: 95%;
-    padding: 20px;
-    margin-bottom: 80px;
+    padding: 25px;
+    margin-bottom: 60px;
   }
   .about-box p {
     font-size: 18px;
-    line-height: 1.4;
+    line-height: 1.5;
+  }
+  .about-heading {
+    font-size: 36px;
   }
 
   /* Experience Section */
   .experience {
-    margin-top: 100px;
+    margin-top: 80px;
     padding: 1rem;
   }
   .experience h1 {
-    font-size: 40px;
+    font-size: 36px;
     margin-bottom: 40px;
   }
-
-  /* Timeline adjustments */
   .timeline {
     padding-left: 20px;
-    margin-left: 0;
   }
   .timeline::before {
     left: 12px;
@@ -551,8 +553,8 @@
     padding: 1rem;
   }
   .projects h1 {
-    font-size: 40px;
-    margin-bottom: 20px;
+    font-size: 36px;
+    margin-bottom: 30px;
   }
   .projects p {
     font-size: 16px;
@@ -573,12 +575,15 @@
     gap: 15px;
   }
   .navbar img {
+    height: 30px;
+    width: 30px;
     margin-right: 20px;
+    margin-bottom: 10px;
   }
 
   /* Contacts Section */
   .contacts h1 {
-    font-size: 40px;
+    font-size: 36px;
     margin-bottom: 20px;
   }
   .contacts p {
@@ -587,6 +592,19 @@
   .contacts .social-links {
     gap: 15px;
   }
+  .contacts .social-links a img {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Optional: smaller underline for headings */
+  .experience h1::after,
+  .projects h1::after,
+  .about h1::after,
+  .contacts h1::after {
+    width: 40px;
+    height: 2px;
+  }
 }
 
 
@@ -594,84 +612,4 @@
 .highlight {
   font-weight: bold;
   color: #00eaff; /* or another color of your choice */
-}
-
-
-/* ===== Responsive adjustments ===== */
-@media (max-width: 768px) {
-  
-  /* Hero section */
-  .hero h1 {
-    font-size: 36px;
-  }
-  .hero h2 {
-    font-size: 20px;
-  }
-  .hero p {
-    font-size: 16px;
-  }
-
-  /* About section */
-  .about-heading {
-    font-size: 36px;
-  }
-  .about-box {
-    max-width: 95%;
-    padding: 20px;
-  }
-  .about-box p {
-    font-size: 18px;
-  }
-
-  /* Experience heading */
-  .experience h1 {
-    font-size: 36px;
-    margin-bottom: 40px;
-  }
-  .timeline-item .card {
-    margin-left: 20px;
-    width: calc(100% - 40px);
-    padding: 20px;
-  }
-  .timeline::before {
-    left: 10px;
-  }
-  .timeline-dot {
-    left: 4px;
-  }
-
-  /* Projects heading */
-  .projects h1 {
-    font-size: 36px;
-  }
-  .projects p {
-    font-size: 18px;
-  }
-  .projects-grid .card {
-    flex: 1 1 100%;
-    max-width: 100%;
-    padding: 20px;
-  }
-
-  /* Navbar */
-  .navbar ul {
-    gap: 20px;
-    font-size: 16px;
-  }
-  .navbar img {
-    height: 30px;
-    width: 30px;
-    margin-right: 20px;
-  }
-
-  /* Contacts */
-  .contacts h1 {
-    font-size: 36px;
-  }
-  .contacts p {
-    font-size: 18px;
-  }
-  .contacts .social-links a {
-    font-size: 18px;
-  }
 }
