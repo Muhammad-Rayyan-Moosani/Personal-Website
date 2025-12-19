@@ -1,6 +1,3 @@
-/* =========================
-   HERO SECTION
-   ========================= */
 .hero {
   height: 100vh;
   display: flex;
@@ -27,9 +24,6 @@
   opacity: 0.5;
 }
 
-/* =========================
-   ABOUT SECTION
-   ========================= */
 .about-section {
   display: flex;
   flex-direction: column;
@@ -75,16 +69,14 @@
   text-align: center;
 }
 
-/* =========================
-   EXPERIENCE SECTION
-   ========================= */
 .experience {
   height: 100vh;
   color: white;
   text-align: center;
   font-family: 'Orbitron', sans-serif;
-  max-width: 1000px;
-  margin: 150px auto 0 auto; /* space above section */
+  max-width: 1000px; /* Limits how wide the text can go */
+  margin: 150px auto 0 auto;   /* adjust 150px as needed */   /* Centers the div horizontally */
+  text-align: center; /* Centers the text inside */
   padding: 2rem;
 }
 
@@ -98,13 +90,13 @@
   opacity: 0.8;
 }
 
+
 .experience-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
+  flex-wrap: wrap;       /* allows wrapping to next row */
+  gap: 30px;             /* space between cards */
+  justify-content: center; /* center the row */
 }
-
 /* =========================
    PROJECTS SECTION
    ========================= */
@@ -117,8 +109,8 @@
   color: white;
   text-align: center;
   font-family: 'Orbitron', sans-serif;
-  max-width: 1000px;
-  margin: 500px auto 0 auto;
+  max-width: 2000px;
+  margin: 1500px auto 0 auto; /* increased top margin */
   padding: 2rem;
 }
 
@@ -132,56 +124,52 @@
   opacity: 0.8;
 }
 
-/* Container for project cards */
-.projects-grid {
+/* Container for cards */
+.projects-container {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
   justify-content: center;
+  width: 100%;
   margin-top: 2rem;
 }
 
-/* Project cards: two per row, wide rectangles */
-.projects-grid .card {
-  flex: 1 1 45%;
-  max-width: 45%;
-  padding: 25px;
-  border-radius: 16px;
-  background-color: #0a122a;
-  border: 2px solid #00eaff;
-  color: #e5e7eb;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.projects-grid .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(96, 165, 250, 0.4);
-}
-
-/* =========================
-   CARD STYLING
-   ========================= */
+/* Individual card */
 .card {
-  flex: 1 1 45%;
+  flex: 1 1 45%;       /* Grow, shrink, basis for 2 per row */
   max-width: 45%;
   box-sizing: border-box;
+
   padding: 25px;
   border-radius: 16px;
   background-color: #0a122a;
   border: 2px solid white;
   color: #e5e7eb;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
+/* Hover effect */
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 40px rgba(96, 165, 250, 0.4);
+}
+
+/* Card content styling */
+.card-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-title a {
+  color: #60a5fa; /* link color */
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 .card-title {
@@ -189,15 +177,15 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 5px;
-  position: relative;
-  display: inline-block;
+  position: relative; /* needed for the pseudo-element */
+  display: inline-block; /* shrink to fit text */
 }
 
 .card-title::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -4px;
+  bottom: -4px; /* space below text */
   width: 0%;
   height: 2px;
   background-color: #00eaff;
@@ -206,11 +194,6 @@
 
 .card-title:hover::after {
   width: 100%;
-}
-
-.card-title a {
-  color: #60a5fa;
-  text-decoration: none;
 }
 
 .card-title a:hover {
@@ -237,9 +220,14 @@
   white-space: pre-line;
 }
 
-/* =========================
-   NAVBAR
-   ========================= */
+/* Responsive: 1 card per row on small screens */
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
 .navbar {
   position: fixed;
   top: 0px;
@@ -264,6 +252,7 @@
   text-decoration: none;
   font-family: 'Orbitron', sans-serif;
   font-weight: 600;
+  transition: colour 0.15s, textshadow 0.15s;
 }
 
 .navbar ul li a:hover {
@@ -276,15 +265,15 @@
   width: 40px;
   object-fit: cover;
   border-radius: 50%;
-  margin-left: 10px;
-  margin-right: 100px;
-  margin-top: -5px;
+
+  /* Adjust position */
+  margin-left: 10px;   /* move right */
+  margin-right: 100px;  /* move left */
+  margin-top: -5px;     /* move down */
   margin-bottom: 5px;
 }
 
-/* =========================
-   CONTACTS
-   ========================= */
+
 .contacts {
   height: 40vh;
   display: flex;
@@ -306,23 +295,17 @@
   opacity: 0.8;
 }
 
-.contacts .social-links {
-  margin-top: 20px;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
+
 
 /* =========================
-   TIMELINE
+   EXPERIENCE TIMELINE
    ========================= */
 .timeline {
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-left: 40px;
-  margin-left: -50px;
+  padding-left: 60px;  /* more space on the left */
+  margin-left: 0px;     /* remove the left shift */
   margin-top: 2rem;
 }
 
@@ -330,7 +313,7 @@
   content: "";
   position: absolute;
   top: 0;
-  left: 20px;
+  left: 40px; /* adjust so the vertical line aligns with the new padding */
   width: 4px;
   height: 100%;
   background-color: #00eaff;
@@ -346,9 +329,9 @@
 
 .timeline-dot {
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 12px; /* aligns dot with new line position */
+  top: 50%;   /* center vertically relative to card */
+  transform: translateY(-50%); /* perfect vertical alignment */
   width: 16px;
   height: 16px;
   background-color: #00eaff;
@@ -364,12 +347,88 @@
   border-radius: 12px;
   background-color: #0a122a;
   border: 2px solid #00eaff;
-  margin-left: 40px;
+  margin-left: 40px; /* space between dot and card */
+}
+
+/* Responsive: small screens */
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    left: 20px;
+  }
+
+  .timeline-dot {
+    left: 12px;
+  }
+
+  .timeline-item .card {
+    margin-left: 20px;
+    width: calc(100% - 20px);
+  }
 }
 
 /* =========================
-   TYPING CURSOR
+   PROJECTS GRID
    ========================= */
+.projects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Project cards: two per row, wide rectangles */
+.projects-grid .card {
+  flex: 1 1 45%;      /* 2 cards per row */
+  max-width: 45%;
+  padding: 25px;
+  border-radius: 16px;
+  background-color: #0a122a;
+  border: 2px solid #00eaff;
+  color: #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.projects-grid .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(96, 165, 250, 0.4);
+}
+
+/* Responsive: 1 card per row on small screens */
+@media (max-width: 768px) {
+  .projects-grid .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+.contacts .social-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px; /* space between icons */
+  justify-content: center;
+  align-items: center;
+}
+
+.contacts .social-links a img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.contacts .social-links a img:hover {
+  transform: scale(1.2);
+  filter: brightness(1.3);
+}
+
 .typing {
   color: #00eaff;
   font-weight: bold;
@@ -385,41 +444,48 @@
   25%, 75% { opacity: 0; }
 }
 
-/* =========================
-   UNDERLINE FOR HEADINGS
-   ========================= */
+
+.experience, .projects, .about, .contacts {
+  scroll-margin-top: 100px; /* height of your fixed navbar + extra spacing */
+}
+/* Add space below heading and a simple underline */
 .experience h1,
 .projects h1,
 .about h1,
 .contacts h1 {
   font-size: 64px;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* space between heading and text */
   position: relative;
-  display: inline-block;
+  display: inline-block; /* shrink to fit the text */
 }
 
+/* The underline itself */
 .experience h1::after,
 .projects h1::after,
 .about h1::after,
 .contacts h1::after {
   content: "";
   display: block;
-  width: 60px;
-  height: 3px;
-  background-color: #00eaff;
-  margin-top: 8px;
-  border-radius: 2px;
+  width: 60px;           /* length of the underline */
+  height: 3px;           /* thickness of the underline */
+  background-color: #00eaff; /* underline color */
+  margin-top: 8px;       /* space between text and line */
+  border-radius: 2px;    /* optional rounded edges */
 }
 
-/* =========================
-   SCROLL MARGIN FOR FIXED NAVBAR
-   ========================= */
+
+
+
+/* Add to all sections you scroll to */
 #about,
 #experience,
 #projects,
 #contacts {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 100px; /* height of your fixed navbar + some space */
 }
+
+
+
 
 /* =========================
    MOBILE RESPONSIVE
@@ -521,4 +587,11 @@
   .contacts .social-links {
     gap: 15px;
   }
+}
+
+
+/* Highlight important keywords in project descriptions */
+.highlight {
+  font-weight: bold;
+  color: #00eaff; /* or another color of your choice */
 }
