@@ -4,28 +4,48 @@ import Card from "./Card.jsx";
 export default function Experience() {
   const experiences = [
     {
-      title: "IICUW",
-      description: "Optimized frontend interfaces to achieve a 20% improvement in load times, resulting in a smoother and more responsive user experience. Designed, built, and deployed Discord bots to automate 3–5 routine tasks, reducing the team’s manual workload by up to 40%. Developed interactive bot features that supported over 100 active users and significantly increased server engagement. Contributed to six successful feature updates by writing clean, maintainable code and collaborating effectively using modern web development tools.",
+      title: "IICUW - Web Developer",
       date: "Sep 2025 – Dec 2025",
-      link: "https://www.iicuwaterloo.com/"
+      link: "https://www.iicuwaterloo.com/",
+      bullets: [
+        "Optimized frontend interfaces to improve load times by 20%",
+        "Designed and deployed Discord bots automating 3–5 routine tasks",
+        "Reduced manual workload by up to 40% through automation",
+        "Built interactive bot features supporting 100+ active users",
+        "Contributed to 6 production feature updates using clean, maintainable code"
+      ]
     },
     {
-      title: "Scitra",
-      description: "Built a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across more than 30 production lines. Implemented a streamlined, automated reporting workflow that reduced reporting latency by 40% and improved data reliability. Designed and developed 3D digital twins of factory machinery using Unity and C#, integrating real-time IoT sensor streams to support predictive maintenance initiatives. Automated error logging and diagnostics, improving the engineering team’s root-cause identification speed by 30%.",
+      title: "Scitra - Software Optimisation Engineer",
       date: "July 2024 – Aug 2024",
-      link: "https://www.albatha.com/scitra.htm"
+      link: "https://www.albatha.com/scitra.htm",
+      bullets: [
+        "Built a Python Telegram bot with Google Sheets API for real-time issue reporting across 30+ production lines",
+        "Reduced reporting latency by 40% through automated workflows",
+        "Developed Unity/C# 3D digital twins with live IoT data for predictive maintenance",
+        "Automated error logging, improving root-cause analysis speed by 30%"
+      ]
     },
     {
-      title: "Medad",
-      description: "Developed a strong understanding of the end-to-end packaging production workflow, spanning design, printing, and quality control. Gained hands-on experience with quality inspection processes, including the use of microscopes to evaluate print accuracy and packaging details. Assisted the design team with foundational tasks, building practical knowledge of graphic design principles and print-ready artwork preparation.",
+      title: "Medad - Operations Optimiser",
       date: "July 2025 – Aug 2025",
-      link: "https://www.albatha.com/medad-printing.htm"
+      link: "https://www.albatha.com/medad-printing.htm",
+      bullets: [
+        "Gained hands-on experience across the full packaging production workflow",
+        "Performed quality inspections using microscopes for print accuracy",
+        "Assisted design team with print-ready artwork preparation",
+        "Developed practical understanding of graphic design principles"
+      ]
     },
     {
       title: "AGMC",
-      description: "Developed a strong understanding of the end-to-end packaging production workflow, spanning design, printing, and quality control. Gained hands-on experience with quality inspection processes, including the use of microscopes to evaluate print accuracy and packaging details. Assisted the design team with foundational tasks, building practical knowledge of graphic design principles and print-ready artwork preparation.",
       date: "June 2024 – July 2024",
-      link: "https://www.bmw-dubai.com/"
+      link: "https://www.bmw-dubai.com/",
+      bullets: [
+        "Observed end-to-end automotive service and operations workflow",
+        "Assisted technical teams with inspection and diagnostics processes",
+        "Developed understanding of quality control in automotive systems"
+      ]
     }
   ];
 
@@ -35,11 +55,14 @@ export default function Experience() {
 
       <div className="timeline">
         {experiences.map((exp, index) => (
-          <div className="timeline-item" key={index}>
+          <div
+            className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
+            key={index}
+          >
             <div className="timeline-dot" />
             <Card
               title={exp.title}
-              description={exp.description}
+              bullets={exp.bullets}
               date={exp.date}
               link={exp.link}
             />

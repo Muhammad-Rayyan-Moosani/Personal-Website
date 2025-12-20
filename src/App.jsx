@@ -6,8 +6,11 @@ import Projects from "./components/Projects";
 import Navbar from "./components/Navbar";
 import Contacts from "./components/Contacts";
 import "./index.css";
+import useScrollBullets from "./useScrollBullets";
 
 function App() {
+
+  useScrollBullets();
   return (
     <>
       <Background />
