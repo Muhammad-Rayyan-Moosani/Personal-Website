@@ -25,7 +25,7 @@ export default function Hero() {
   }, [charIndex, index, words]);
 
   return (
-    <section className="hero">
+    <section className="hero" id = 'home'>
       {/* Static title (no typing) */}
       <h1 className="hero-title">
         Hey, I am Rayyan Moosani

@@ -433,8 +433,8 @@
   scroll-margin-top: 100px;
 }
 
-#about, #experience, #projects, #contacts {
-  scroll-margin-top: 100px;
+#home, #about, #experience, #projects, #contacts {
+  scroll-margin-top: 250px;
 }
 
 /* =========================
@@ -502,3 +502,49 @@
   font-weight: 600;
 }
 
+
+
+/* StyleSheet.css */
+
+/* Contact box styling */
+.contact-box {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #0a122a; /* same as cards */
+  border: 2px solid #00eaff;
+  transition: transform 0.3s, box-shadow 0.3s; /* animation */
+}
+
+/* Hover effect */
+.contact-box:hover {
+  transform: translateY(-5px); /* lift effect */
+  box-shadow: 0 8px 20px rgba(0, 234, 255, 0.3); /* subtle shadow */
+}
+
+/* Apply to any link container */
+.contact-links a {
+  color: white;            /* link color */
+  text-decoration: none;   /* remove default underline */
+  position: relative;      /* needed for ::after positioning */
+  padding-bottom: 2px;     /* some spacing for the underline */
+  transition: color 0.3s;
+}
+
+/* Create the underline */
+.contact-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;               /* start hidden */
+  height: 2px;
+  background-color: #00eaff; /* same accent color as cards */
+  transition: width 0.3s ease-in-out;
+}
+
+/* Animate on hover */
+.contact-links a:hover::after {
+  width: 100%;
+}

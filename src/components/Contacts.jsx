@@ -7,7 +7,7 @@ export default function Contacts() {
       <p>Let’s connect</p>
 
       <div
-  className="social-links"
+  className="contact-box"
   style={{
     maxWidth: '500px',
     width: '300px',
@@ -23,7 +23,7 @@ export default function Contacts() {
   }}
 >
   {/* Top row: Links */}
-  <div
+  <div className="contact-links"
     style={{
       display: 'flex',
       gap: '20px',       // space between links

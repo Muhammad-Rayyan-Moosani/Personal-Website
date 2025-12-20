@@ -1,6 +1,6 @@
 import React from "react";
 import "./StyleSheet.css";
-import logo from "./IMG_3529.JPG"
+import logo from "./View recent photos.png"
 
 export default function Navbar() {
   return (
@@ -12,12 +12,82 @@ export default function Navbar() {
 
       {/* Navigation links */}
       <ul className="navbar-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About Me</a></li>
-        
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contacts">Contact</a></li>
+        <li>
+  <a
+    href="#home"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("home")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }}
+  >
+    Home
+  </a>
+</li>
+
+  <li>
+  <a
+    href="#about"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("about")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }}
+  >
+    About Me
+  </a>
+</li>
+
+
+
+<li>
+  <a
+    href="#experience"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("experience")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }}
+  >
+    Experience
+  </a>
+</li>
+
+<li>
+  <a
+    href="#projects"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("projects")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }}
+  >
+    Projects
+  </a>
+</li>
+
+<li>
+  <a
+    href="#contacts"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById("contacts")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }}
+  >
+    Contact
+  </a>
+</li>
       </ul>
     </nav>
   );
