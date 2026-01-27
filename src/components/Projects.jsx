@@ -1,9 +1,36 @@
+import { useEffect, useRef } from "react";
 import "./StyleSheet.css";
 import Card from "./Card.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
 
 export default function Projects() {
+  const gridRef = useRef(null);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+
+    if (gridRef.current) {
+      const cards = gridRef.current.querySelectorAll(".card");
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        observer.observe(card);
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const projects = [
     {
       title: "Games.Random",
@@ -89,7 +116,7 @@ export default function Projects() {
       <h1>Projects</h1>
       
       {/* Container for cards */}
-      <div className="projects-grid">
+      <div className="projects-grid" ref={gridRef}>
         {projects.map((project, index) => (
           <Card
             key={index}

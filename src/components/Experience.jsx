@@ -1,7 +1,34 @@
+import { useEffect, useRef } from "react";
 import "./StyleSheet.css";
 import Card from "./Card.jsx";
 
 export default function Experience() {
+  const timelineRef = useRef(null);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+
+    if (timelineRef.current) {
+      const items = timelineRef.current.querySelectorAll(".timeline-item");
+      items.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.15}s`;
+        observer.observe(item);
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const experiences = [
     {
       title: "IICUW - Web Developer",
@@ -53,7 +80,7 @@ export default function Experience() {
     <section className="experience" id="experience">
       <h1>Experience</h1>
 
-      <div className="timeline">
+      <div className="timeline" ref={timelineRef}>
         {experiences.map((exp, index) => (
           <div
             className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}

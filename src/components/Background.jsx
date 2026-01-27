@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Background() {
   const canvasRef = useRef(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -11,6 +13,13 @@ export default function Background() {
     let particles = [];
     let animationFrameId;
     const particleCount = 130;
+    
+    // Theme-based colors
+    const isDark = theme === 'dark';
+    const bgColor = isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.05)';
+    const gridColor = isDark ? 'rgba(0, 255, 255, 0.1)' : 'rgba(0, 234, 255, 0.15)';
+    const particleColor = isDark ? '#00eaff' : '#00a8cc';
+    const particleShadow = isDark ? '#00eaff' : '#00a8cc';
 
     // Function to get actual viewport dimensions
     const getViewportSize = () => {
@@ -40,10 +49,10 @@ export default function Background() {
         this.x = Math.max(0, Math.min(width, this.x));
         this.y = Math.max(0, Math.min(height, this.y));
       }
-      draw() {
-        ctx.fillStyle = "#00eaff"; // neon cyan
+      draw(particleColor, particleShadow) {
+        ctx.fillStyle = particleColor;
         ctx.shadowBlur = 15;
-        ctx.shadowColor = "#00eaff";
+        ctx.shadowColor = particleShadow;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -69,13 +78,19 @@ export default function Background() {
 
     function animate() {
       const { width, height } = getViewportSize();
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDarkNow = currentTheme === 'dark';
+      const currentBgColor = isDarkNow ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.05)';
+      const currentGridColor = isDarkNow ? 'rgba(0, 255, 255, 0.1)' : 'rgba(0, 234, 255, 0.15)';
+      const currentParticleColor = isDarkNow ? '#00eaff' : '#00a8cc';
+      const currentParticleShadow = isDarkNow ? '#00eaff' : '#00a8cc';
       
       // Clear with fade effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.fillStyle = currentBgColor;
       ctx.fillRect(0, 0, width, height);
 
       // GRID effect
-      ctx.strokeStyle = "rgba(0, 255, 255, 0.1)";
+      ctx.strokeStyle = currentGridColor;
       ctx.lineWidth = 1;
       const gridSize = 60;
 
@@ -96,7 +111,7 @@ export default function Background() {
       // particles
       particles.forEach((p) => {
         p.update(width, height);
-        p.draw();
+        p.draw(currentParticleColor, currentParticleShadow);
       });
 
       animationFrameId = requestAnimationFrame(animate);
@@ -125,7 +140,7 @@ export default function Background() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
     };
-  }, []);
+  }, [theme]);
 
   return (
     <canvas
