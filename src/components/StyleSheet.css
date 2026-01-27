@@ -515,6 +515,8 @@
   margin-top: 15px;
   padding-left: 1.5rem;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .card-bullets li,
 .animated-bullets li {
@@ -523,6 +525,9 @@
   animation: bulletIn 0.3s ease forwards;
   line-height: 1.6;
   margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 @keyframes bulletIn {
   to {
@@ -551,6 +556,7 @@
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-subtle);
   transition: background-color 0.3s ease, border-color 0.3s ease;
+  overflow-x: hidden;
 }
 
 .navbar ul {
@@ -710,6 +716,41 @@
    RESPONSIVE - Mobile adjustments while keeping desktop layout
    ========================= */
 @media (max-width: 768px) {
+  /* Navbar - keep horizontal layout, prevent wrapping, scale down */
+  .navbar {
+    padding: clamp(10px, 1.5vh, 20px) clamp(5px, 1vw, 10px) clamp(3px, 0.8vh, 8px);
+    font-size: clamp(10px, 1.2vw, 14px);
+  }
+  
+  .navbar ul {
+    flex-direction: row;
+    gap: clamp(8px, 2vw, 20px);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  
+  .navbar ul::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .navbar ul li a {
+    font-size: clamp(10px, 1.2vw, 14px);
+    white-space: nowrap;
+  }
+  
+  .navbar img {
+    height: clamp(20px, 3vw, 30px);
+    width: clamp(20px, 3vw, 30px);
+    margin-right: clamp(10px, 4vw, 50px);
+  }
+  
+  .theme-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+  
   /* Keep timeline centered layout on mobile */
   .timeline::before {
     left: 50%;
@@ -717,13 +758,40 @@
   
   .timeline-item {
     width: 50%;
-    padding: clamp(10px, 2vw, 15px) clamp(10px, 2vw, 20px);
+    padding: clamp(8px, 1.5vw, 12px) clamp(8px, 1.5vw, 15px);
   }
   
   .timeline-item.left .card,
   .timeline-item.right .card {
-    width: calc(100% - clamp(20px, 6vw, 40px));
+    width: calc(100% - clamp(15px, 5vw, 35px));
     max-width: 100%;
+    padding: clamp(15px, 2vw, 20px);
+  }
+  
+  /* Fix text in timeline cards - prevent squishing */
+  .timeline-item .card-title {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .timeline-item .card-date {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    line-height: 1.4;
+  }
+  
+  .timeline-item .card-bullets {
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    line-height: 1.5;
+    padding-left: 1.2rem;
+  }
+  
+  .timeline-item .card-bullets li {
+    margin-bottom: clamp(6px, 1vh, 8px);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   
   .timeline-item.left {
@@ -732,7 +800,7 @@
   
   .timeline-item.left .card {
     margin-left: 0;
-    margin-right: clamp(15px, 4vw, 30px);
+    margin-right: clamp(12px, 3vw, 25px);
   }
   
   .timeline-item.right {
@@ -740,16 +808,16 @@
   }
   
   .timeline-item.right .card {
-    margin-left: clamp(15px, 4vw, 30px);
+    margin-left: clamp(12px, 3vw, 25px);
     margin-right: 0;
   }
   
   .timeline-item.left .timeline-dot {
-    right: clamp(-8px, -2vw, -8px);
+    right: clamp(-6px, -1.5vw, -8px);
   }
   
   .timeline-item.right .timeline-dot {
-    left: clamp(-8px, -2vw, -8px);
+    left: clamp(-6px, -1.5vw, -8px);
   }
   
   /* Projects cards - keep 2 column layout on mobile when possible */
@@ -757,39 +825,91 @@
     flex: 1 1 calc(50% - 15px);
     max-width: calc(50% - 15px);
     min-width: min(100%, 280px);
+    padding: clamp(15px, 2vw, 20px);
   }
   
-  /* Navbar - keep horizontal layout */
-  .navbar ul {
-    flex-direction: row;
-    gap: clamp(15px, 4vw, 30px);
+  /* Fix project card text */
+  .projects-grid .card-title {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    line-height: 1.3;
+  }
+  
+  .projects-grid .project-bullets {
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    line-height: 1.5;
+  }
+  
+  .projects-grid .project-bullets li {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 }
 
-/* Very small screens - ensure no overlap */
+/* Very small screens - ensure no overlap, maintain structure */
 @media (max-width: 480px) {
+  /* Navbar - even smaller but still one line */
+  .navbar ul {
+    gap: clamp(6px, 1.5vw, 12px);
+  }
+  
+  .navbar ul li a {
+    font-size: clamp(9px, 1.1vw, 12px);
+  }
+  
+  .navbar img {
+    height: clamp(18px, 2.5vw, 25px);
+    width: clamp(18px, 2.5vw, 25px);
+    margin-right: clamp(8px, 3vw, 40px);
+  }
+  
+  .theme-toggle svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* Timeline - maintain structure, scale down */
   .timeline-item {
-    padding: 10px 8px;
+    padding: 8px 6px;
   }
   
   .timeline-item.left .card,
   .timeline-item.right .card {
-    width: calc(100% - 20px);
-    padding: 15px;
+    width: calc(100% - 18px);
+    padding: clamp(12px, 1.8vw, 18px);
   }
   
   .timeline-item.left .card {
-    margin-right: 12px;
+    margin-right: 10px;
   }
   
   .timeline-item.right .card {
-    margin-left: 12px;
+    margin-left: 10px;
   }
   
+  /* Ensure text doesn't squish */
+  .timeline-item .card-title {
+    font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  }
+  
+  .timeline-item .card-bullets {
+    font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+  }
+  
+  /* Projects - can go single column on very small screens but maintain structure */
   .projects-grid .card {
     flex: 1 1 100%;
     max-width: 100%;
     min-width: 100%;
+    padding: clamp(12px, 1.8vw, 18px);
+  }
+  
+  .projects-grid .card-title {
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+  }
+  
+  .projects-grid .project-bullets {
+    font-size: clamp(0.75rem, 1.8vw, 0.85rem);
   }
 }
 
