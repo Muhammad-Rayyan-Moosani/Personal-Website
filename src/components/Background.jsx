@@ -5,30 +5,40 @@ export default function Background() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+    
     const ctx = canvas.getContext("2d");
-
-    // Full screen
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
     let particles = [];
+    let animationFrameId;
     const particleCount = 130;
 
+    // Function to get actual viewport dimensions
+    const getViewportSize = () => {
+      return {
+        width: Math.max(window.innerWidth, document.documentElement.clientWidth, window.screen.width),
+        height: Math.max(window.innerHeight, document.documentElement.clientHeight, window.screen.height)
+      };
+    };
+
     class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+      constructor(width, height) {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
         this.speedX = (Math.random() - 0.5) * 0.7;
         this.speedY = (Math.random() - 0.5) * 0.7;
         this.size = Math.random() * 2 + 1;
       }
-      update() {
+      update(width, height) {
         this.x += this.speedX;
         this.y += this.speedY;
 
         // bounce from edges
-        if (this.x <= 0 || this.x >= canvas.width) this.speedX *= -1;
-        if (this.y <= 0 || this.y >= canvas.height) this.speedY *= -1;
+        if (this.x <= 0 || this.x >= width) this.speedX *= -1;
+        if (this.y <= 0 || this.y >= height) this.speedY *= -1;
+        
+        // Keep particles within bounds
+        this.x = Math.max(0, Math.min(width, this.x));
+        this.y = Math.max(0, Math.min(height, this.y));
       }
       draw() {
         ctx.fillStyle = "#00eaff"; // neon cyan
@@ -40,55 +50,81 @@ export default function Background() {
       }
     }
 
-    function init() {
+    // Function to set canvas size
+    const setCanvasSize = () => {
+      const { width, height } = getViewportSize();
+      // Set actual canvas size
+      canvas.width = width;
+      canvas.height = height;
+      // Set CSS size to match
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      
+      // Reinitialize particles with new dimensions
+      particles = [];
       for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+        particles.push(new Particle(width, height));
       }
-    }
+    };
 
     function animate() {
+      const { width, height } = getViewportSize();
+      
+      // Clear with fade effect
       ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, width, height);
 
       // GRID effect
       ctx.strokeStyle = "rgba(0, 255, 255, 0.1)";
       ctx.lineWidth = 1;
       const gridSize = 60;
 
-      for (let x = 0; x < canvas.width; x += gridSize) {
+      for (let x = 0; x < width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, height);
         ctx.stroke();
       }
 
-      for (let y = 0; y < canvas.height; y += gridSize) {
+      for (let y = 0; y < height; y += gridSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.lineTo(width, y);
         ctx.stroke();
       }
 
       // particles
       particles.forEach((p) => {
-        p.update();
+        p.update(width, height);
         p.draw();
       });
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     }
 
-    init();
+    // Initialize
+    setCanvasSize();
     animate();
 
-    // Resize handler
+    // Resize handler with debounce
+    let resizeTimeout;
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasSize();
+      }, 100);
     };
+    
     window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
   }, []);
 
   return (
@@ -98,7 +134,11 @@ export default function Background() {
         position: "fixed",
         top: 0,
         left: 0,
+        width: "100%",
+        height: "100%",
         zIndex: -1,
+        minWidth: "100vw",
+        minHeight: "100vh",
       }}
     />
   );

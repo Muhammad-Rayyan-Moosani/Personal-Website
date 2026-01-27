@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./StyleSheet.css";
 
 export default function Hero() {
-  const words = ["a Software Developer", "a Problem Solver", "a Learner"];
+  const words = ["a Software Engineer", "a Problem Solver", "a Fast Learner"];
   const [text, setText] = useState("");
   const [index, setIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);

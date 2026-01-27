@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import "./StyleSheet.css";
 
-export default function Card({ title, bullets = [], description, date, link }) {
+export default function Card({ title, bullets = [], description, date, link, image }) {
   const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(0);
 
@@ -38,11 +39,17 @@ export default function Card({ title, bullets = [], description, date, link }) {
 
   return (
     <div className="card" ref={ref}>
+      {image && (
+        <div className="card-image-container">
+          <img src={image} alt={title} className="card-image" />
+        </div>
+      )}
+      
       <h3 className="card-title">
         <a href={link} target="_blank" rel="noreferrer">{title}</a>
       </h3>
 
-      <p className="card-date">{date}</p>
+      {date && <p className="card-date">{date}</p>}
 
       {hasBullets ? (
         <ul className="card-bullets">
@@ -51,7 +58,7 @@ export default function Card({ title, bullets = [], description, date, link }) {
           ))}
         </ul>
       ) : (
-        <p className="card-description">{description}</p>
+        <div className="card-description">{description}</div>
       )}
     </div>
   );

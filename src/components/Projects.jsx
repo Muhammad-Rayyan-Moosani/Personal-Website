@@ -1,11 +1,14 @@
 import "./StyleSheet.css";
 import Card from "./Card.jsx";
+import gamesRandomImage from "./Games.Random.jpeg";
+import barakahLinkImage from "./Barakah-link.jpeg";
 
 export default function Projects() {
   const projects = [
     {
       title: "Games.Random",
-     description: (
+      image: gamesRandomImage,
+      description: (
           <ul className="project-bullets">
             <li>
               <span className="tech-stack">
@@ -54,23 +57,26 @@ export default function Projects() {
       link: "https://github.com/Muhammad-Rayyan-Moosani/AI-tracker"
     },
     {
-      title: "Youtube Playlist Downloader",
+      title: "Barakah-Link",
+      image: barakahLinkImage,
       description: (
   <ul className="project-bullets">
     <li>
       <span className="tech-stack">
-        Tech-Stack: Python, React, Flask, yt-dlp, FFmpeg, SQLite
+        Tech-Stack: Twilio, React, Flask
       </span>
     </li>
     <li>
-      Built a full-stack app for fast, high-resolution YouTube playlist downloads
+      Fighting hunger systemically — Turns food surplus into life-saving resources for those in need.
     </li>
     <li>
-      Integrated yt-dlp and FFmpeg for batching and format conversion
+      Inclusive access — SMS-based backend ensures everyone can find food, even without smartphones.
     </li>
     <li>
-      Used multiprocessing and SQLite for concurrent downloads
-      and persistent history
+      Empathetic tech — React.js frontend makes donating easy while preserving recipients' dignity.
+    </li>
+    <li>
+      Scalable local impact — Built for Kitchener–Waterloo with potential to expand to other essentials.
     </li>
   </ul>
 ),
@@ -91,6 +97,7 @@ export default function Projects() {
             description={project.description}
             date={project.date}
             link={project.link}
+            image={project.image}
           />
         ))}
       </div>
