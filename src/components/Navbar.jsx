@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import "./StyleSheet.css";
 import logo from "./View recent photos.png";
 import { useTheme } from "../contexts/ThemeContext";
@@ -6,15 +7,45 @@ import { useTheme } from "../contexts/ThemeContext";
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
+  const navVariants = {
+    hidden: { y: -100, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.34, 1.56, 0.64, 1],
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: -20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <nav className="navbar">
+    <motion.nav
+      className="navbar"
+      variants={navVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Logo / Image */}
-      <div className="navbar-logo">
+      <motion.div className="navbar-logo" variants={itemVariants}>
         <img src={logo} alt="Logo" />
-      </div>
+      </motion.div>
 
       {/* Navigation links */}
-      <ul className="navbar-links">
+      <motion.ul className="navbar-links" variants={itemVariants}>
         <li>
   <a
     href="#home"
@@ -91,11 +122,13 @@ export default function Navbar() {
     Contact
   </a>
 </li>
-        <li>
-          <button 
+        <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+          <motion.button 
             className="theme-toggle" 
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            whileHover={{ rotate: 180 }}
+            transition={{ duration: 0.3 }}
           >
             {theme === 'light' ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -114,9 +147,9 @@ export default function Navbar() {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
               </svg>
             )}
-          </button>
-        </li>
-      </ul>
-    </nav>
+          </motion.button>
+        </motion.li>
+      </motion.ul>
+    </motion.nav>
   );
 }

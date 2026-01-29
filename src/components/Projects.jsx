@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import "./StyleSheet.css";
-import Card from "./Card.jsx";
+import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
 
@@ -112,13 +113,27 @@ export default function Projects() {
   ];
 
   return (
-    <section className="projects" id="projects">
-      <h1>Projects</h1>
+    <motion.section
+      className="projects"
+      id="projects"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+      >
+        Projects
+      </motion.h1>
       
       {/* Container for cards */}
       <div className="projects-grid" ref={gridRef}>
         {projects.map((project, index) => (
-          <Card
+          <EnhancedCard
             key={index}
             title={project.title}
             description={project.description}
@@ -128,6 +143,6 @@ export default function Projects() {
           />
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

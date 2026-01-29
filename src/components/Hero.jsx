@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "./StyleSheet.css";
 
 export default function Hero() {
@@ -24,20 +25,49 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [charIndex, index, words]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.34, 1.56, 0.64, 1],
+      },
+    },
+  };
+
   return (
-    <section className="hero" id = 'home'>
-      {/* Static title (no typing) */}
-      <h1 className="hero-title">
+    <motion.section
+      className="hero"
+      id="home"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.h1 className="hero-title" variants={itemVariants}>
         Hey, I am Rayyan Moosani
-      </h1>
+      </motion.h1>
 
-      <h2>Computer Science Undergrad @ University of Waterloo</h2>
+      <motion.h2 variants={itemVariants}>
+        Computer Science Undergrad @ University of Waterloo
+      </motion.h2>
 
-      {/* Static "I am" + dynamic typing */}
-      <p className="hero-subtitle">
+      <motion.p className="hero-subtitle" variants={itemVariants}>
         I am <span className="typing">{text}</span>
         <span className="cursor">|</span>
-      </p>
-    </section>
+      </motion.p>
+    </motion.section>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import "./StyleSheet.css";
-import Card from "./Card.jsx";
+import EnhancedCard from "./EnhancedCard.jsx";
 
 export default function Experience() {
   const timelineRef = useRef(null);
@@ -77,8 +78,22 @@ export default function Experience() {
   ];
 
   return (
-    <section className="experience" id="experience">
-      <h1>Experience</h1>
+    <motion.section
+      className="experience"
+      id="experience"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+      >
+        Experience
+      </motion.h1>
 
       <div className="timeline" ref={timelineRef}>
         {experiences.map((exp, index) => (
@@ -86,8 +101,18 @@ export default function Experience() {
             className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
             key={index}
           >
-            <div className="timeline-dot" />
-            <Card
+            <motion.div
+              className="timeline-dot"
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: index * 0.15 + 0.2,
+                duration: 0.5,
+                ease: [0.34, 1.56, 0.64, 1]
+              }}
+            />
+            <EnhancedCard
               title={exp.title}
               bullets={exp.bullets}
               date={exp.date}
@@ -96,6 +121,6 @@ export default function Experience() {
           </div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -389,12 +389,44 @@
   background-color: var(--bg-card);
   border: 2px solid var(--border-color);
   color: var(--text-secondary);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              background-color 0.3s ease,
+              border-color 0.3s ease,
+              color 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
   overflow: hidden;
+  perspective: 1000px;
+}
+
+/* Enhanced Card Glow Effect */
+.enhanced-card {
+  will-change: transform;
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--accent-glow) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.enhanced-card:hover .card-glow {
+  opacity: 0.15;
 }
 
 /* Only apply initial animation state to project cards, not timeline cards */
@@ -405,6 +437,30 @@
 
 .projects-grid .card.animate-in {
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Disable 3D transforms on mobile for better performance */
+  .enhanced-card {
+    transform: none !important;
+    perspective: none !important;
+  }
+  
+  .enhanced-card:hover {
+    transform: scale(1.02) !important;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .card-glow {
+    display: none;
+  }
+  
+  /* Optimize font rendering on mobile */
+  * {
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 @keyframes fadeInUp {
