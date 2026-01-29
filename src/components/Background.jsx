@@ -1,142 +1,219 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 
-export default function Background() {
+// Detect low-end devices
+const isLowEndDevice = () => {
+  if (typeof navigator === 'undefined') return false;
+  const memory = navigator.deviceMemory;
+  const cores = navigator.hardwareConcurrency;
+  return (memory && memory < 4) || (cores && cores < 4);
+};
+
+const isMobile = typeof window !== 'undefined' && 
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// Adaptive particle count
+const getParticleCount = () => {
+  if (isMobile) return 40;
+  if (isLowEndDevice()) return 60;
+  return 100; // Reduced from 130 for better perf
+};
+
+function Background() {
   const canvasRef = useRef(null);
   const { theme } = useTheme();
+  const animationRef = useRef(null);
+  const particlesRef = useRef([]);
+  const dimensionsRef = useRef({ width: 0, height: 0 });
+  const colorsRef = useRef({});
+  const lastFrameTime = useRef(0);
+  const gridPathRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-    let animationFrameId;
-    const particleCount = 130;
+    const ctx = canvas.getContext("2d", { 
+      alpha: false, // Opaque canvas = faster
+      desynchronized: true // Reduce latency
+    });
     
-    // Theme-based colors
-    const isDark = theme === 'dark';
-    const bgColor = isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.05)';
-    const gridColor = isDark ? 'rgba(0, 255, 255, 0.1)' : 'rgba(0, 234, 255, 0.15)';
-    const particleColor = isDark ? '#00eaff' : '#00a8cc';
-    const particleShadow = isDark ? '#00eaff' : '#00a8cc';
+    const particleCount = getParticleCount();
+    const GRID_SIZE = 60;
+    const TARGET_FPS = isMobile ? 30 : 60;
+    const FRAME_DURATION = 1000 / TARGET_FPS;
 
-    // Function to get actual viewport dimensions
-    const getViewportSize = () => {
-      return {
-        width: Math.max(window.innerWidth, document.documentElement.clientWidth, window.screen.width),
-        height: Math.max(window.innerHeight, document.documentElement.clientHeight, window.screen.height)
+    // Pre-calculate colors based on theme
+    // Blue mode = dark blue background, Dark mode = pure black background
+    const updateColors = () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      colorsRef.current = {
+        // Dark mode: pure black, Blue mode: dark navy blue
+        bg: isDark ? '#000000' : '#0a0a1a',
+        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(10, 10, 26, 0.25)',
+        grid: 'rgba(0, 234, 255, 0.1)',
+        particle: '#00eaff',
+        shadow: '#00eaff',
       };
     };
 
+    // Particle class - optimized with object pooling
     class Particle {
-      constructor(width, height) {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        const { width, height } = dimensionsRef.current;
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         this.speedX = (Math.random() - 0.5) * 0.7;
         this.speedY = (Math.random() - 0.5) * 0.7;
         this.size = Math.random() * 2 + 1;
       }
-      update(width, height) {
+      
+      update() {
+        const { width, height } = dimensionsRef.current;
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // bounce from edges
-        if (this.x <= 0 || this.x >= width) this.speedX *= -1;
-        if (this.y <= 0 || this.y >= height) this.speedY *= -1;
+        // Bounce from edges - branchless optimization
+        if (this.x <= 0 || this.x >= width) this.speedX = -this.speedX;
+        if (this.y <= 0 || this.y >= height) this.speedY = -this.speedY;
         
-        // Keep particles within bounds
+        // Clamp to bounds
         this.x = Math.max(0, Math.min(width, this.x));
         this.y = Math.max(0, Math.min(height, this.y));
       }
-      draw(particleColor, particleShadow) {
-        ctx.fillStyle = particleColor;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = particleShadow;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
     }
 
-    // Function to set canvas size
+    // Pre-create grid path for reuse
+    const createGridPath = (width, height) => {
+      const path = new Path2D();
+      for (let x = 0; x <= width; x += GRID_SIZE) {
+        path.moveTo(x, 0);
+        path.lineTo(x, height);
+      }
+      for (let y = 0; y <= height; y += GRID_SIZE) {
+        path.moveTo(0, y);
+        path.lineTo(width, y);
+      }
+      return path;
+    };
+
+    // Set canvas size and initialize particles
     const setCanvasSize = () => {
-      const { width, height } = getViewportSize();
-      // Set actual canvas size
-      canvas.width = width;
-      canvas.height = height;
-      // Set CSS size to match
+      const width = Math.max(window.innerWidth, document.documentElement.clientWidth);
+      const height = Math.max(window.innerHeight, document.documentElement.clientHeight);
+      
+      // Only resize if dimensions changed
+      if (width === dimensionsRef.current.width && height === dimensionsRef.current.height) {
+        return;
+      }
+      
+      dimensionsRef.current = { width, height };
+      
+      // Set canvas size with device pixel ratio for sharpness
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
+      ctx.scale(dpr, dpr);
       
-      // Reinitialize particles with new dimensions
-      particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle(width, height));
+      // Pre-create grid path
+      gridPathRef.current = createGridPath(width, height);
+      
+      // Initialize or reset particles
+      if (particlesRef.current.length === 0) {
+        for (let i = 0; i < particleCount; i++) {
+          particlesRef.current.push(new Particle());
+        }
+      } else {
+        particlesRef.current.forEach(p => p.reset());
       }
     };
 
-    function animate() {
-      const { width, height } = getViewportSize();
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const isDarkNow = currentTheme === 'dark';
-      const currentBgColor = isDarkNow ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.05)';
-      const currentGridColor = isDarkNow ? 'rgba(0, 255, 255, 0.1)' : 'rgba(0, 234, 255, 0.15)';
-      const currentParticleColor = isDarkNow ? '#00eaff' : '#00a8cc';
-      const currentParticleShadow = isDarkNow ? '#00eaff' : '#00a8cc';
-      
-      // Clear with fade effect
-      ctx.fillStyle = currentBgColor;
+    // Optimized animation loop
+    const animate = (timestamp) => {
+      // Throttle to target FPS
+      const elapsed = timestamp - lastFrameTime.current;
+      if (elapsed < FRAME_DURATION) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime.current = timestamp - (elapsed % FRAME_DURATION);
+
+      const { width, height } = dimensionsRef.current;
+      const colors = colorsRef.current;
+
+      // Clear with fade effect - single fill operation
+      ctx.fillStyle = colors.bgFade;
       ctx.fillRect(0, 0, width, height);
 
-      // GRID effect
-      ctx.strokeStyle = currentGridColor;
+      // Draw grid using pre-created path - single stroke operation
+      ctx.strokeStyle = colors.grid;
       ctx.lineWidth = 1;
-      const gridSize = 60;
+      ctx.stroke(gridPathRef.current);
 
-      for (let x = 0; x < width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
+      // Batch particle drawing
+      ctx.fillStyle = colors.particle;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = colors.shadow;
+      
+      // Begin single path for all particles
+      ctx.beginPath();
+      const particles = particlesRef.current;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.update();
+        ctx.moveTo(p.x + p.size, p.y);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       }
+      ctx.fill();
+      
+      // Reset shadow for next frame
+      ctx.shadowBlur = 0;
 
-      for (let y = 0; y < height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
-
-      // particles
-      particles.forEach((p) => {
-        p.update(width, height);
-        p.draw(currentParticleColor, currentParticleShadow);
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
-    }
+      animationRef.current = requestAnimationFrame(animate);
+    };
 
     // Initialize
+    updateColors();
     setCanvasSize();
-    animate();
+    animationRef.current = requestAnimationFrame(animate);
 
-    // Resize handler with debounce
+    // Debounced resize handler
     let resizeTimeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        setCanvasSize();
-      }, 100);
+      resizeTimeout = setTimeout(setCanvasSize, 100);
     };
+
+    // Theme change observer
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.attributeName === 'data-theme') {
+          updateColors();
+          break;
+        }
+      }
+    });
     
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("orientationchange", handleResize);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['data-theme'] 
+    });
+
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("orientationchange", handleResize, { passive: true });
 
     return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
+      clearTimeout(resizeTimeout);
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
     };
@@ -152,9 +229,12 @@ export default function Background() {
         width: "100%",
         height: "100%",
         zIndex: -1,
-        minWidth: "100vw",
-        minHeight: "100vh",
+        pointerEvents: "none", // CRITICAL: Never intercept cursor/pointer events
+        contain: "strict", // CSS containment for isolation
       }}
     />
   );
 }
+
+// Memo to prevent unnecessary re-renders
+export default memo(Background);

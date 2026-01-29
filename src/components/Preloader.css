@@ -1,4 +1,4 @@
-/* Preloader Styles */
+/* Preloader Styles - GPU Optimized with CSS Animations */
 .preloader {
   position: fixed;
   top: 0;
@@ -22,21 +22,38 @@
 
 .preloader-spaceship {
   filter: drop-shadow(0 0 20px var(--accent-glow));
+  animation: spaceshipEntrance 1.2s ease-out forwards,
+             pulse 1.5s ease-in-out 1.2s infinite;
+  transform: scale(0) rotate(0deg);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+@keyframes spaceshipEntrance {
+  0% {
+    transform: scale(0) rotate(0deg) translate3d(0, 0, 0);
+  }
+  60% {
+    transform: scale(1.2) rotate(360deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1) rotate(360deg) translate3d(0, 0, 0);
+  }
 }
 
 .preloader-spaceship svg {
   color: var(--accent-color);
-  animation: pulse 1.5s ease-in-out infinite;
+  display: block;
 }
 
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(360deg) translate3d(0, 0, 0);
   }
   50% {
     opacity: 0.7;
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(360deg) translate3d(0, 0, 0);
   }
 }
 
@@ -46,6 +63,16 @@
   color: var(--text-primary);
   font-weight: 500;
   letter-spacing: 0.1em;
+  animation: textFadeIn 0.5s ease-out 0.3s forwards;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+@keyframes textFadeIn {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .preloader-bar {
@@ -55,10 +82,28 @@
   border-radius: 2px;
   box-shadow: 0 0 10px var(--accent-glow);
   transform-origin: left;
+  animation: barFill 1.5s ease-in-out forwards;
+  transform: scaleX(0) translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
-/* Reduced motion */
+@keyframes barFill {
+  to {
+    transform: scaleX(1) translate3d(0, 0, 0);
+  }
+}
+
+/* Reduced motion - instant display */
 @media (prefers-reduced-motion: reduce) {
+  .preloader-spaceship,
+  .preloader-text,
+  .preloader-bar {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
   .preloader-spaceship svg {
     animation: none;
   }

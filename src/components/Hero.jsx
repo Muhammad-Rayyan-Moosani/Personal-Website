@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./StyleSheet.css";
+import waterlooLogo from "./waterloo logo.jpeg";
 
 export default function Hero() {
   const words = ["a Software Engineer", "a Problem Solver", "a Fast Learner"];
@@ -60,8 +61,16 @@ export default function Hero() {
         Hey, I am Rayyan Moosani
       </motion.h1>
 
-      <motion.h2 variants={itemVariants}>
-        Computer Science Undergrad @ University of Waterloo
+      <motion.h2 className="hero-school" variants={itemVariants}>
+        Computer Science Undergrad @ University of{" "}
+        <span className="hero-waterloo-wrap">
+          Waterloo
+          <img
+            src={waterlooLogo}
+            alt="University of Waterloo"
+            className="hero-waterloo-logo"
+          />
+        </span>
       </motion.h2>
 
       <motion.p className="hero-subtitle" variants={itemVariants}>

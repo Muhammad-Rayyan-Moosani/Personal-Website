@@ -1,31 +1,20 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import './Preloader.css';
 
-export default function Preloader({ onComplete }) {
+// Memoized Preloader - uses CSS animations internally for better perf
+function Preloader({ onComplete }) {
   return (
     <motion.div
       className="preloader"
       initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
       onAnimationComplete={onComplete}
     >
       <div className="preloader-content">
-        {/* Animated Spaceship */}
-        <motion.div
-          className="preloader-spaceship"
-          initial={{ scale: 0, rotate: 0 }}
-          animate={{
-            scale: [0, 1.2, 1],
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 1.2,
-            ease: 'easeOut',
-            times: [0, 0.6, 1],
-          }}
-        >
+        {/* Spaceship - CSS animated for GPU acceleration */}
+        <div className="preloader-spaceship">
           <svg
             width="80"
             height="80"
@@ -42,26 +31,18 @@ export default function Preloader({ onComplete }) {
             />
             <circle cx="16" cy="16" r="3" fill="var(--bg-primary)" />
           </svg>
-        </motion.div>
+        </div>
 
-        {/* Loading Text */}
-        <motion.p
-          className="preloader-text"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
+        {/* Loading Text - CSS animated */}
+        <p className="preloader-text">
           Preparing launch...
-        </motion.p>
+        </p>
 
-        {/* Progress Bar */}
-        <motion.div
-          className="preloader-bar"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1.5, ease: 'easeInOut' }}
-        />
+        {/* Progress Bar - CSS animated */}
+        <div className="preloader-bar" />
       </div>
     </motion.div>
   );
 }
+
+export default memo(Preloader);

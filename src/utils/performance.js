@@ -1,25 +1,54 @@
-// Performance utilities
+// Performance utilities - optimized for minimal runtime cost
+
+// Cache results to avoid repeated queries
+let _prefersReducedMotion = null;
+let _isMobile = null;
+let _isLowEnd = null;
 
 export const prefersReducedMotion = () => {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (_prefersReducedMotion !== null) return _prefersReducedMotion;
+  _prefersReducedMotion = typeof window !== 'undefined' && 
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return _prefersReducedMotion;
 };
 
 export const isMobileDevice = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  if (_isMobile !== null) return _isMobile;
+  if (typeof window === 'undefined') return false;
+  
+  _isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   ) || window.matchMedia('(pointer: coarse)').matches;
+  return _isMobile;
 };
 
 export const isLowEndDevice = () => {
-  // Check for low-end device indicators
+  if (_isLowEnd !== null) return _isLowEnd;
+  if (typeof navigator === 'undefined') return false;
+  
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const slowConnection = connection && (connection.saveData || connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+  const slowConnection = connection && (
+    connection.saveData || 
+    connection.effectiveType === 'slow-2g' || 
+    connection.effectiveType === '2g'
+  );
   const lowMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
   const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
   
-  return slowConnection || lowMemory || lowCores;
+  _isLowEnd = slowConnection || lowMemory || lowCores;
+  return _isLowEnd;
 };
 
+// Reset cache on visibility change (user might have changed settings)
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      _prefersReducedMotion = null;
+    }
+  }, { passive: true });
+}
+
+// Optimized animation config getter
 export const getAnimationConfig = () => {
   if (prefersReducedMotion()) {
     return {
@@ -44,6 +73,7 @@ export const getAnimationConfig = () => {
   };
 };
 
+// Debounce utility - prevents function from being called too frequently
 export const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
@@ -56,13 +86,56 @@ export const debounce = (func, wait) => {
   };
 };
 
+// Throttle utility - ensures function is called at most once per interval
 export const throttle = (func, limit) => {
   let inThrottle;
+  let lastResult;
   return function(...args) {
     if (!inThrottle) {
-      func.apply(this, args);
+      lastResult = func.apply(this, args);
       inThrottle = true;
       setTimeout(() => inThrottle = false, limit);
     }
+    return lastResult;
   };
+};
+
+// RAF-based throttle for animations
+export const rafThrottle = (callback) => {
+  let requestId = null;
+  let lastArgs = null;
+  
+  const later = () => {
+    requestId = null;
+    callback(...lastArgs);
+  };
+  
+  return (...args) => {
+    lastArgs = args;
+    if (requestId === null) {
+      requestId = requestAnimationFrame(later);
+    }
+  };
+};
+
+// Batch DOM reads to avoid layout thrashing
+export const batchRead = (readFn) => {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      const result = readFn();
+      resolve(result);
+    });
+  });
+};
+
+// Batch DOM writes 
+export const batchWrite = (writeFn) => {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        writeFn();
+        resolve();
+      });
+    });
+  });
 };

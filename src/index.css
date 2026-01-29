@@ -29,17 +29,21 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* GPU acceleration for animations */
-.card,
-.timeline-item,
+/* GPU acceleration for sections - use contain for isolation */
 .hero,
 .projects,
 .experience,
 .about-section,
 .contacts {
-  will-change: transform, opacity;
+  contain: layout style;
   transform: translateZ(0);
+}
+
+/* Animated elements - will-change only during animation */
+.card,
+.timeline-item {
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Prevent layout shifts */
@@ -51,7 +55,7 @@ img, video {
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
-  /* Disable hover effects on touch devices */
+  /* Disable 3D transforms on touch devices for better performance */
   .card:hover,
   .enhanced-card:hover,
   .about-box:hover,
@@ -59,11 +63,20 @@ img, video {
     transform: none !important;
   }
   
-  /* Larger tap targets for mobile */
+  /* Disable will-change on mobile - reduces memory usage */
+  .enhanced-card {
+    will-change: auto !important;
+  }
+  
+  /* Larger tap targets for mobile - accessibility */
   button, a {
     min-height: 44px;
     min-width: 44px;
-    padding: 12px;
+  }
+  
+  /* Passive touch handling hint */
+  * {
+    touch-action: manipulation;
   }
 }
 
@@ -76,12 +89,6 @@ img, video {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  
-  .custom-cursor,
-  .cursor-trail,
-  .thrust-particle {
-    display: none !important;
   }
 }
 
@@ -102,28 +109,38 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Light Mode (Default) */
-:root[data-theme="light"],
-:root:not([data-theme]) {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f5;
-  --bg-card: #f8f9fa;
-  --text-primary: #1a1a1a;
-  --text-secondary: #4a4a4a;
-  --text-muted: #6b6b6b;
-  --accent-color: #006680;
-  --accent-glow: #0088aa;
-  --border-color: #006680;
-  --border-subtle: rgba(0, 102, 128, 0.3);
-  --shadow-color: rgba(0, 102, 128, 0.2);
-  --typing-color: #004d66;
+/* Performance: Optimize compositing layers */
+@supports (contain: paint) {
+  .card,
+  .timeline-item,
+  .about-box,
+  .contact-box {
+    contain: layout style paint;
+  }
 }
 
-/* Dark Mode */
+/* Blue Mode (Default) - Original Blue Theme */
+:root[data-theme="light"],
+:root:not([data-theme]) {
+  --bg-primary: #0a0a1a;
+  --bg-secondary: #0d0d24;
+  --bg-card: #0a122a;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
+  --accent-color: #00eaff;
+  --accent-glow: #00eaff;
+  --border-color: #00eaff;
+  --border-subtle: rgba(0, 234, 255, 0.3);
+  --shadow-color: rgba(0, 234, 255, 0.2);
+  --typing-color: #00b8d4;
+}
+
+/* Dark Mode - Pure Black */
 :root[data-theme="dark"] {
   --bg-primary: #000000;
-  --bg-secondary: #0a0a0a;
-  --bg-card: #0a122a;
+  --bg-secondary: #050505;
+  --bg-card: #0a0a0a;
   --text-primary: #ffffff;
   --text-secondary: #e5e7eb;
   --text-muted: #9ca3af;
