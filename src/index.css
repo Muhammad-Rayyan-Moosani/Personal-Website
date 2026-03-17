@@ -119,21 +119,21 @@ body {
   }
 }
 
-/* Blue Mode (Default) - Original Blue Theme */
+/* Light Mode - Bright and Airy Theme */
 :root[data-theme="light"],
 :root:not([data-theme]) {
-  --bg-primary: #0a0a1a;
-  --bg-secondary: #0d0d24;
-  --bg-card: #0a122a;
-  --text-primary: #ffffff;
-  --text-secondary: #e5e7eb;
-  --text-muted: #9ca3af;
-  --accent-color: #00eaff;
-  --accent-glow: #00eaff;
-  --border-color: #00eaff;
-  --border-subtle: rgba(0, 234, 255, 0.3);
-  --shadow-color: rgba(0, 234, 255, 0.2);
-  --typing-color: #00b8d4;
+  --bg-primary: #E0FFFF;
+  --bg-secondary: #D4F5F5;
+  --bg-card: #E0FFFF;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --accent-color: #0ea5e9;
+  --accent-glow: #0ea5e9;
+  --border-color: #0ea5e9;
+  --border-subtle: rgba(14, 165, 233, 0.2);
+  --shadow-color: rgba(14, 165, 233, 0.1);
+  --typing-color: #0284c7;
 }
 
 /* Dark Mode - Pure Black */

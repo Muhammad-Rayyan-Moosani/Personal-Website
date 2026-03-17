@@ -44,13 +44,13 @@ function Background() {
     const FRAME_DURATION = 1000 / TARGET_FPS;
 
     // Pre-calculate colors based on theme
-    // Blue mode = dark blue background, Dark mode = pure black background
+    // Light mode = light cyan background, Dark mode = pure black background
     const updateColors = () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       colorsRef.current = {
-        // Dark mode: pure black, Blue mode: dark navy blue
-        bg: isDark ? '#000000' : '#0a0a1a',
-        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(10, 10, 26, 0.25)',
+        // Dark mode: pure black, Light mode: light cyan
+        bg: isDark ? '#000000' : '#E0FFFF',
+        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(224, 255, 255, 0.25)',
         grid: 'rgba(0, 234, 255, 0.1)',
         particle: '#00eaff',
         shadow: '#00eaff',
