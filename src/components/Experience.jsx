@@ -16,13 +16,13 @@ export default function Experience() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
     );
 
     if (timelineRef.current) {
       const items = timelineRef.current.querySelectorAll(".timeline-item");
       items.forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.15}s`;
+        item.style.animationDelay = `${index * 0.05}s`;
         observer.observe(item);
       });
     }
@@ -32,47 +32,47 @@ export default function Experience() {
 
   const experiences = [
     {
-      title: "IICUW - Web Developer",
+      title: "IICUW - Software Developer",
       date: "Sep 2025 – Dec 2025",
       link: "https://www.iicuwaterloo.com/",
       bullets: [
-        "Optimized frontend interfaces to improve load times by 20%",
-        "Designed and deployed Discord bots automating 3–5 routine tasks",
-        "Reduced manual workload by up to 40% through automation",
-        "Built interactive bot features supporting 100+ active users",
-        "Contributed to 6 production feature updates using clean, maintainable code"
+        <span className="tech-stack">GitHub, Python, Discord API, React</span>,
+        "Optimized frontend performance by refactoring React (ES6+) components, reducing bundle size & improving team load times by ~20%",
+        "Developed Python-based Discord bots to automate internal workflows and streamline team operations",
+        "Supported 100+ active users by developing interactive bot features, significantly improving server engagement",
+        "Added 6 successful web pages by delivering clean, maintainable code and collaborating using Git/GitHub"
       ]
     },
     {
-      title: "Scitra - Software Optimisation Engineer",
-      date: "July 2024 – Aug 2024",
+      title: "SCITRA - Software Automation Developer",
+      date: "Aug 2024 – Sep 2024",
       link: "https://www.albatha.com/scitra.htm",
       bullets: [
-        "Built a Python Telegram bot with Google Sheets API for real-time issue reporting across 30+ production lines",
-        "Reduced reporting latency by 40% through automated workflows",
-        "Developed Unity/C# 3D digital twins with live IoT data for predictive maintenance",
-        "Automated error logging, improving root-cause analysis speed by 30%"
+        <span className="tech-stack">Telegram bot API, Google Sheets API, Unity, C#, IOT Systems</span>,
+        "Developed and deployed a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across 30+ production lines. Reduced reporting latency by 40% by architecting a streamlined, automated issue-tracking workflow",
+        "Engineered high-fidelity 3D digital twins of factory machinery using Unity & C#, integrating real-time IoT sensor data to support predictive maintenance strategies. Automated intelligent error logging, improving the engineering team's fault diagnosis and resolution speed by 30%"
       ]
     },
     {
-      title: "Medad - Operations Optimiser",
+      title: "MEDAD - QA Analyst",
       date: "July 2025 – Aug 2025",
       link: "https://www.albatha.com/medad-printing.htm",
       bullets: [
-        "Gained hands-on experience across the full packaging production workflow",
-        "Performed quality inspections using microscopes for print accuracy",
-        "Assisted design team with print-ready artwork preparation",
-        "Developed practical understanding of graphic design principles"
+        <span className="tech-stack">Adobe Photoshop</span>,
+        "Analyzed packaging workflow across design, printing, and quality teams to understand production pipeline",
+        "Conducted print quality inspections, evaluating color accuracy, alignment, and packaging output using verification tools",
+        "Prepared print-ready artwork in Adobe Illustrator, ensuring files met production specifications and formatting standards"
       ]
     },
     {
-      title: "AGMC",
+      title: "AGMC - IT Intern",
       date: "June 2024 – July 2024",
       link: "https://www.bmw-dubai.com/",
       bullets: [
-        "Observed end-to-end automotive service and operations workflow",
-        "Assisted technical teams with inspection and diagnostics processes",
-        "Developed understanding of quality control in automotive systems"
+        <span className="tech-stack">Microsoft Forms, SharePoint, Excel workflow, Microsoft 365 systems</span>,
+        "Designed and implemented a Microsoft Forms, SharePoint, and Excel workflow replacing a paper-based process and centralizing internal data collection",
+        "Led the transition of internal requests to Microsoft 365 systems, improving information accessibility and reducing manual administrative steps",
+        "Supported IT operations by assisting staff with internal software tools, documentation, and troubleshooting, streamlining enterprise workflows"
       ]
     }
   ];
@@ -83,14 +83,14 @@ export default function Experience() {
       id="experience"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.3 }}
     >
       <motion.h1
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         Experience
       </motion.h1>
@@ -107,9 +107,9 @@ export default function Experience() {
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{
-                delay: index * 0.15 + 0.2,
-                duration: 0.5,
-                ease: [0.34, 1.56, 0.64, 1]
+                delay: index * 0.05 + 0.1,
+                duration: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
             />
             <EnhancedCard

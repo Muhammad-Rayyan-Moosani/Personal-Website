@@ -4,6 +4,7 @@ import "./StyleSheet.css";
 import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
+import directAidImage from "./SCR-20260317-czet.png";
 
 export default function Projects() {
   const gridRef = useRef(null);
@@ -18,13 +19,13 @@ export default function Projects() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
     );
 
     if (gridRef.current) {
       const cards = gridRef.current.querySelectorAll(".card");
       cards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animationDelay = `${index * 0.05}s`;
         observer.observe(card);
       });
     }
@@ -60,6 +61,31 @@ export default function Projects() {
       link: "https://github.com/Shayan-Mazahir/games.random"
     },
     {
+      title: "VoiceAI Web Agent",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Python, Flask, JavaScript, Chrome Extension (Manifest V3), SmallestAI (STT/TTS), LLM Integration
+            </span>
+          </li>
+          <li>
+            Engineered a Manifest V3 Chrome extension featuring a custom STT/TTS pipeline for real-time, voice-directed browser automation
+          </li>
+          <li>
+            Developed a neural intent-mapping system that parses speech and DOM context into precise, executable browser actions via LLMs
+          </li>
+          <li>
+            Architected a Flask microservice to process multi-modal inputs, utilizing structured JSON output for complex, automated UI navigation
+          </li>
+          <li>
+            Reduced end-to-end pipeline latency by 40% through asynchronous audio streaming, C-Extension API optimizations, and efficient DOM parsing
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/VoiceAI-Web-Agent"
+    },
+    {
       title: "AI-TRACKER",
  description: (
   <ul className="project-bullets">
@@ -83,6 +109,57 @@ export default function Projects() {
   </ul>
 ),
       link: "https://github.com/Muhammad-Rayyan-Moosani/AI-tracker"
+    },
+    {
+      title: "Anr Awaaz",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Python, FastAPI, Whisper (OpenAI), Claude (Anthropic), ElevenLabs, PHOIBLE, Pandas, JavaScript
+            </span>
+          </li>
+          <li>
+            Engineered a phoneme-level diagnostic engine using PHOIBLE and CMU Dict to identify language-specific articulation gaps for real-time phonetic feedback
+          </li>
+          <li>
+            Developed an adaptive AI tutor using Claude and ElevenLabs that generates personalized, voice-guided curriculum based on individual learner sound-deficits
+          </li>
+          <li>
+            Architected a high-concurrency FastAPI backend with asynchronous STT/TTS pipelines, reducing end-to-end processing latency for natural, fluid dialogue
+          </li>
+          <li>
+            Implemented a neural role-play engine featuring cross-session memory and custom accent-aware Whisper prompting to sustain complex, multi-turn simulations
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/Anr-Awaaz"
+    },
+    {
+      title: "DirectAid",
+      image: directAidImage,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Next.js, TypeScript, Supabase, TailwindCSS, Recharts, Zod
+            </span>
+          </li>
+          <li>
+            Architected a multi-rail disbursement engine in TypeScript to automate high-integrity fund transfers across mobile wallets, bank APIs, and USSD claim codes
+          </li>
+          <li>
+            Engineered a secure, role-based infrastructure using Supabase Auth and Zod-validated schemas to manage donor, recipient, and verifier permissions
+          </li>
+          <li>
+            Developed an inclusive, low-literacy-friendly UI with Next.js and TailwindCSS, prioritizing accessibility and transparency for unbanked user populations
+          </li>
+          <li>
+            Built an integrated analytics dashboard using Recharts to provide real-time transparency into fund distribution, risk rules, and regional payout success rates
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/DirectAid"
     },
     {
       title: "Barakah-Link",
@@ -118,14 +195,14 @@ export default function Projects() {
       id="projects"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.3 }}
     >
       <motion.h1
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         Projects
       </motion.h1>

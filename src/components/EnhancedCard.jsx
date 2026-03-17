@@ -96,7 +96,7 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
     };
   }, []);
 
-  // Bullet reveal animation with IntersectionObserver
+  // Bullet reveal animation with IntersectionObserver - faster
   useEffect(() => {
     if (!hasBullets) return;
 
@@ -110,14 +110,14 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
             setVisibleCount(v => Math.min(v + 1, bullets.length));
             index++;
             if (index < bullets.length) {
-              timeout = setTimeout(reveal, 140);
+              timeout = setTimeout(reveal, 60);
             }
           };
           reveal();
           observer.disconnect(); // Only trigger once
         }
       },
-      { threshold: 0.3, rootMargin: '50px' }
+      { threshold: 0.15, rootMargin: '100px' }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -129,13 +129,13 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
   }, [bullets, hasBullets]);
 
   // Memoized transition configs - prevent object recreation
-  const hoverTransition = useMemo(() => ({ 
-    duration: 0.3, 
-    ease: [0.34, 1.56, 0.64, 1] 
+  const hoverTransition = useMemo(() => ({
+    duration: 0.2,
+    ease: [0.25, 0.46, 0.45, 0.94]
   }), []);
-  
+
   const tapTransition = useMemo(() => ({ duration: 0.1 }), []);
-  const glowTransition = useMemo(() => ({ duration: 0.3 }), []);
+  const glowTransition = useMemo(() => ({ duration: 0.2 }), []);
 
   return (
     <motion.div
@@ -202,9 +202,9 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
             <motion.li
               key={i}
               className="bullet"
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -15 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.4, ease: "easeOut" }}
+              transition={{ delay: i * 0.06, duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {b}
             </motion.li>
