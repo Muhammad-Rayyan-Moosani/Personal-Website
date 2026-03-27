@@ -37,7 +37,15 @@ class Settings(BaseSettings):
     collection_name: str = "rayyan_knowledge"
 
     # CORS settings
-    allowed_origins: list[str] = ["http://localhost:3000", "http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]
+    allowed_origins: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "https://www.rayyanmoosani.com",
+        "https://rayyanmoosani.com",
+        "https://rayyanmoosani.onrender.com"
+    ]
 
     model_config = SettingsConfigDict(
         env_file=".env",
