@@ -119,25 +119,25 @@ body {
   }
 }
 
-/* Light Mode - Bright and Airy Theme */
-:root[data-theme="light"],
-:root:not([data-theme]) {
-  --bg-primary: #E0FFFF;
-  --bg-secondary: #D4F5F5;
-  --bg-card: #E0FFFF;
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --accent-color: #0ea5e9;
-  --accent-glow: #0ea5e9;
-  --border-color: #0ea5e9;
-  --border-subtle: rgba(14, 165, 233, 0.2);
-  --shadow-color: rgba(14, 165, 233, 0.1);
-  --typing-color: #0284c7;
+/* Light Mode - Darker Cyan Theme */
+:root[data-theme="light"] {
+  --bg-primary: #0a1a1f;
+  --bg-secondary: #0d2329;
+  --bg-card: #112830;
+  --text-primary: #e0f7fa;
+  --text-secondary: #b2ebf2;
+  --text-muted: #80deea;
+  --accent-color: #00bcd4;
+  --accent-glow: #00e5ff;
+  --border-color: #00acc1;
+  --border-subtle: rgba(0, 188, 212, 0.3);
+  --shadow-color: rgba(0, 188, 212, 0.2);
+  --typing-color: #00e5ff;
 }
 
-/* Dark Mode - Pure Black */
-:root[data-theme="dark"] {
+/* Dark Mode - Pure Black (Default) */
+:root[data-theme="dark"],
+:root:not([data-theme]) {
   --bg-primary: #000000;
   --bg-secondary: #050505;
   --bg-card: #0a0a0a;

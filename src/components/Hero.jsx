@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./StyleSheet.css";
 import waterlooLogo from "./waterloo logo.jpeg";
+import PromptBox from "./PromptBox";
 
 export default function Hero() {
   const words = ["a Software Engineer", "a Problem Solver", "a Fast Learner"];
@@ -77,6 +78,10 @@ export default function Hero() {
         I am <span className="typing">{text}</span>
         <span className="cursor">|</span>
       </motion.p>
+
+      <motion.div variants={itemVariants}>
+        <PromptBox />
+      </motion.div>
     </motion.section>
   );
 }
