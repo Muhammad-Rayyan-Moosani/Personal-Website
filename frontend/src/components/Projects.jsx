@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import "./StyleSheet.css";
 import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
@@ -190,22 +189,13 @@ export default function Projects() {
   ];
 
   return (
-    <motion.section
+    <section
       className="projects"
       id="projects"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.3 }}
     >
-      <motion.h1
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
+      <h1>
         Projects
-      </motion.h1>
+      </h1>
       
       {/* Container for cards */}
       <div className="projects-grid" ref={gridRef}>
@@ -220,6 +210,6 @@ export default function Projects() {
           />
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }

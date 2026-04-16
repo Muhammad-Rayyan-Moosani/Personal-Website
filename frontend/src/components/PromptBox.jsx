@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 import "./PromptBox.css";
 
 export default function PromptBox() {
@@ -38,24 +38,9 @@ export default function PromptBox() {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
-    <motion.div
+    <div
       className="prompt-box-container"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
     >
       <form onSubmit={handleSubmit} className="prompt-form">
         <div className="prompt-input-wrapper">
@@ -95,21 +80,20 @@ export default function PromptBox() {
       </form>
 
       {showResponse && (
-        <motion.div
+        <div
           className="prompt-response"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
         >
-          <p>{response}</p>
+          <div className="response-content">
+            <ReactMarkdown>{response}</ReactMarkdown>
+          </div>
           <button
             className="close-response-btn"
             onClick={() => setShowResponse(false)}
           >
             ✕
           </button>
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 }

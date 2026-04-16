@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import "./StyleSheet.css";
 import EnhancedCard from "./EnhancedCard.jsx";
 
@@ -78,22 +77,13 @@ export default function Experience() {
   ];
 
   return (
-    <motion.section
+    <section
       className="experience"
       id="experience"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.3 }}
     >
-      <motion.h1
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
+      <h1>
         Experience
-      </motion.h1>
+      </h1>
 
       <div className="timeline" ref={timelineRef}>
         {experiences.map((exp, index) => (
@@ -101,16 +91,8 @@ export default function Experience() {
             className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}
             key={index}
           >
-            <motion.div
+            <div
               className="timeline-dot"
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: index * 0.05 + 0.1,
-                duration: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
             />
             <EnhancedCard
               title={exp.title}
@@ -121,6 +103,6 @@ export default function Experience() {
           </div>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }

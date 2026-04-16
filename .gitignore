@@ -1,3 +1,24 @@
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+
+# Backend
+LLM-Integration/backend/__pycache__
+LLM-Integration/backend/venv
+LLM-Integration/backend/.env
+LLM-Integration/chroma_db
+
+# Python
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv
+venv/
+
 # Logs
 logs
 *.log
@@ -6,11 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +38,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Documentation (keep only main README)
+CHANGES_SUMMARY.md
+GIT_COMMIT_READY.md
+PERFORMANCE_IMPROVEMENTS.md
+QUICKSTART.md
+README_ENHANCEMENTS.md
+VISUAL_TESTING_GUIDE.md
+RENDER_DEPLOYMENT.md
+DEPLOYMENT.md
+MIGRATION_SUMMARY.md
+**/DEPLOYMENT_GUIDE.md
+
+# Deployment configs
+railway.json
+render.yaml
+Procfile

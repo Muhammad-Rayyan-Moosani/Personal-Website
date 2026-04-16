@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import LazyImage from "./LazyImage";
 import "./StyleSheet.css";
 
@@ -19,21 +18,6 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
 
   const hasBullets = bullets && bullets.length > 0;
 
-  // Mouse position for 3D tilt effect
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // Optimized spring config - same visual, less internal work
-  const springConfig = useMemo(() => ({
-    stiffness: 300,
-    damping: 30,
-    restDelta: 0.001,
-    restSpeed: 0.001,
-  }), []);
-
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), springConfig);
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), springConfig);
-
   // Cache rect on hover start - avoid repeated getBoundingClientRect calls
   const cacheRect = useCallback(() => {
     if (!ref.current) return;
@@ -48,27 +32,15 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
     };
   }, []);
 
-  // Batch DOM writes in rAF
-  const flushUpdate = useCallback(() => {
-    x.set(pendingUpdate.current.x);
-    y.set(pendingUpdate.current.y);
-    rafId.current = null;
-  }, [x, y]);
-
   // Throttled mouse move - schedules update in next rAF
   const handleMouseMove = useCallback((e) => {
     if (!supportsHover) return;
-    
+
     const cache = rectCache.current;
     // Calculate relative position using cached values
     pendingUpdate.current.x = (e.clientX - cache.centerX) / cache.width;
     pendingUpdate.current.y = (e.clientY - cache.centerY) / cache.height;
-    
-    // Schedule rAF if not already pending
-    if (!rafId.current) {
-      rafId.current = requestAnimationFrame(flushUpdate);
-    }
-  }, [flushUpdate]);
+  }, []);
 
   const handleMouseEnter = useCallback(() => {
     if (!supportsHover) return;
@@ -77,15 +49,8 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
   }, [cacheRect]);
 
   const handleMouseLeave = useCallback(() => {
-    // Cancel any pending rAF
-    if (rafId.current) {
-      cancelAnimationFrame(rafId.current);
-      rafId.current = null;
-    }
-    x.set(0);
-    y.set(0);
     setIsHovered(false);
-  }, [x, y]);
+  }, []);
 
   // Cleanup rAF on unmount
   useEffect(() => {
@@ -128,96 +93,72 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
     };
   }, [bullets, hasBullets]);
 
-  // Memoized transition configs - prevent object recreation
-  const hoverTransition = useMemo(() => ({
-    duration: 0.2,
-    ease: [0.25, 0.46, 0.45, 0.94]
-  }), []);
-
-  const tapTransition = useMemo(() => ({ duration: 0.1 }), []);
-  const glowTransition = useMemo(() => ({ duration: 0.2 }), []);
-
   return (
-    <motion.div
+    <div
       ref={ref}
       className="card enhanced-card"
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
-        rotateX: supportsHover ? rotateX : 0,
-        rotateY: supportsHover ? rotateY : 0,
         transformStyle: supportsHover ? "preserve-3d" : "flat",
-      }}
-      whileHover={{
-        scale: 1.02,
-        transition: hoverTransition,
-      }}
-      whileTap={{
-        scale: 0.98,
-        transition: tapTransition,
       }}
     >
       {/* Glow effect on hover - only render when hovered for perf */}
       {supportsHover && (
-        <motion.div
+        <div
           className="card-glow"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={glowTransition}
+          style={{ opacity: isHovered ? 1 : 0 }}
         />
       )}
 
       {image && (
-        <motion.div
+        <div
           className="card-image-container"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           <LazyImage src={image} alt={title} className="card-image" />
-        </motion.div>
+        </div>
       )}
-      
-      <motion.h3
+
+      <h3
         className="card-title"
         style={{ transform: supportsHover ? "translateZ(30px)" : "none" }}
       >
         <a href={link} target="_blank" rel="noreferrer">{title}</a>
-      </motion.h3>
+      </h3>
 
       {date && (
-        <motion.p
+        <p
           className="card-date"
           style={{ transform: supportsHover ? "translateZ(25px)" : "none" }}
         >
           {date}
-        </motion.p>
+        </p>
       )}
 
       {hasBullets ? (
-        <motion.ul
+        <ul
           className="card-bullets"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           {bullets.slice(0, visibleCount).map((b, i) => (
-            <motion.li
+            <li
               key={i}
               className="bullet"
-              initial={{ opacity: 0, x: -15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06, duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {b}
-            </motion.li>
+            </li>
           ))}
-        </motion.ul>
+        </ul>
       ) : (
-        <motion.div
+        <div
           className="card-description"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           {description}
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 }

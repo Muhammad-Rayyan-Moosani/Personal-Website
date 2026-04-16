@@ -12,11 +12,11 @@ const isLowEndDevice = () => {
 const isMobile = typeof window !== 'undefined' && 
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// Adaptive particle count
+// Adaptive particle count - Optimized for mobile performance
 const getParticleCount = () => {
-  if (isMobile) return 40;
-  if (isLowEndDevice()) return 60;
-  return 100; // Reduced from 130 for better perf
+  if (isMobile) return 25; // Reduced from 40 for faster mobile
+  if (isLowEndDevice()) return 50;
+  return 80; // Reduced for overall better performance
 };
 
 function Background() {
@@ -44,16 +44,18 @@ function Background() {
     const FRAME_DURATION = 1000 / TARGET_FPS;
 
     // Pre-calculate colors based on theme
-    // Light mode = light cyan background, Dark mode = pure black background
+    // Light mode = premium white, Dark mode = pure black background
     const updateColors = () => {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       colorsRef.current = {
-        // Dark mode: pure black, Light mode: light cyan
-        bg: isDark ? '#000000' : '#E0FFFF',
-        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(224, 255, 255, 0.25)',
-        grid: 'rgba(0, 234, 255, 0.1)',
-        particle: '#00eaff',
-        shadow: '#00eaff',
+        // Dark mode: pure black, Light mode: pure white
+        bg: isDark ? '#000000' : '#ffffff',
+        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.3)',
+        // Brighter, more visible grid in light mode
+        grid: isDark ? 'rgba(0, 234, 255, 0.1)' : 'rgba(8, 145, 178, 0.15)',
+        // Brighter particles in light mode
+        particle: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.6)',
+        shadow: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.4)',
       };
     };
 
@@ -156,12 +158,12 @@ function Background() {
       ctx.lineWidth = 1;
       ctx.stroke(gridPathRef.current);
 
-      // Batch particle drawing
+      // Batch particle drawing - FAST path
       ctx.fillStyle = colors.particle;
-      ctx.shadowBlur = 15;
+      ctx.shadowBlur = 10;
       ctx.shadowColor = colors.shadow;
-      
-      // Begin single path for all particles
+
+      // Begin single path for all particles - MUCH faster
       ctx.beginPath();
       const particles = particlesRef.current;
       for (let i = 0; i < particles.length; i++) {
@@ -171,7 +173,7 @@ function Background() {
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       }
       ctx.fill();
-      
+
       // Reset shadow for next frame
       ctx.shadowBlur = 0;
 

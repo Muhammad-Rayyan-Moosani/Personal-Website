@@ -1,18 +1,67 @@
-# React + Vite
+# Personal Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern personal portfolio website with an AI chatbot powered by Claude AI.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```
+.
+├── frontend/              # React + Vite frontend application
+│   ├── src/              # React components and app code
+│   ├── public/           # Static assets
+│   └── package.json      # Frontend dependencies
+│
+└── LLM-Integration/
+    └── backend/          # Python Flask backend with RAG chatbot
+        ├── app.py        # Main Flask application
+        └── requirements.txt
+```
 
-## React Compiler
+## Deployment
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+This project is split into two separate deployments:
 
-Note: This will impact Vite dev & build performances.
+### Frontend (Static Site)
 
-## Expanding the ESLint configuration
+**Deploy to Render:**
+1. Create a new **Static Site** on Render
+2. Connect your GitHub repository
+3. Configure:
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend (Web Service)
+
+**Deploy to Render:**
+1. Create a new **Web Service** on Render
+2. Connect your GitHub repository
+3. Configure:
+   - **Root Directory**: `LLM-Integration/backend`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `python app.py`
+   - **Environment Variables**: Add your `ANTHROPIC_API_KEY`
+
+## Local Development
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Backend
+```bash
+cd LLM-Integration/backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+
+## Tech Stack
+
+- **Frontend**: React, Vite, Three.js, Tailwind CSS, Framer Motion
+- **Backend**: Python, Flask, LangChain, Anthropic Claude API
+- **AI Features**: RAG (Retrieval Augmented Generation) with ChromaDB

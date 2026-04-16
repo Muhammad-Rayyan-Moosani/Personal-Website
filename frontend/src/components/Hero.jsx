@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import "./StyleSheet.css";
 import waterlooLogo from "./waterloo logo.jpeg";
 import PromptBox from "./PromptBox";
@@ -27,42 +26,13 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [charIndex, index, words]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
-    <motion.section
-      className="hero"
-      id="home"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.h1 className="hero-title" variants={itemVariants}>
+    <section className="hero" id="home">
+      <h1 className="hero-title">
         Hey, I am Rayyan Moosani
-      </motion.h1>
+      </h1>
 
-      <motion.h2 className="hero-school" variants={itemVariants}>
+      <h2 className="hero-school">
         Computer Science Undergrad @ University of{" "}
         <span className="hero-waterloo-wrap">
           Waterloo
@@ -72,16 +42,16 @@ export default function Hero() {
             className="hero-waterloo-logo"
           />
         </span>
-      </motion.h2>
+      </h2>
 
-      <motion.p className="hero-subtitle" variants={itemVariants}>
+      <p className="hero-subtitle">
         I am <span className="typing">{text}</span>
         <span className="cursor">|</span>
-      </motion.p>
+      </p>
 
-      <motion.div variants={itemVariants}>
+      <div>
         <PromptBox />
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }

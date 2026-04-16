@@ -1,37 +1,19 @@
-import { motion } from "framer-motion";
 import "./StyleSheet.css";
 
 export default function About() {
   return (
-    <motion.section
+    <section
       className="about-section"
       id="about"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.3 }}
     >
-      <motion.h1
+      <h1
         className="about-heading"
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         About Me
-      </motion.h1>
+      </h1>
 
-      <motion.div
+      <div
         className="about-box"
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-        whileHover={{
-          scale: 1.02,
-          boxShadow: "0 15px 40px var(--shadow-color)",
-          transition: { duration: 0.2 },
-        }}
       >
         <p className="about-intro">
           A computer science student who enjoys building systems that actually
@@ -100,7 +82,7 @@ export default function About() {
             consistency developed through years of match play.
           </li>
         </ul>
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }

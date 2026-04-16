@@ -170,9 +170,9 @@ class IndexingResponse(BaseModel):
 @app.get(
     "/",
     summary="Root endpoint",
-    response_model=Dict[str, str]
+    response_model=Dict[str, Any]
 )
-async def root() -> Dict[str, str]:
+async def root() -> Dict[str, Any]:
     """Root endpoint returning basic API information."""
     return {
         "message": "Welcome to Rayyan's Personal AI Assistant API",

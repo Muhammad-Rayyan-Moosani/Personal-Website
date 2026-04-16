@@ -15,7 +15,6 @@
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  transition: color 0.3s ease;
 }
 
 .hero h1 {
@@ -70,7 +69,6 @@
   padding: 0 1rem;
   box-sizing: border-box;
   position: relative;
-  transition: color 0.3s ease;
 }
 
 .about-heading {
@@ -88,7 +86,6 @@
   background-color: var(--accent-color);
   margin-top: 8px;
   border-radius: 2px;
-  transition: background-color 0.3s ease;
 }
 
 .about-box {
@@ -101,7 +98,6 @@
   box-shadow: 0 8px 20px var(--shadow-color);
   margin-bottom: clamp(60px, 15vh, 190px);
   box-sizing: border-box;
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
 }
 
@@ -126,9 +122,9 @@
   display: block;
   width: clamp(40px, 5vw, 60px);
   height: 3px;
+  background-color: var(--accent-color);
   margin-top: 8px;
   border-radius: 2px;
-  transition: background-color 0.3s ease;
 }
 
 .about-subhead-exp {
@@ -187,7 +183,6 @@
   padding: clamp(1rem, 3vw, 2rem);
   box-sizing: border-box;
   position: relative;
-  transition: color 0.3s ease;
 }
 
 .experience h1 {
@@ -205,7 +200,6 @@
   background-color: var(--accent-color);
   margin-top: 8px;
   border-radius: 2px;
-  transition: background-color 0.3s ease;
 }
 
 .experience p {
@@ -243,7 +237,6 @@
   background-color: var(--accent-color);
   border-radius: 2px;
   z-index: 1;
-  transition: background-color 0.3s ease;
 }
 
 .timeline-item {
@@ -251,101 +244,26 @@
   width: 50%;
   padding: clamp(15px, 2vw, 20px) clamp(20px, 3vw, 40px);
   box-sizing: border-box;
-  opacity: 0;
-  transform: translate3d(0, 30px, 0); /* GPU promotion */
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translate3d(0, 0, 0); /* GPU promotion */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   contain: layout style;
-}
-
-.timeline-item.animate-in {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
-
-.timeline-item.left.animate-in {
-  animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.timeline-item.right.animate-in {
-  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translate3d(-50px, 30px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translate3d(50px, 30px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
 }
 
 /* Dot */
 .timeline-dot {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%) scale(0) translateZ(0);
+  transform: translateY(-50%) scale(1) translateZ(0);
   width: clamp(12px, 1.5vw, 16px);
   height: clamp(12px, 1.5vw, 16px);
   background-color: var(--accent-color);
   border: 3px solid var(--bg-primary);
   border-radius: 50%;
   z-index: 2;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-}
-
-.timeline-item.left.animate-in .timeline-dot {
-  animation: dotPulseLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: 0.3s;
-}
-
-.timeline-item.right.animate-in .timeline-dot {
-  animation: dotPulseRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: 0.3s;
-}
-
-@keyframes dotPulseLeft {
-  0% {
-    transform: translateX(50%) translateY(-50%) scale(0) translateZ(0);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(50%) translateY(-50%) scale(1.3) translateZ(0);
-  }
-  100% {
-    transform: translateX(50%) translateY(-50%) scale(1) translateZ(0);
-    opacity: 1;
-  }
-}
-
-@keyframes dotPulseRight {
-  0% {
-    transform: translateX(-50%) translateY(-50%) scale(0) translateZ(0);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(-50%) translateY(-50%) scale(1.3) translateZ(0);
-  }
-  100% {
-    transform: translateX(-50%) translateY(-50%) scale(1) translateZ(0);
-    opacity: 1;
-  }
 }
 
 /* LEFT side */
@@ -355,7 +273,7 @@
 }
 .timeline-item.left .timeline-dot {
   right: -8px;
-  transform: translateX(50%) translateY(-50%) scale(0) translateZ(0);
+  transform: translateX(50%) translateY(-50%) scale(1) translateZ(0);
 }
 .timeline-item.left .card {
   margin-left: auto;
@@ -373,7 +291,7 @@
 }
 .timeline-item.right .timeline-dot {
   left: -8px;
-  transform: translateX(-50%) translateY(-50%) scale(0) translateZ(0);
+  transform: translateX(-50%) translateY(-50%) scale(1) translateZ(0);
 }
 .timeline-item.right .card {
   margin-left: clamp(20px, 4vw, 50px);
@@ -392,57 +310,8 @@
   padding: clamp(20px, 2.5vw, 25px);
   flex: none !important;
   box-sizing: border-box;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-  opacity: 0;
-  transform: translateY(20px) scale(1);
-}
-
-.timeline-item.animate-in .card {
-  animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.2s;
-}
-
-.timeline-item.left.animate-in .card {
-  animation: cardSlideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.2s;
-}
-
-.timeline-item.right.animate-in .card {
-  animation: cardSlideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 0.2s;
-}
-
-@keyframes cardSlideIn {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes cardSlideInLeft {
-  from {
-    opacity: 0;
-    transform: translate3d(-30px, 20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes cardSlideInRight {
-  from {
-    opacity: 0;
-    transform: translate3d(30px, 20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .timeline-item .card:hover {
@@ -469,7 +338,6 @@
   padding: clamp(1rem, 3vw, 2rem);
   box-sizing: border-box;
   position: relative;
-  transition: color 0.3s ease;
 }
 
 .projects h1 {
@@ -487,7 +355,6 @@
   background-color: var(--accent-color);
   margin-top: 8px;
   border-radius: 2px;
-  transition: background-color 0.3s ease;
 }
 
 .projects p {
@@ -511,11 +378,6 @@
   background-color: var(--bg-card);
   border: 2px solid var(--border-color);
   color: var(--text-secondary);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.3s ease,
-              background-color 0.3s ease,
-              border-color 0.3s ease,
-              color 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -534,7 +396,6 @@
 
 /* Enhanced Card Glow Effect */
 .enhanced-card {
-  will-change: transform;
   contain: layout style;
 }
 
@@ -552,7 +413,6 @@
     transparent 70%
   );
   opacity: 0;
-  transition: opacity 0.3s ease;
   z-index: 0;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -564,12 +424,8 @@
 
 /* Only apply initial animation state to project cards, not timeline cards */
 .projects-grid .card {
-  opacity: 0;
-  transform: translate3d(0, 40px, 0) scale(0.95);
-}
-
-.projects-grid .card.animate-in {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 /* Mobile Performance Optimizations */
@@ -596,15 +452,23 @@
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 40px, 0) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
+/* Light mode specific enhancements */
+:root[data-theme="light"] .card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #e5e7eb;
+}
+
+:root[data-theme="light"] .card:hover {
+  box-shadow: 0 8px 20px rgba(8, 145, 178, 0.15);
+  border-color: var(--accent-color);
+}
+
+:root[data-theme="light"] .timeline-item .card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .timeline-item .card:hover {
+  box-shadow: 0 8px 20px rgba(8, 145, 178, 0.12);
 }
 
 .card-image-container {
@@ -614,7 +478,6 @@
   overflow: hidden;
   background-color: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-image {
@@ -623,7 +486,6 @@
   display: block;
   border-radius: 12px;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
 .card:hover .card-image {
@@ -657,7 +519,6 @@
   width: 0%;
   height: 2px;
   background-color: var(--accent-color);
-  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .card-title:hover::after {
@@ -667,7 +528,6 @@
 .card-title a {
   color: var(--accent-color);
   text-decoration: none;
-  transition: color 0.2s;
 }
 
 .card-title a:hover {
@@ -679,14 +539,12 @@
   font-size: 1.2rem;
   color: var(--accent-color);
   margin-bottom: 10px;
-  transition: color 0.3s ease;
 }
 
 .card-date {
   font-size: 0.9rem;
   color: var(--text-muted);
   margin-bottom: 10px;
-  transition: color 0.3s ease;
 }
 
 .card-description {
@@ -694,7 +552,6 @@
   color: var(--text-secondary);
   line-height: 1.6;
   white-space: pre-line;
-  transition: color 0.3s ease;
 }
 
 /* Bullets */
@@ -709,20 +566,13 @@
 }
 .card-bullets li,
 .animated-bullets li {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: bulletIn 0.3s ease forwards;
+  opacity: 1;
+  transform: translateY(0);
   line-height: 1.6;
   margin-bottom: 10px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
-}
-@keyframes bulletIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* =========================
@@ -744,7 +594,6 @@
   font-size: clamp(14px, 1.5vw, 20px);
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-subtle);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
   overflow-x: hidden;
 }
 
@@ -769,7 +618,6 @@
   text-decoration: none;
   font-family: 'Orbitron', sans-serif;
   font-weight: 600;
-  transition: color 0.15s, text-shadow 0.15s;
   white-space: nowrap;
   font-size: clamp(14px, 1.5vw, 20px);
 }
@@ -790,8 +638,9 @@
   margin-bottom: 5px;
 }
 
-/* Theme Toggle Button */
-.navbar ul li .theme-toggle {
+/* Theme Toggle Button & Resume Button */
+.navbar ul li .theme-toggle,
+.navbar ul li .resume-btn {
   background: transparent;
   border: none;
   color: var(--accent-color);
@@ -800,23 +649,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s, transform 0.15s;
   font-family: 'Orbitron', sans-serif;
   font-weight: 600;
   margin-top: 2px;
+  text-decoration: none;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.resume-btn:hover {
   color: var(--accent-glow);
   text-shadow: 0 0 8px var(--accent-color), 0 0 15px var(--accent-glow);
   transform: scale(1.1);
 }
 
-.theme-toggle:active {
+.theme-toggle:active,
+.resume-btn:active {
   transform: scale(0.95);
 }
 
-.theme-toggle svg {
+.theme-toggle svg,
+.resume-btn svg {
   width: 20px;
   height: 20px;
   stroke: currentColor;
@@ -842,7 +694,6 @@
   padding: clamp(2rem, 5vh, 4rem) clamp(1rem, 3vw, 2rem);
   box-sizing: border-box;
   position: relative;
-  transition: color 0.3s ease;
 }
 
 .contacts h1 {
@@ -860,7 +711,6 @@
   background-color: var(--accent-color);
   margin-top: 8px;
   border-radius: 2px;
-  transition: background-color 0.3s ease;
 }
 
 .contacts p {
@@ -881,7 +731,6 @@
   width: clamp(28px, 3vw, 32px);
   height: clamp(28px, 3vw, 32px);
   object-fit: contain;
-  transition: transform 0.2s, filter 0.2s;
 }
 
 /* =========================
@@ -890,17 +739,11 @@
 .typing {
   color: var(--typing-color);
   font-weight: bold;
-  transition: color 0.3s ease;
 }
 
 .cursor {
   margin-left: 2px;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 50%, 100% { opacity: 1; }
-  25%, 75% { opacity: 0; }
+  opacity: 1;
 }
 
 /* =========================
@@ -948,7 +791,8 @@
     margin-right: clamp(10px, 4vw, 50px);
   }
   
-  .theme-toggle svg {
+  .theme-toggle svg,
+  .resume-btn svg {
     width: 16px;
     height: 16px;
   }
@@ -1068,7 +912,8 @@
     margin-right: clamp(8px, 3vw, 40px);
   }
   
-  .theme-toggle svg {
+  .theme-toggle svg,
+  .resume-btn svg {
     width: 14px;
     height: 14px;
   }
@@ -1125,7 +970,6 @@
   margin-top: 15px;
   color: var(--text-secondary);
   text-align: left;
-  transition: color 0.3s ease;
 }
 
 .project-bullets li {
@@ -1137,7 +981,6 @@
 .tech-stack {
   color: #3b82f6;
   font-weight: 600;
-  transition: color 0.3s ease;
 }
 
 
@@ -1157,7 +1000,6 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Hover effect */
@@ -1179,7 +1021,6 @@
   text-decoration: none;
   position: relative;
   padding-bottom: 2px;
-  transition: color 0.3s;
 }
 
 .contact-links a:hover {
@@ -1195,7 +1036,6 @@
   width: 0%;
   height: 2px;
   background-color: var(--accent-color);
-  transition: width 0.3s ease-in-out, background-color 0.3s ease;
 }
 
 .contact-links a:hover::after {
@@ -1217,7 +1057,11 @@
   margin-left: -5px;
   margin-top: 5px;
   margin-right: -5px;
-  transition: color 0.3s ease;
+}
+
+/* Light mode - Make arrows visible with cyan color */
+:root[data-theme="light"] .webring-arrow {
+  color: var(--accent-color);
 }
 
 .webring-icon {
@@ -1226,11 +1070,333 @@
   opacity: 0.8;
   margin-top: 15px;
   margin-left: 5px;
-  filter: brightness(0) invert(1); /* Always white for both light and dark modes */
-  transition: opacity 0.3s ease;
+  filter: brightness(0) invert(1); /* White for dark mode */
+}
+
+/* Light mode - Make webring icon visible with cyan tint */
+:root[data-theme="light"] .webring-icon {
+  filter: brightness(0) saturate(100%) invert(44%) sepia(85%) saturate(1586%) hue-rotate(160deg) brightness(95%) contrast(90%);
+  opacity: 1;
 }
 
 /* Animate on hover */
 .contact-links a:hover::after {
   width: 100%;
+}
+
+/* =========================
+   PREMIUM TYPOGRAPHY - LIGHT MODE
+   ========================= */
+
+/* H1 - Primary Heading with Modern Condensed Look */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+/* H2 - Subtext with Clear Hierarchy */
+:root[data-theme="light"] .hero h2 {
+  color: var(--text-muted);
+  opacity: 1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* All Headings - Premium Typography */
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] .about-heading {
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+}
+
+/* =========================
+   NAVBAR GLASS EFFECT - LIGHT MODE
+   ========================= */
+
+/* Sticky Solid Navbar (NO backdrop-filter for performance) */
+:root[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
+/* Link Hover with Cyan Dot */
+:root[data-theme="light"] .navbar ul li a {
+  color: var(--text-secondary);
+  position: relative;
+  padding-bottom: 4px;
+}
+
+:root[data-theme="light"] .navbar ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+:root[data-theme="light"] .navbar ul li a:hover {
+  color: var(--accent-color);
+  text-shadow: none;
+}
+
+:root[data-theme="light"] .navbar ul li a:hover::after {
+  opacity: 1;
+}
+/* =========================
+   MOBILE PERFORMANCE & OPTIMIZATIONS
+   ========================= */
+
+/* Tablet and Mobile */
+@media (max-width: 1024px) {
+  /* Reduce particle count on tablets/mobile */
+  canvas {
+    opacity: 0.7;
+  }
+  
+  /* Disable hover effects that don't work on touch */
+  .card:hover,
+  .contact-box:hover,
+  .timeline-item .card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 12px var(--shadow-color) !important;
+  }
+  
+  /* Optimize fonts for mobile */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Phone Optimization */
+@media (max-width: 768px) {
+  /* Single column layout for timeline on phones */
+  .timeline::before {
+    left: 20px !important;
+  }
+  
+  .timeline-item {
+    width: 100% !important;
+    left: 0 !important;
+    text-align: left !important;
+    padding-left: 50px !important;
+    padding-right: 15px !important;
+  }
+  
+  .timeline-item.left .timeline-dot,
+  .timeline-item.right .timeline-dot {
+    left: 12px !important;
+    right: auto !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+  }
+  
+  .timeline-item .card,
+  .timeline-item.left .card,
+  .timeline-item.right .card {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+  
+  /* Single column for projects on phone */
+  .projects-grid {
+    column-count: 1 !important;
+  }
+  
+  /* Larger tap targets for mobile */
+  .navbar ul li a,
+  .theme-toggle,
+  .resume-btn,
+  button,
+  .contact-links a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Optimize spacing for mobile */
+  .hero {
+    padding: 1.5rem 1rem;
+    min-height: 90vh;
+  }
+  
+  .about-section,
+  .experience,
+  .projects,
+  .contacts {
+    padding: 2rem 1rem;
+  }
+  
+  /* Make text more readable on mobile */
+  .hero h1 {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+  
+  .hero h2 {
+    font-size: clamp(16px, 5vw, 24px) !important;
+  }
+  
+  .about-heading,
+  .experience h1,
+  .projects h1,
+  .contacts h1 {
+    font-size: clamp(32px, 8vw, 52px) !important;
+  }
+  
+  /* Optimize cards for mobile */
+  .card {
+    padding: 1.25rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .card-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .card-description {
+    font-size: 0.95rem !important;
+  }
+  
+  /* Better image handling on mobile */
+  .card-image-container {
+    max-height: 200px;
+    overflow: hidden;
+  }
+  
+  .card-image {
+    object-fit: cover;
+    height: 100%;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  /* Ultra-compact navbar */
+  .navbar {
+    padding: 8px 5px 5px !important;
+  }
+  
+  .navbar img {
+    height: 24px !important;
+    width: 24px !important;
+  }
+  
+  .navbar ul {
+    gap: 8px !important;
+  }
+  
+  .navbar ul li a {
+    font-size: 11px !important;
+    padding: 4px 6px;
+  }
+  
+  /* Compact hero */
+  .hero {
+    min-height: 85vh;
+    padding: 1rem 0.75rem;
+  }
+  
+  .hero h1 {
+    font-size: clamp(24px, 9vw, 40px) !important;
+    line-height: 1.1 !important;
+  }
+  
+  .hero h2 {
+    font-size: clamp(14px, 5.5vw, 20px) !important;
+  }
+  
+  .hero-waterloo-logo {
+    height: 0.9em !important;
+  }
+  
+  /* Compact sections */
+  .about-section,
+  .experience,
+  .projects,
+  .contacts {
+    padding: 1.5rem 0.75rem;
+    margin-top: 50px !important;
+  }
+  
+  .about-heading,
+  .experience h1,
+  .projects h1,
+  .contacts h1 {
+    font-size: clamp(28px, 9vw, 44px) !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Ultra-compact cards */
+  .card {
+    padding: 1rem !important;
+    border-radius: 12px !important;
+  }
+  
+  .timeline-item {
+    padding-left: 40px !important;
+  }
+  
+  /* Smaller dot */
+  .timeline-dot {
+    width: 10px !important;
+    height: 10px !important;
+    left: 8px !important;
+  }
+  
+  .timeline::before {
+    left: 12px !important;
+    width: 3px !important;
+  }
+}
+
+/* Performance: Disable complex effects on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .card:hover,
+  .timeline-item .card:hover {
+    transform: none !important;
+  }
+}
+
+/* Optimize for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove all hover effects on touch */
+  .card:hover,
+  .contact-box:hover,
+  .timeline-item .card:hover,
+  .enhanced-card:hover,
+  .navbar ul li a:hover {
+    transform: none !important;
+    color: inherit !important;
+    box-shadow: inherit !important;
+  }
+  
+  /* Better tap feedback */
+  button:active,
+  a:active {
+    opacity: 0.7;
+  }
+  
+  /* Disable card glow on touch */
+  .card-glow {
+    display: none !important;
+  }
 }
