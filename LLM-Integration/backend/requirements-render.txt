@@ -1,0 +1,18 @@
+# Optimized requirements for Render deployment
+# Minimal dependencies for production
+
+# Core framework
+fastapi==0.135.2
+uvicorn==0.42.0  # Without [standard] extras for lighter footprint
+
+# API and configuration
+anthropic==0.86.0
+python-dotenv==1.2.2
+pydantic==2.12.5
+pydantic-settings==2.13.1
+
+# Content processing
+markdown==3.7
+
+# Note: ChromaDB and sentence-transformers are excluded to reduce memory usage
+# The application will use simplified in-memory storage for deployment
