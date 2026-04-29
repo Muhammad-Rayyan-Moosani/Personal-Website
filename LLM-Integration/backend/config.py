@@ -9,6 +9,8 @@ Loads environment variables and defines system constants.
 
 import os
 from pathlib import Path
+from typing import List
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -37,7 +39,7 @@ class Settings(BaseSettings):
     collection_name: str = "rayyan_knowledge"
 
     # CORS settings
-    allowed_origins: list[str] = [
+    allowed_origins: List[str] = [
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:5174",
@@ -46,6 +48,14 @@ class Settings(BaseSettings):
         "https://rayyanmoosani.com",
         "https://rayyanmoosani.onrender.com"
     ]
+
+    @field_validator('allowed_origins', mode='before')
+    @classmethod
+    def parse_allowed_origins(cls, v):
+        """Parse allowed origins from comma-separated string if needed."""
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(',')]
+        return v
 
     model_config = SettingsConfigDict(
         env_file=".env",
