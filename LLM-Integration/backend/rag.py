@@ -11,19 +11,17 @@ from typing import List, Dict, Any, Optional
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
-from sentence_transformers import SentenceTransformer
 from anthropic import Anthropic
 
 from config import settings
+from embeddings import embed_query
 
 
 class ContextRetriever:
     """Retrieves relevant context from the vector database."""
 
     def __init__(self):
-        """Initialize the retriever with embedding model and database connection."""
-        self.embedding_model = SentenceTransformer(settings.embedding_model)
-
+        """Initialize the retriever with a database connection (model loads lazily)."""
         # Connect to ChromaDB
         self.client = chromadb.PersistentClient(
             path=str(settings.chroma_db_dir),
@@ -60,10 +58,7 @@ class ContextRetriever:
         fetch_k = top_k * settings.fetch_k_multiplier
 
         # Generate query embedding
-        query_embedding = self.embedding_model.encode(
-            query,
-            convert_to_numpy=True
-        ).tolist()
+        query_embedding = embed_query(query)
 
         # Query ChromaDB for more results
         results = self.collection.query(

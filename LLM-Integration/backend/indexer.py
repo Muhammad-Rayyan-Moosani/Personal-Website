@@ -14,9 +14,9 @@ from typing import List, Dict, Any
 
 import chromadb
 from chromadb.config import Settings as ChromaSettings
-from sentence_transformers import SentenceTransformer
 
 from config import settings
+from embeddings import embed_texts
 
 
 class DocumentChunker:
@@ -134,8 +134,7 @@ class VectorIndexer:
     """Manages vector embeddings and ChromaDB storage."""
 
     def __init__(self):
-        """Initialize the indexer with embedding model and database."""
-        self.embedding_model = SentenceTransformer(settings.embedding_model)
+        """Initialize the indexer with a chunker and database (model loads lazily)."""
         self.chunker = DocumentChunker(
             chunk_size=settings.chunk_size,
             overlap=settings.chunk_overlap
@@ -242,11 +241,7 @@ class VectorIndexer:
 
         # Generate embeddings
         texts = [chunk["text"] for chunk in all_chunks]
-        embeddings = self.embedding_model.encode(
-            texts,
-            show_progress_bar=True,
-            convert_to_numpy=True
-        ).tolist()
+        embeddings = embed_texts(texts)
 
         # Prepare data for ChromaDB
         ids = [f"chunk_{i}" for i in range(len(all_chunks))]
