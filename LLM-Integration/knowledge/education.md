@@ -2,7 +2,7 @@
 
 ## University of Waterloo
 **Bachelor of Computer Science**  
-2025 – 2030  
+2025 – 2029 (Expected)  
 - Awarded the President’s Scholarship
 
 ## A-Levels (International Advanced Level)

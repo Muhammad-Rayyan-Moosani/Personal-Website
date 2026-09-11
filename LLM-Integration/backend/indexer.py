@@ -35,7 +35,12 @@ class DocumentChunker:
 
     def chunk_text(self, text: str, metadata: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Split text into overlapping chunks.
+        Split text into chunks, keeping each markdown section together.
+
+        The knowledge base is structured with markdown headings, so we chunk by
+        section: a full FAQ question-and-answer or a single role/project stays as
+        one coherent unit, which makes semantic retrieval far more accurate.
+        Sections longer than the chunk size fall back to character splitting.
 
         Args:
             text: The text to chunk
@@ -44,37 +49,70 @@ class DocumentChunker:
         Returns:
             List of dictionaries containing chunk text and metadata
         """
-        chunks = []
-        start = 0
+        chunks: List[Dict[str, Any]] = []
+        for section in self._split_by_headings(text):
+            section = section.strip()
+            if not section:
+                continue
+            if len(section) <= int(self.chunk_size * 1.6):
+                self._add_chunk(chunks, section, metadata)
+            else:
+                for sub in self._split_by_chars(section):
+                    self._add_chunk(chunks, sub, metadata)
 
-        while start < len(text):
-            end = start + self.chunk_size
-            chunk_text = text[start:end]
-
-            # Try to break at a sentence or word boundary
-            if end < len(text):
-                last_period = chunk_text.rfind(".")
-                last_newline = chunk_text.rfind("\n")
-                last_space = chunk_text.rfind(" ")
-
-                break_point = max(last_period, last_newline, last_space)
-                if break_point > self.chunk_size // 2:
-                    chunk_text = chunk_text[:break_point + 1]
-                    end = start + break_point + 1
-
-            chunk_metadata = metadata.copy()
-            chunk_metadata["chunk_index"] = len(chunks)
-            chunk_metadata["char_start"] = start
-            chunk_metadata["char_end"] = end
-
-            chunks.append({
-                "text": chunk_text.strip(),
-                "metadata": chunk_metadata
-            })
-
-            start = end - self.overlap
+        if not chunks:  # headingless text: fall back to character splitting
+            for sub in self._split_by_chars(text):
+                self._add_chunk(chunks, sub, metadata)
 
         return chunks
+
+    def _split_by_headings(self, text: str) -> List[str]:
+        """Group text into sections that each begin at a level-2+ heading.
+
+        A run of headings with no body text yet (e.g. a category heading
+        immediately followed by a question) is kept with the section that
+        follows, so each chunk carries its heading context.
+        """
+        def has_body(lines: List[str]) -> bool:
+            return any(l.strip() and not l.strip().startswith("#") for l in lines)
+
+        sections: List[str] = []
+        current: List[str] = []
+        for line in text.split("\n"):
+            stripped = line.strip()
+            hashes = len(stripped) - len(stripped.lstrip("#"))
+            is_section_heading = hashes >= 2 and stripped[hashes:hashes + 1] == " "
+            if is_section_heading and has_body(current):
+                sections.append("\n".join(current))
+                current = [line]
+            else:
+                current.append(line)
+        if current:
+            sections.append("\n".join(current))
+        return sections
+
+    def _split_by_chars(self, text: str) -> List[str]:
+        """Character-based splitting with overlap, breaking on nearby boundaries."""
+        parts: List[str] = []
+        start = 0
+        while start < len(text):
+            end = start + self.chunk_size
+            chunk = text[start:end]
+            if end < len(text):
+                break_point = max(chunk.rfind("."), chunk.rfind("\n"), chunk.rfind(" "))
+                if break_point > self.chunk_size // 2:
+                    chunk = chunk[:break_point + 1]
+                    end = start + break_point + 1
+            parts.append(chunk.strip())
+            start = end - self.overlap
+        return parts
+
+    def _add_chunk(
+        self, chunks: List[Dict[str, Any]], text: str, metadata: Dict[str, Any]
+    ) -> None:
+        chunk_metadata = metadata.copy()
+        chunk_metadata["chunk_index"] = len(chunks)
+        chunks.append({"text": text.strip(), "metadata": chunk_metadata})
 
 
 class MarkdownLoader:

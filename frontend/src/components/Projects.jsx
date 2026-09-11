@@ -4,6 +4,7 @@ import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
 import directAidImage from "./SCR-20260317-czet.png";
+import storyVerseImage from "./StoryVerse.png";
 
 export default function Projects() {
   const gridRef = useRef(null);
@@ -33,6 +34,32 @@ export default function Projects() {
   }, []);
 
   const projects = [
+    {
+      title: "StoryVerse",
+      image: storyVerseImage,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: TypeScript, Node.js, Express, React, PostgreSQL (Drizzle ORM), Cloudflare R2, FFmpeg, Multi-Model AI (Claude, GPT-4o-mini, FLUX, Runway, Veo 3, ElevenLabs)
+            </span>
+          </li>
+          <li>
+            Built a full-stack, AI-native platform that turns a written manuscript into a finished 45-second cinematic book trailer — visuals, camera motion, time-aligned narration, and lip-sync — in minutes
+          </li>
+          <li>
+            Architected a declarative step-runner orchestrating ~10 AI providers behind one uniform interface across 8 model-agnostic tiers spanning a ~600× cost range ($0.03–$18 per trailer)
+          </li>
+          <li>
+            Engineered a resumable, human-in-the-loop pipeline with database-persisted state — users pause, preview, edit prompts, regenerate a single asset, or swap models mid-run without restarting or re-paying for completed work
+          </li>
+          <li>
+            Raised AI character-consistency from ~22% to 100% of scenes by moving correctness out of unreliable LLM instructions into a deterministic prompt injector
+          </li>
+        </ul>
+      ),
+      link: "https://storyverse-production-2356.up.railway.app/"
+    },
     {
       title: "Games.Random",
       image: gamesRandomImage,
