@@ -9,33 +9,18 @@ Handles query processing, context retrieval, and Claude API integration.
 
 from typing import List, Dict, Any, Optional
 
-import chromadb
-from chromadb.config import Settings as ChromaSettings
 from anthropic import Anthropic
 
 from config import settings
-from embeddings import embed_query
+from vectorstore import VectorStore
 
 
 class ContextRetriever:
-    """Retrieves relevant context from the vector database."""
+    """Retrieves relevant context from the in-memory vector store."""
 
-    def __init__(self):
-        """Initialize the retriever with a database connection (model loads lazily)."""
-        # Connect to ChromaDB
-        self.client = chromadb.PersistentClient(
-            path=str(settings.chroma_db_dir),
-            settings=ChromaSettings(anonymized_telemetry=False)
-        )
-
-        # Get collection
-        try:
-            self.collection = self.client.get_collection(name=settings.collection_name)
-        except Exception as e:
-            raise RuntimeError(
-                f"Collection '{settings.collection_name}' not found. "
-                f"Please run indexer first. Error: {e}"
-            )
+    def __init__(self, store: VectorStore):
+        """Initialize the retriever with a prebuilt in-memory vector store."""
+        self.store = store
 
     def retrieve(self, query: str, top_k: int = None) -> List[Dict[str, Any]]:
         """
@@ -57,24 +42,8 @@ class ContextRetriever:
         # Fetch more candidates for diversity (similar to fetch_k in MMR)
         fetch_k = top_k * settings.fetch_k_multiplier
 
-        # Generate query embedding
-        query_embedding = embed_query(query)
-
-        # Query ChromaDB for more results
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=fetch_k,
-            include=["documents", "metadatas", "distances"]
-        )
-
-        # Format all candidates
-        all_chunks = []
-        for i in range(len(results["ids"][0])):
-            all_chunks.append({
-                "text": results["documents"][0][i],
-                "metadata": results["metadatas"][0][i],
-                "distance": results["distances"][0][i]
-            })
+        # Retrieve candidates from the in-memory vector store
+        all_chunks = self.store.search(query, fetch_k)
 
         # Apply diversity selection (MMR-like)
         selected_chunks = self._select_diverse_chunks(all_chunks, top_k)
@@ -133,10 +102,12 @@ class ContextRetriever:
 class ClaudeRAG:
     """Orchestrates RAG pipeline with Claude."""
 
-    def __init__(self):
+    def __init__(self, store: VectorStore):
         """Initialize the RAG system with retriever and Claude client."""
-        self.retriever = ContextRetriever()
+        self.retriever = ContextRetriever(store)
         self.anthropic_client = Anthropic(api_key=settings.anthropic_api_key)
+        self.num_documents = getattr(store, "num_documents", 0)
+        self.num_chunks = store.size
 
     def _build_system_prompt(self) -> str:
         """
@@ -301,7 +272,13 @@ def create_rag_system() -> ClaudeRAG:
     """
     Factory function to create a RAG system instance.
 
+    Builds the in-memory vector store from the knowledge base, then wires it
+    into a ClaudeRAG instance.
+
     Returns:
         Initialized ClaudeRAG instance
     """
-    return ClaudeRAG()
+    from indexer import build_vector_store
+
+    store = build_vector_store()
+    return ClaudeRAG(store)

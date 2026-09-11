@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     anthropic_api_key: str
 
     # Model configurations
-    embedding_model: str = "all-MiniLM-L6-v2"
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     claude_model: str = "claude-sonnet-4-5-20250929"
 
     # Chunking parameters

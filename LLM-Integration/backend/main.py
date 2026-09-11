@@ -16,7 +16,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from config import settings
-from indexer import VectorIndexer, MarkdownLoader
 from rag import create_rag_system, ClaudeRAG
 
 # Configure logging
@@ -41,34 +40,14 @@ async def lifespan(app: FastAPI):
 
     logger.info("Starting up Personal AI Assistant API...")
 
-    # Check if reindexing is needed
+    # Build the in-memory index and initialize the RAG system
     try:
-        logger.info("Checking if indexing is required...")
-        indexer = VectorIndexer()
-        loader = MarkdownLoader(settings.knowledge_dir)
-        documents = loader.load_documents()
-
-        if indexer.needs_reindexing(documents):
-            logger.info("Documents changed. Starting reindexing...")
-            result = indexer.index_documents()
-            logger.info(
-                f"Indexing complete: {result['total_chunks']} chunks "
-                f"from {result['total_documents']} documents"
-            )
-        else:
-            logger.info("Index is up to date. Skipping reindexing.")
-
-    except FileNotFoundError:
-        logger.warning(
-            "Knowledge directory not found. Please create it and add markdown files."
-        )
-    except Exception as e:
-        logger.error(f"Indexing check failed: {e}")
-
-    # Initialize RAG system
-    try:
+        logger.info("Building knowledge index...")
         rag_system = create_rag_system()
-        logger.info("RAG system initialized successfully")
+        logger.info(
+            f"RAG system ready: {rag_system.num_chunks} chunks "
+            f"from {rag_system.num_documents} documents"
+        )
     except Exception as e:
         logger.error(f"Failed to initialize RAG system: {e}")
         rag_system = None
@@ -277,18 +256,16 @@ async def reindex() -> IndexingResponse:
 
     try:
         logger.info("Manual reindexing triggered")
-        indexer = VectorIndexer()
-        result = indexer.index_documents(force=True)
 
-        # Reinitialize RAG system
+        # Rebuild the in-memory index and reinitialize the RAG system
         rag_system = create_rag_system()
         logger.info("RAG system reinitialized after reindexing")
 
         return IndexingResponse(
-            status=result["status"],
+            status="success",
             message="Knowledge base reindexed successfully",
-            total_documents=result["total_documents"],
-            total_chunks=result["total_chunks"]
+            total_documents=rag_system.num_documents,
+            total_chunks=rag_system.num_chunks
         )
 
     except FileNotFoundError as e:

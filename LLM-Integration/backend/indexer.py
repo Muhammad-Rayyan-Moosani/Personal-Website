@@ -3,20 +3,16 @@
 # ====================
 
 """
-Indexing pipeline for converting markdown files into vector embeddings.
-Handles document loading, chunking, embedding generation, and storage in ChromaDB.
+Indexing pipeline for converting markdown files into an in-memory vector index.
+Handles document loading and heading-aware chunking; embedding + storage live in
+the lightweight VectorStore (no external vector database).
 """
 
-import hashlib
-import json
 from pathlib import Path
 from typing import List, Dict, Any
 
-import chromadb
-from chromadb.config import Settings as ChromaSettings
-
 from config import settings
-from embeddings import embed_texts
+from vectorstore import VectorStore
 
 
 class DocumentChunker:
@@ -168,157 +164,43 @@ class MarkdownLoader:
         return documents
 
 
-class VectorIndexer:
-    """Manages vector embeddings and ChromaDB storage."""
+def build_vector_store() -> VectorStore:
+    """
+    Build the in-memory vector index from the knowledge base.
 
-    def __init__(self):
-        """Initialize the indexer with a chunker and database (model loads lazily)."""
-        self.chunker = DocumentChunker(
-            chunk_size=settings.chunk_size,
-            overlap=settings.chunk_overlap
-        )
+    Loads all markdown documents, splits them into heading-aware chunks, embeds
+    them (in small batches to keep memory low), and returns a ready VectorStore.
+    The store also carries `num_documents` for reporting.
 
-        # Initialize ChromaDB
-        settings.chroma_db_dir.mkdir(parents=True, exist_ok=True)
-        self.client = chromadb.PersistentClient(
-            path=str(settings.chroma_db_dir),
-            settings=ChromaSettings(anonymized_telemetry=False)
-        )
+    Returns:
+        A populated VectorStore.
+    """
+    loader = MarkdownLoader(settings.knowledge_dir)
+    documents = loader.load_documents()
 
-    def _compute_corpus_hash(self, documents: List[Dict[str, Any]]) -> str:
-        """
-        Compute hash of all document contents to detect changes.
+    chunker = DocumentChunker(
+        chunk_size=settings.chunk_size,
+        overlap=settings.chunk_overlap,
+    )
 
-        Args:
-            documents: List of documents
+    all_chunks: List[Dict[str, Any]] = []
+    for doc in documents:
+        all_chunks.extend(chunker.chunk_text(doc["text"], doc["metadata"]))
 
-        Returns:
-            SHA256 hash of concatenated document texts
-        """
-        combined = "".join([doc["text"] for doc in documents])
-        return hashlib.sha256(combined.encode()).hexdigest()
-
-    def _get_stored_hash(self) -> str:
-        """
-        Retrieve stored corpus hash from metadata file.
-
-        Returns:
-            Stored hash or empty string if not found
-        """
-        hash_file = settings.chroma_db_dir / "corpus_hash.json"
-        if hash_file.exists():
-            with open(hash_file, "r") as f:
-                data = json.load(f)
-                return data.get("hash", "")
-        return ""
-
-    def _save_hash(self, corpus_hash: str) -> None:
-        """
-        Save corpus hash to metadata file.
-
-        Args:
-            corpus_hash: Hash to save
-        """
-        hash_file = settings.chroma_db_dir / "corpus_hash.json"
-        with open(hash_file, "w") as f:
-            json.dump({"hash": corpus_hash}, f)
-
-    def needs_reindexing(self, documents: List[Dict[str, Any]]) -> bool:
-        """
-        Check if documents have changed and reindexing is needed.
-
-        Args:
-            documents: Current documents
-
-        Returns:
-            True if reindexing needed, False otherwise
-        """
-        current_hash = self._compute_corpus_hash(documents)
-        stored_hash = self._get_stored_hash()
-        return current_hash != stored_hash
-
-    def index_documents(self, force: bool = False) -> Dict[str, Any]:
-        """
-        Index all documents from the knowledge directory.
-
-        Args:
-            force: Force reindexing even if documents haven't changed
-
-        Returns:
-            Dictionary containing indexing statistics
-
-        Raises:
-            Exception: If indexing fails
-        """
-        loader = MarkdownLoader(settings.knowledge_dir)
-        documents = loader.load_documents()
-
-        if not force and not self.needs_reindexing(documents):
-            return {
-                "status": "skipped",
-                "reason": "Documents unchanged",
-                "total_documents": len(documents)
-            }
-
-        # Delete existing collection and recreate
-        try:
-            self.client.delete_collection(name=settings.collection_name)
-        except Exception:
-            pass
-
-        collection = self.client.create_collection(
-            name=settings.collection_name,
-            metadata={"hnsw:space": "cosine"}
-        )
-
-        # Process documents
-        all_chunks = []
-        for doc in documents:
-            chunks = self.chunker.chunk_text(doc["text"], doc["metadata"])
-            all_chunks.extend(chunks)
-
-        # Generate embeddings
-        texts = [chunk["text"] for chunk in all_chunks]
-        embeddings = embed_texts(texts)
-
-        # Prepare data for ChromaDB
-        ids = [f"chunk_{i}" for i in range(len(all_chunks))]
-        metadatas = [chunk["metadata"] for chunk in all_chunks]
-
-        # Add to collection
-        collection.add(
-            ids=ids,
-            embeddings=embeddings,
-            documents=texts,
-            metadatas=metadatas
-        )
-
-        # Save hash
-        corpus_hash = self._compute_corpus_hash(documents)
-        self._save_hash(corpus_hash)
-
-        return {
-            "status": "success",
-            "total_documents": len(documents),
-            "total_chunks": len(all_chunks),
-            "collection_name": settings.collection_name
-        }
+    store = VectorStore()
+    store.build(all_chunks)
+    store.num_documents = len(documents)
+    return store
 
 
 def main() -> None:
-    """Main entry point for running indexer as a script."""
-    print("Starting indexing pipeline...")
+    """Build the index once and print stats (useful for local checks)."""
+    print("Building in-memory vector index...")
     print(f"Knowledge directory: {settings.knowledge_dir}")
-    print(f"Database directory: {settings.chroma_db_dir}")
-
-    indexer = VectorIndexer()
-    result = indexer.index_documents(force=True)
-
-    print("\nIndexing complete!")
-    print(f"Status: {result['status']}")
-    print(f"Documents processed: {result['total_documents']}")
-    print(f"Chunks created: {result['total_chunks']}")
-    print(f"Collection name: {result['collection_name']}")
+    store = build_vector_store()
+    print("\nIndex built!")
+    print(f"Documents processed: {store.num_documents}")
+    print(f"Chunks created: {store.size}")
 
 
 if __name__ == "__main__":
