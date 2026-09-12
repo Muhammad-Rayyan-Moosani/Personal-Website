@@ -407,12 +407,9 @@
   bottom: 0;
   border-radius: 16px;
   pointer-events: none;
-  background: radial-gradient(
-    circle at 50% 50%,
-    var(--accent-glow) 0%,
-    transparent 70%
-  );
+  background: var(--card-hover-fill);
   opacity: 0;
+  transition: opacity 0.35s ease;
   z-index: 0;
   transform: translateZ(0);
   backface-visibility: hidden;

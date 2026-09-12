@@ -61,6 +61,126 @@ export default function Projects() {
       link: "https://storyverse-production-2356.up.railway.app/"
     },
     {
+      title: "File Guardian Agent",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Python, Flask, pandas/NumPy, SQLite, watchdog, Anthropic/OpenAI, React, PyInstaller
+            </span>
+          </li>
+          <li>
+            Engineered an agentic data-quality gatekeeper at XORBIX that watches folders, validates every file against per-column rules, and routes it to good, quarantine, or review
+          </li>
+          <li>
+            Rebuilt the validation core into a chunked, vectorized pandas engine hitting ~442,000 rows/second (~50× faster) with flat memory on multi-hundred-GB files
+          </li>
+          <li>
+            Added an LLM explanation agent with a 5-provider abstraction that turns failures into plain-English summaries emailed to the responsible team
+          </li>
+          <li>
+            Cut a REST API from 3.1s to 0.56s (~5.5×) by collapsing 301 N+1 queries into 3 bulk reads, and packaged the full stack as a single offline Windows executable
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "Xorbix Document Flow",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: C# / .NET 8, WPF (MVVM), JSON Schema, PdfPig, OpenXML, Multi-provider LLMs (Anthropic, OpenAI, LM Studio)
+            </span>
+          </li>
+          <li>
+            Built a local-first document-intelligence desktop app at XORBIX that turns RFQ PDFs into structured, priced customer quotes across 10+ document workflows
+          </li>
+          <li>
+            Designed an "AI recommends, deterministic C# decides" pipeline — the LLM extracts fields against a strict schema while all pricing math runs in code, keeping quotes auditable
+          </li>
+          <li>
+            Re-architected the AI extraction path to single-turn streaming over stdin, cutting per-document latency ~95% (from 3–6 minutes to ~5 seconds)
+          </li>
+          <li>
+            Built a 5-provider LLM abstraction with hardened JSON-Schema outputs and reduced hot-path disk I/O ~8× via state-transition-only persistence
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "Kickstarter Cockpit",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: C# / .NET 8, WPF (MVVM), Claude Code CLI, ASP.NET Core, EF Core, PostgreSQL (pgvector), React/Vite, xUnit
+            </span>
+          </li>
+          <li>
+            Helped build an internal AI application generator at XORBIX that drives Claude through a governed 6-step pipeline to produce full .NET + React apps with human approval at each step
+          </li>
+          <li>
+            Engineered a "Finalize & Launch" agentic pass that makes generated code actually build and run — creating glue files, installing dependencies, and iterating until it compiles
+          </li>
+          <li>
+            Built a unit-tested rollback and start-over safety subsystem with path-boundary checks that guarantee deletions never escape the generated-code folder
+          </li>
+          <li>
+            Designed a feature-to-feature handoff-contract document so isolated generations integrate cleanly, producing 200+ file apps across 10 features in a single run
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "WorkAssist AI",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: React 19, Python/Flask, Supabase (PostgreSQL), Azure OpenAI, Azure AI Search, JWT
+            </span>
+          </li>
+          <li>
+            Built an end-to-end RAG assistant at XORBIX that answers shop-floor questions only from approved SOPs, with source citations, confidence scores, and a decline path to avoid hallucination
+          </li>
+          <li>
+            Engineered access-scoped hybrid (keyword + vector) search that injects team-based filters into the query, so users never receive answers from documents they can't access
+          </li>
+          <li>
+            Added an AI quiz generator and a supervisor analytics dashboard that surfaces documentation gaps from the query log, with CSV export
+          </li>
+          <li>
+            Shipped 35 REST endpoints across a 13-module backend with JWT role-gating over 1,536-dimension embeddings on a ~1,200-chunk document corpus
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "Derse Vista (QA Engineering)",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: .NET 10, C#, EF Core, PostgreSQL, React 19, Azure DevOps, Python (openpyxl)
+            </span>
+          </li>
+          <li>
+            Led QA at XORBIX for a full-stack, multi-role logistics platform, authoring a 167-case test matrix mapped to requirements, roles, and acceptance criteria
+          </li>
+          <li>
+            Validated all 10 application roles against a permission matrix and ran API-level authorization tests with spoofed division IDs to confirm server-side scoping
+          </li>
+          <li>
+            Identified 15+ documented defects, including a silent client-save data-loss bug and a server-side authorization gap that the UI and automated tests missed
+          </li>
+          <li>
+            Built Python (openpyxl) automation to turn findings into repeatable QA reports and used a repo→Figma→task traceability method to cut mis-filed bugs
+          </li>
+        </ul>
+      )
+    },
+    {
       title: "Games.Random",
       image: gamesRandomImage,
       description: (

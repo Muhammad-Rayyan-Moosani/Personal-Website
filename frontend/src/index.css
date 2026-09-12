@@ -138,6 +138,7 @@ body {
   --accent-secondary: #0284c7;
   --accent-glow: #06b6d4;
   --accent-gradient: linear-gradient(135deg, #0891b2 0%, #0284c7 100%);
+  --card-hover-fill: #cffafe;
 
   /* Borders & Dividers */
   --border-color: #e2e8f0;
@@ -178,6 +179,7 @@ body {
   --text-muted: #9ca3af;
   --accent-color: #00eaff;
   --accent-glow: #00eaff;
+  --card-hover-fill: #0d3d4a;
   --border-color: #00eaff;
   --border-subtle: rgba(0, 234, 255, 0.3);
   --shadow-color: rgba(0, 234, 255, 0.2);

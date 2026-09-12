@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./StyleSheet.css";
-import waterlooLogo from "./waterloo logo.jpeg";
+import waterlooLogo from "./waterloo logo.png";
 import PromptBox from "./PromptBox";
 
 export default function Hero() {
