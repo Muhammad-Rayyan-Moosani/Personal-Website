@@ -305,7 +305,7 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/DirectAid"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/DirectAid-multi-rail-donation-platform"
     },
     {
       title: "Barakah-Link",
