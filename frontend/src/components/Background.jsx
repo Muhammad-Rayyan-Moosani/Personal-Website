@@ -183,7 +183,39 @@ function Background() {
     // Initialize
     updateColors();
     setCanvasSize();
-    animationRef.current = requestAnimationFrame(animate);
+
+    // Respect reduced-motion: draw a single static frame instead of animating.
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      const { width, height } = dimensionsRef.current;
+      const colors = colorsRef.current;
+      ctx.fillStyle = colors.bg;
+      ctx.fillRect(0, 0, width, height);
+      ctx.strokeStyle = colors.grid;
+      ctx.lineWidth = 1;
+      ctx.stroke(gridPathRef.current);
+      ctx.fillStyle = colors.particle;
+      ctx.beginPath();
+      for (const p of particlesRef.current) {
+        ctx.moveTo(p.x + p.size, p.y);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    } else {
+      animationRef.current = requestAnimationFrame(animate);
+    }
+
+    // Pause the loop when the tab is hidden (saves CPU/battery).
+    const handleVisibility = () => {
+      if (prefersReducedMotion) return;
+      if (document.hidden) {
+        if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      } else {
+        lastFrameTime.current = 0;
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
 
     // Debounced resize handler
     let resizeTimeout;
@@ -216,6 +248,7 @@ function Background() {
       }
       clearTimeout(resizeTimeout);
       observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
     };

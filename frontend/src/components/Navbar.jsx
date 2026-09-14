@@ -1,6 +1,6 @@
 import React from "react";
 import "./StyleSheet.css";
-import logo from "./View recent photos.png";
+import logo from "./navbar-logo.webp";
 import resumePdf from "./Rayyan_Moosani_Resume_EX.pdf";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -11,7 +11,7 @@ export default function Navbar() {
     <nav className="navbar">
       {/* Logo / Image */}
       <div className="navbar-logo">
-        <img src={logo} alt="Logo" />
+        <img src={logo} alt="Rayyan Moosani" fetchPriority="high" />
       </div>
 
       {/* Navigation links */}

@@ -54,16 +54,6 @@ export default function Experience() {
       ]
     },
     {
-      title: "SCITRA - Software Automation Developer",
-      date: "Aug 2024 – Sep 2024",
-      link: "https://www.albatha.com/scitra.htm",
-      bullets: [
-        <span className="tech-stack">Telegram bot API, Google Sheets API, Unity, C#, IOT Systems</span>,
-        "Developed and deployed a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across 30+ production lines. Reduced reporting latency by 40% by architecting a streamlined, automated issue-tracking workflow",
-        "Engineered high-fidelity 3D digital twins of factory machinery using Unity & C#, integrating real-time IoT sensor data to support predictive maintenance strategies. Automated intelligent error logging, improving the engineering team's fault diagnosis and resolution speed by 30%"
-      ]
-    },
-    {
       title: "MEDAD - QA Analyst",
       date: "July 2025 – Aug 2025",
       link: "https://www.albatha.com/medad-printing.htm",
@@ -72,6 +62,16 @@ export default function Experience() {
         "Analyzed packaging workflow across design, printing, and quality teams to understand production pipeline",
         "Conducted print quality inspections, evaluating color accuracy, alignment, and packaging output using verification tools",
         "Prepared print-ready artwork in Adobe Illustrator, ensuring files met production specifications and formatting standards"
+      ]
+    },
+    {
+      title: "SCITRA - Software Automation Developer",
+      date: "Aug 2024 – Sep 2024",
+      link: "https://www.albatha.com/scitra.htm",
+      bullets: [
+        <span className="tech-stack">Telegram bot API, Google Sheets API, Unity, C#, IOT Systems</span>,
+        "Developed and deployed a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across 30+ production lines. Reduced reporting latency by 40% by architecting a streamlined, automated issue-tracking workflow",
+        "Engineered high-fidelity 3D digital twins of factory machinery using Unity & C#, integrating real-time IoT sensor data to support predictive maintenance strategies. Automated intelligent error logging, improving the engineering team's fault diagnosis and resolution speed by 30%"
       ]
     },
     {
@@ -92,9 +92,9 @@ export default function Experience() {
       className="experience"
       id="experience"
     >
-      <h1>
+      <h2>
         Experience
-      </h1>
+      </h2>
 
       <div className="timeline" ref={timelineRef}>
         {experiences.map((exp, index) => (

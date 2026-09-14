@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import "./PromptBox.css";
+
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export default function PromptBox() {
   const [prompt, setPrompt] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState("");
   const [showResponse, setShowResponse] = useState(false);
+  const [waking, setWaking] = useState(false);
+
+  // Warm up the free-tier backend on load so the first question isn't a cold start.
+  useEffect(() => {
+    fetch(`${apiUrl}/health`).catch(() => {});
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,8 +23,10 @@ export default function PromptBox() {
     setIsSubmitting(true);
     setShowResponse(false);
 
+    // The backend runs on a free tier that can cold-start; hint if it's slow.
+    const wakingTimer = setTimeout(() => setWaking(true), 3000);
+
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
       const res = await fetch(`${apiUrl}/chat`, {
         method: "POST",
         headers: {
@@ -34,6 +44,8 @@ export default function PromptBox() {
       setResponse("Oops! Something went wrong. Please try again.");
       setShowResponse(true);
     } finally {
+      clearTimeout(wakingTimer);
+      setWaking(false);
       setIsSubmitting(false);
     }
   };
@@ -78,6 +90,15 @@ export default function PromptBox() {
           </button>
         </div>
       </form>
+
+      {waking && !showResponse && (
+        <div
+          className="waking-note"
+          style={{ marginTop: "10px", fontSize: "0.85rem", opacity: 0.75, textAlign: "center" }}
+        >
+          Waking the assistant… first request after idle can take ~30s.
+        </div>
+      )}
 
       {showResponse && (
         <div

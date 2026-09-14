@@ -6,82 +6,43 @@ export default function About() {
       className="about-section"
       id="about"
     >
-      <h1
+      <h2
         className="about-heading"
       >
         About Me
-      </h1>
+      </h2>
 
       <div
         className="about-box"
       >
         <p className="about-intro">
-          A computer science student who enjoys building systems that actually
-          get used — from automation tools and analytics platforms to full-stack
-          and backend applications. Driven by impact, clarity, and solving real
-          operational problems with code.
+          I build backend systems and AI pipelines that have to survive real
+          users. At XORBIX I rebuilt a file-validation core into a chunked,
+          vectorized pandas engine (~442K rows/s on multi-GB inputs, ~50× faster)
+          and cut one REST endpoint from 3.1s to 0.56s by collapsing 301 N+1
+          queries into three bulk reads. In the document pipeline, the LLM
+          extracts fields against a strict JSON Schema and deterministic C# does
+          every line of pricing math, so quotes stay auditable.
         </p>
 
-        <h2 className="about-subhead about-subhead-exp">Experience Highlights</h2>
-        <ul className="about-highlights">
-          <li>
-            <span className="about-item-title">
-              Industrial Digital Systems Internship (SCITRA)
-            </span>
-            Built a full 3D digital twin of an operational factory using Unity
-            and C#, modeling real machinery and workflows to support
-            visualization, simulation, and future system integration.
-          </li>
-          <li>
-            <span className="about-item-title">
-              Factory Operations Automation Project
-            </span>
-            Designed and implemented a fault-reporting and tracking system using
-            Python, Telegram Bot API, and Google Sheets, streamlining machine
-            issue reporting and reducing downtime.
-          </li>
-          <li>
-            <span className="about-item-title">
-              Student Organization Contract Developer
-            </span>
-            Currently developing financial analytics and reporting systems to
-            improve transparency, budgeting, and data-driven decision-making for
-            a large student organization.
-          </li>
-          <li>
-            <span className="about-item-title">
-              Cybersecurity Ambassador & IT Experience
-            </span>
-            Completed certified cybersecurity training and worked with IT teams
-            to understand network security, system risks, and real-world
-            infrastructure, promoting safer digital practices.
-          </li>
-          <li>
-            <span className="about-item-title">
-              Robotics & App Development Leadership
-            </span>
-            Led teams in robotics and mobile app design, translating ideas into
-            functional products while coordinating technical and design
-            decisions.
-          </li>
-        </ul>
+        <p className="about-intro">
+          On my own time I&apos;m building TestGuard, a regression engine that
+          runs untrusted test suites inside a locked-down Docker sandbox (no root,
+          no capabilities, read-only rootfs, network revoked before tests start)
+          and diffs results against the last fully green baseline instead of the
+          previous run. Before that: a Telegram + Google Sheets fault-reporting
+          bot across 30+ production lines at SCITRA, and Unity/C# digital twins
+          fed by live IoT data.
+        </p>
 
-        <h2 className="about-subhead about-subhead-athletics">
-          Athletics & Extracurriculars
-        </h2>
-        <ul className="about-highlights">
-          <li>
-            <span className="about-item-title">Cricket (Professional Level)</span>
-            Professional-level cricketer and team captain, known for leadership,
-            discipline, and performing under pressure — strengths carried
-            directly into engineering teams.
-          </li>
-          <li>
-            <span className="about-item-title">Table Tennis</span>
-            Highly competitive player with strong reflexes, focus, and
-            consistency developed through years of match play.
-          </li>
-        </ul>
+        <p className="about-intro">
+          Computer Science at Waterloo, class of 2029. Python, C#/.NET,
+          TypeScript, React, PostgreSQL, Docker.
+        </p>
+
+        <p className="about-intro" style={{ marginBottom: 0, opacity: 0.7 }}>
+          Outside code: cricket captain, table tennis.
+        </p>
       </div>
     </section>
   );

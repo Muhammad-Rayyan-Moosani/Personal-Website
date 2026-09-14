@@ -35,6 +35,53 @@ export default function Projects() {
 
   const projects = [
     {
+      title: "TestGuard Platform",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Python 3.12, Docker SDK, SQLAlchemy, JUnit XML, Click CLI, GitHub Actions
+            </span>
+          </li>
+          <li>
+            Built an automated regression-testing engine that runs untrusted test suites in a hardened Docker sandbox and reports what actually changed vs the last green run — not just pass/fail counts
+          </li>
+          <li>
+            Hardened the sandbox — no root, all capabilities dropped, read-only rootfs, capped memory/CPU/pids, and network revoked before tests run (attached only for dependency install; the run aborts if the disconnect fails)
+          </li>
+          <li>
+            Language-agnostic by contract: a project declares an image + command and leaves JUnit XML behind; results diff against the last fully-green baseline, and flaky tests are surfaced but never fail the build
+          </li>
+          <li>
+            Verified confinement with adversarial escape tests that run inside a live container in CI
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/TestGuard-Platform-"
+    },
+    {
+      title: "Portfolio RAG Assistant",
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: FastAPI, fastembed (ONNX), NumPy vector store, Anthropic Claude, Render
+            </span>
+          </li>
+          <li>
+            Built the "Ask me anything" box on this site: a retrieval-augmented Claude assistant that answers only from a curated markdown knowledge base, with heading-aware chunking
+          </li>
+          <li>
+            Engineered retrieval that fetches top-k × fetch-k candidates then applies an MMR-style diversity pass before building the prompt, with a graceful "I don't have that" fallback instead of hallucinating
+          </li>
+          <li>
+            Re-architected to fit a 512MB free tier — replaced PyTorch/sentence-transformers + ChromaDB with ONNX embeddings and an in-memory NumPy cosine store after an OOM
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/Personal-Website/tree/main/LLM-Integration"
+    },
+    {
       title: "StoryVerse",
       image: storyVerseImage,
       description: (
@@ -58,7 +105,7 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://storyverse-production-2356.up.railway.app/"
+      live: "https://storyverse-production-2356.up.railway.app/"
     },
     {
       title: "File Guardian Agent",
@@ -82,7 +129,8 @@ export default function Projects() {
             Cut a REST API from 3.1s to 0.56s (~5.5×) by collapsing 301 N+1 queries into 3 bulk reads, and packaged the full stack as a single offline Windows executable
           </li>
         </ul>
-      )
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/File_Guradian_Agent_POC"
     },
     {
       title: "Xorbix Document Flow",
@@ -204,7 +252,8 @@ export default function Projects() {
             </li>
           </ul>
 ),
-      link: "https://github.com/Shayan-Mazahir/games.random"
+      link: "https://github.com/Shayan-Mazahir/games.random",
+      live: "https://games-random.onrender.com"
     },
     {
       title: "VoiceAI Web Agent",
@@ -229,10 +278,10 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/VoiceAI-Web-Agent"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/Autonomous_Voice_Web_Agent"
     },
     {
-      title: "AI-TRACKER",
+      title: "TrackerFlow AI",
  description: (
   <ul className="project-bullets">
     <li>
@@ -254,7 +303,7 @@ export default function Projects() {
     </li>
   </ul>
 ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/AI-tracker"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/TrackerFlow-AI"
     },
     {
       title: "Anr Awaaz",
@@ -305,7 +354,8 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/DirectAid-multi-rail-donation-platform"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/DirectAid-multi-rail-donation-platform",
+      live: "https://direct-aid-multi-rail-donation-plat.vercel.app"
     },
     {
       title: "Barakah-Link",
@@ -331,7 +381,8 @@ export default function Projects() {
     </li>
   </ul>
 ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/Youtube-Playlist-Video-Downloader-"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/barakahlink",
+      live: "https://barakahlink.vercel.app"
     }
   ];
 
@@ -340,9 +391,9 @@ export default function Projects() {
       className="projects"
       id="projects"
     >
-      <h1>
+      <h2>
         Projects
-      </h1>
+      </h2>
       
       {/* Container for cards */}
       <div className="projects-grid" ref={gridRef}>
@@ -353,6 +404,8 @@ export default function Projects() {
             description={project.description}
             date={project.date}
             link={project.link}
+            live={project.live}
+            writeup={project.writeup}
             image={project.image}
           />
         ))}

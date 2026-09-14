@@ -6,7 +6,7 @@ import "./StyleSheet.css";
 const supportsHover = typeof window !== 'undefined' && 
   window.matchMedia('(hover: hover)').matches;
 
-export default function EnhancedCard({ title, bullets = [], description, date, link, image }) {
+export default function EnhancedCard({ title, bullets = [], description, date, link, live, writeup, image }) {
   const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -125,7 +125,7 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
         className="card-title"
         style={{ transform: supportsHover ? "translateZ(30px)" : "none" }}
       >
-        <a href={link} target="_blank" rel="noreferrer">{title}</a>
+        {link ? <a href={link} target="_blank" rel="noreferrer">{title}</a> : title}
       </h3>
 
       {date && (
@@ -157,6 +157,17 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           {description}
+        </div>
+      )}
+
+      {(link || live || writeup) && (
+        <div
+          className="card-cta"
+          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+        >
+          {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
+          {link && <a href={link} target="_blank" rel="noreferrer">Repo ↗</a>}
+          {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}
         </div>
       )}
     </div>

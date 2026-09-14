@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from "react";
 import { AnimatePresence } from "framer-motion";
 import Background from "./components/Background";
 import Hero from "./components/Hero";
+import ProofStrip from "./components/ProofStrip";
 import About from "./components/About"
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
@@ -25,16 +26,19 @@ function App() {
   useScrollBullets();
 
   useEffect(() => {
-    // Faster preloader - actual content loads while preloader shows
-    const timer = setTimeout(() => {
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
       setLoading(false);
-      // Small delay before showing content for smooth transition
-      requestAnimationFrame(() => {
-        setShowContent(true);
-      });
-    }, 1800);
-
-    return () => clearTimeout(timer);
+      requestAnimationFrame(() => setShowContent(true));
+    };
+    // Reveal as soon as fonts are ready instead of a fixed artificial delay.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(finish);
+    }
+    const fallback = setTimeout(finish, 1000); // safety cap
+    return () => clearTimeout(fallback);
   }, []);
 
   return (
@@ -52,9 +56,10 @@ function App() {
         <MemoizedBackground />
         <MemoizedNavbar />
         <MemoizedHero />
-        <MemoizedAbout />
+        <ProofStrip />
         <Experience />
         <Projects />
+        <MemoizedAbout />
         <MemoizedContacts />
       </div>
     </>

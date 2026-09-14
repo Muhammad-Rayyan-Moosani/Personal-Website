@@ -6,14 +6,12 @@ export default function Contacts() {
       className="contacts"
       id="contacts"
     >
-      <h1
-      >
+      <h2>
         Contact
-      </h1>
+      </h2>
 
-      <p
-      >
-        Let's connect
+      <p>
+        Open to co-op and internship opportunities.
       </p>
 
       <div
@@ -38,7 +36,7 @@ export default function Contacts() {
           <a
             href="mailto:mrayyanm411@gmail.com"
           >
-            Gmail
+            Email
           </a>
         </div>
 

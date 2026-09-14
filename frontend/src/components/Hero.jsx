@@ -1,39 +1,15 @@
-import React, { useState, useEffect } from "react";
 import "./StyleSheet.css";
 import waterlooLogo from "./waterloo logo.png";
+import resumePdf from "./Rayyan_Moosani_Resume_EX.pdf";
 import PromptBox from "./PromptBox";
 
 export default function Hero() {
-  const words = ["a Software Engineer", "a Problem Solver", "a Fast Learner"];
-  const [text, setText] = useState("");
-  const [index, setIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (charIndex < words[index].length) {
-        setText((prev) => prev + words[index][charIndex]);
-        setCharIndex(charIndex + 1);
-      } else {
-        setTimeout(() => {
-          setText("");
-          setCharIndex(0);
-          setIndex((prev) => (prev + 1) % words.length);
-        }, 1500);
-      }
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [charIndex, index, words]);
-
   return (
     <section className="hero" id="home">
-      <h1 className="hero-title">
-        Hey, I am Rayyan Moosani
-      </h1>
+      <h1 className="hero-title">Rayyan Moosani</h1>
 
-      <h2 className="hero-school">
-        Computer Science Undergrad @ University of{" "}
+      <p className="hero-role">
+        Software Engineer @ XORBIX &nbsp;·&nbsp; CS @{" "}
         <span className="hero-waterloo-wrap">
           Waterloo
           <img
@@ -41,15 +17,40 @@ export default function Hero() {
             alt="University of Waterloo"
             className="hero-waterloo-logo"
           />
-        </span>
-      </h2>
-
-      <p className="hero-subtitle">
-        I am <span className="typing">{text}</span>
-        <span className="cursor">|</span>
+        </span>{" "}
+        &rsquo;29
       </p>
 
-      <div>
+      <p className="hero-subtitle">
+        I build validation engines, LLM pipelines and sandboxed test infrastructure.
+      </p>
+
+      <div className="hero-cta">
+        <a
+          className="btn btn-primary"
+          href="#projects"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        >
+          View projects
+        </a>
+        <a className="btn" href={resumePdf} target="_blank" rel="noreferrer">
+          Resume (PDF)
+        </a>
+        <a
+          className="btn"
+          href="https://github.com/Muhammad-Rayyan-Moosani"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+      </div>
+
+      <div className="hero-assistant">
+        <p className="hero-assistant-caption">Ask the RAG assistant I built for this site</p>
         <PromptBox />
       </div>
     </section>
