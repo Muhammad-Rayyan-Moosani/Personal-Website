@@ -57,7 +57,7 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/TestGuard-Platform-"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/testguard"
     },
     {
       title: "Portfolio RAG Assistant",
@@ -130,7 +130,7 @@ export default function Projects() {
           </li>
         </ul>
       ),
-      link: "https://github.com/Muhammad-Rayyan-Moosani/File_Guradian_Agent_POC"
+      link: "https://github.com/Muhammad-Rayyan-Moosani/file-guardian"
     },
     {
       title: "Xorbix Document Flow",
