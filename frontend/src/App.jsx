@@ -33,12 +33,14 @@ function App() {
       setLoading(false);
       requestAnimationFrame(() => setShowContent(true));
     };
-    // Reveal as soon as fonts are ready instead of a fixed artificial delay.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(finish);
-    }
-    const fallback = setTimeout(finish, 1000); // safety cap
-    return () => clearTimeout(fallback);
+    // Play the full intro animation (the progress bar fills over ~1.5s), and
+    // also wait for fonts so the text never flashes a fallback face — whichever
+    // finishes last, hard-capped so it can never hang.
+    const minShow = new Promise((r) => setTimeout(r, 1800));
+    const fontsReady = (document.fonts && document.fonts.ready) || Promise.resolve();
+    Promise.all([minShow, fontsReady]).then(finish);
+    const hardCap = setTimeout(finish, 4000);
+    return () => clearTimeout(hardCap);
   }, []);
 
   return (
