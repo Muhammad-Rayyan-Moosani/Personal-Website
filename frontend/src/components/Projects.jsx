@@ -4,7 +4,7 @@ import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
 import directAidImage from "./SCR-20260317-czet.png";
-import storyVerseImage from "./StoryVerse.png";
+import storyVerseImage from "./StoryVerse.jpg";
 
 export default function Projects() {
   const gridRef = useRef(null);

@@ -43,8 +43,8 @@ export default function PromptBox() {
           data = await res.json();
           break;
         } catch (err) {
-          if (attempt >= 6) throw err;
-          await new Promise((r) => setTimeout(r, 6000));
+          if (attempt >= 12) throw err; // cover a full free-tier cold start (~80s)
+          await new Promise((r) => setTimeout(r, 7000));
         }
       }
       setResponse(data.answer || "Got your message! Thanks for reaching out.");
