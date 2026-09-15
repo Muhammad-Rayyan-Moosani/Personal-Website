@@ -166,7 +166,7 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
-          {link && <a href={link} target="_blank" rel="noreferrer">Repo/site ↗</a>}
+          {link && <a href={link} target="_blank" rel="noreferrer">Repo/Site ↗</a>}
           {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}
         </div>
       )}
