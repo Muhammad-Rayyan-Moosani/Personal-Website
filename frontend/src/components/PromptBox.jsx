@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import "./PromptBox.css";
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// Prefer an explicit build-time URL; otherwise use localhost in dev and the
+// deployed backend in production (so prod never falls back to localhost:8000).
+const apiUrl =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : "https://rayyan-ai.onrender.com");
 
 export default function PromptBox() {
   const [prompt, setPrompt] = useState("");

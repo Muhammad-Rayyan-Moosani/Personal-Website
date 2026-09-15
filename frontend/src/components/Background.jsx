@@ -156,7 +156,7 @@ function Background() {
       // Draw grid using pre-created path - single stroke operation
       ctx.strokeStyle = colors.grid;
       ctx.lineWidth = 1;
-      ctx.stroke(gridPathRef.current);
+      if (gridPathRef.current) ctx.stroke(gridPathRef.current);
 
       // Batch particle drawing - FAST path
       ctx.fillStyle = colors.particle;
@@ -193,7 +193,7 @@ function Background() {
       ctx.fillRect(0, 0, width, height);
       ctx.strokeStyle = colors.grid;
       ctx.lineWidth = 1;
-      ctx.stroke(gridPathRef.current);
+      if (gridPathRef.current) ctx.stroke(gridPathRef.current);
       ctx.fillStyle = colors.particle;
       ctx.beginPath();
       for (const p of particlesRef.current) {
