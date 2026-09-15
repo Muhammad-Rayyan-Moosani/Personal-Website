@@ -27,15 +27,26 @@ export default function PromptBox() {
     const wakingTimer = setTimeout(() => setWaking(true), 3000);
 
     try {
-      const res = await fetch(`${apiUrl}/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: prompt }),
-      });
-
-      const data = await res.json();
+      // Free-tier backend can cold-start (~30-50s); retry a few times before giving up
+      // so a sleeping server shows "waking…" and then answers instead of erroring.
+      let data;
+      for (let attempt = 0; ; attempt++) {
+        try {
+          const res = await fetch(`${apiUrl}/chat`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ question: prompt }),
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          data = await res.json();
+          break;
+        } catch (err) {
+          if (attempt >= 6) throw err;
+          await new Promise((r) => setTimeout(r, 6000));
+        }
+      }
       setResponse(data.answer || "Got your message! Thanks for reaching out.");
       setShowResponse(true);
       setPrompt("");
