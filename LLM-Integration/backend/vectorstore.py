@@ -29,13 +29,16 @@ class VectorStore:
 
     def build(self, chunks: List[Dict[str, Any]]) -> int:
         """Embed and store chunks. Returns the number of chunks indexed."""
-        self._chunks = list(chunks)
+        # Drop empty/whitespace chunks: they embed to a zero-length vector, which
+        # makes the stacked matrix ragged and crashes the whole index build.
+        self._chunks = [c for c in chunks if c.get("text", "").strip()]
         if not self._chunks:
             self._matrix = None
             return 0
 
-        vectors = np.asarray(
-            embed_texts([c["text"] for c in self._chunks]), dtype=np.float32
+        raw = embed_texts([c["text"] for c in self._chunks])
+        vectors = np.vstack(
+            [np.asarray(v, dtype=np.float32).reshape(-1) for v in raw]
         )
         norms = np.linalg.norm(vectors, axis=1, keepdims=True)
         norms[norms == 0] = 1.0

@@ -1454,24 +1454,39 @@
 .hero-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 12px;
   justify-content: center;
-  margin: 22px 0 8px;
+  align-items: center;
+  margin: 24px 0 10px;
+  max-width: 100%;
 }
 .hero-cta .btn {
   font-family: "Source Sans 3", system-ui, sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 11px 22px;
+  line-height: 1;
+  padding: 12px 24px;
+  min-width: 148px;              /* uniform, balanced buttons */
+  text-align: center;
+  white-space: nowrap;          /* text never wraps inside a button */
   border-radius: 10px;
-  border: 1px solid var(--accent-glow);
+  border: 1.5px solid var(--accent-glow);
   color: var(--accent-glow);
   background: transparent;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
-.hero-cta .btn:hover { transform: translateY(-2px); }
-.hero-cta .btn-primary { background: var(--accent-glow); color: #05161a; }
+.hero-cta .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 234, 255, 0.25);
+}
+.hero-cta .btn-primary {
+  background: var(--accent-glow);
+  color: #05161a;
+  border-color: var(--accent-glow);
+}
 .hero-cta .btn-primary:hover { filter: brightness(1.08); }
 .hero-assistant {
   width: 100%;

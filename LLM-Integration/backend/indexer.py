@@ -106,9 +106,12 @@ class DocumentChunker:
     def _add_chunk(
         self, chunks: List[Dict[str, Any]], text: str, metadata: Dict[str, Any]
     ) -> None:
+        text = text.strip()
+        if not text:
+            return  # skip empty/whitespace chunks (they break embedding)
         chunk_metadata = metadata.copy()
         chunk_metadata["chunk_index"] = len(chunks)
-        chunks.append({"text": text.strip(), "metadata": chunk_metadata})
+        chunks.append({"text": text, "metadata": chunk_metadata})
 
 
 class MarkdownLoader:
