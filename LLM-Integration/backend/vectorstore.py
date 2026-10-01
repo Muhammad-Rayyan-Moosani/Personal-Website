@@ -12,11 +12,22 @@ small enough for constrained free-tier hosts (no chromadb / grpc / onnxruntime
 arena overhead beyond the embedder itself).
 """
 
+import re
 from typing import List, Dict, Any
 
 import numpy as np
 
 from embeddings import embed_texts, embed_query
+
+# Filler words ignored when lexically matching a query to chunks, so the keyword
+# boost keys off distinctive terms (project names, tech) rather than common words.
+_STOPWORDS = {
+    "the", "and", "for", "what", "did", "does", "do", "is", "are", "was", "were",
+    "in", "at", "on", "of", "to", "an", "his", "him", "with", "how", "why", "you",
+    "your", "me", "tell", "about", "can", "could", "would", "give", "show", "has",
+    "have", "built", "build", "work", "worked", "working", "rayyan", "moosani",
+    "project", "projects", "experience", "that", "this", "it", "any",
+}
 
 
 class VectorStore:
@@ -54,10 +65,15 @@ class VectorStore:
         q_norm = float(np.linalg.norm(q)) or 1.0
         sims = self._matrix @ (q / q_norm)
 
+        # Hybrid retrieval: add a lexical boost so chunks that literally contain the
+        # query's distinctive terms (e.g. a project name like "WorkAssist") surface
+        # even when the small embedding model ranks them low semantically.
+        scores = sims + self._keyword_boost(query)
+
         k = min(top_k, len(self._chunks))
-        # Partial top-k, then sort those k by similarity (descending)
-        top_idx = np.argpartition(-sims, k - 1)[:k]
-        top_idx = top_idx[np.argsort(-sims[top_idx])]
+        # Partial top-k, then sort those k by combined score (descending)
+        top_idx = np.argpartition(-scores, k - 1)[:k]
+        top_idx = top_idx[np.argsort(-scores[top_idx])]
 
         results: List[Dict[str, Any]] = []
         for i in top_idx:
@@ -65,9 +81,32 @@ class VectorStore:
             results.append({
                 "text": chunk["text"],
                 "metadata": chunk["metadata"],
-                "distance": float(1.0 - sims[int(i)]),  # cosine distance
+                # distance reflects the combined score so the downstream diversity
+                # step respects the keyword match, not just cosine similarity.
+                "distance": float(1.0 - scores[int(i)]),
             })
         return results
+
+    def _keyword_boost(self, query: str) -> np.ndarray:
+        """Fraction of the query's distinctive terms present in each chunk, scaled.
+
+        Up to +0.4 when a chunk contains every distinctive query term — enough to
+        pull a named project's chunk into the results even on a weak embedding match.
+        """
+        terms = {
+            t for t in re.findall(r"[a-z0-9]+", query.lower())
+            if len(t) > 2 and t not in _STOPWORDS
+        }
+        if not terms:
+            return np.zeros(len(self._chunks), dtype=np.float32)
+        frac = np.array(
+            [
+                sum(1 for t in terms if t in c["text"].lower()) / len(terms)
+                for c in self._chunks
+            ],
+            dtype=np.float32,
+        )
+        return 0.4 * frac
 
     @property
     def size(self) -> int:
