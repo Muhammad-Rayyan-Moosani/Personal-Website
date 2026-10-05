@@ -364,9 +364,12 @@
 
 .projects-container,
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-  gap: clamp(20px, 3vw, 30px);
+  /* Masonry-style packing so cards flow tightly with a CONSTANT vertical gap,
+     instead of a grid row sizing to its tallest card and leaving dead space
+     under shorter cards. column-width keeps the same responsive column count
+     as the old auto-fit grid (as many >=420px columns as fit). */
+  columns: 420px;
+  column-gap: clamp(20px, 3vw, 30px);
   width: 100%;
   margin-top: clamp(1rem, 2vh, 2rem);
   box-sizing: border-box;
