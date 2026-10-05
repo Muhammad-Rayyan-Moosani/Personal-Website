@@ -5,7 +5,7 @@ export default function ProofStrip() {
     ["Software Engineer", "XORBIX · since May 2026"],
     ["CS @ Waterloo", "Class of 2029"],
     ["11 public repos", "on GitHub"],
-    ["TestGuard", "sandboxed test runner"],
+    ["Hackathon Winner", "Circuit Guard · FormulaTechHacks 2026"],
   ];
 
   return (

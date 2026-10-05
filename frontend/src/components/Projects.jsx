@@ -5,6 +5,7 @@ import gamesRandomImage from "./Games.Random.jpeg";
 import barakahLinkImage from "./Barakah-link.jpeg";
 import directAidImage from "./SCR-20260317-czet.png";
 import storyVerseImage from "./StoryVerse.jpg";
+import circuitGuardImage from "./CircuitGuard.webp";
 
 export default function Projects() {
   const gridRef = useRef(null);
@@ -34,6 +35,32 @@ export default function Projects() {
   }, []);
 
   const projects = [
+    {
+      title: "Circuit Guard — Hackathon Winner 🏆",
+      image: circuitGuardImage,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            <span className="tech-stack">
+              Tech-Stack: Python 3.12, FastAPI, NumPy/SciPy, Next.js 16, React 19, TypeScript, three.js / React Three Fiber, Claude (Anthropic SDK), Hugging Face Whisper, MiniLM embeddings, SSE
+            </span>
+          </li>
+          <li>
+            <strong>Won the Ampere Track (AI for Motorsport Safety) at FormulaTechHacks 2026</strong> — led a 4-person team to build Circuit Guard, an AI race-control and insurance platform running on real Formula 1 data
+          </li>
+          <li>
+            Built a live safety loop that streams real OpenF1 telemetry onto a React Three Fiber 3D digital twin of the circuit, detects crashes and lost grip, lights marshal panels sector-by-sector, and warns the following car over server-sent events
+          </li>
+          <li>
+            Integrated a Claude steward agent that writes the steward's call with cited FIA 2026 regulations — structured outputs, validated citations, and a deterministic rule-engine fallback so it never invents a rule
+          </li>
+          <li>
+            Wrote a 240 Hz vehicle-dynamics simulation (Pacejka-style tyres, split-μ braking, tyre barrier) proving an early warning saves the following car; between races, the top-3 riskiest corners caught 47–51% of the next seasons' serious incidents (1.7–2.2× chance)
+          </li>
+        </ul>
+      ),
+      link: "https://github.com/Muhammad-Rayyan-Moosani/FIA_ASSISTANT"
+    },
     {
       title: "TestGuard Platform",
       description: (
