@@ -15,7 +15,6 @@ export default function PromptBox() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [response, setResponse] = useState("");
   const [showResponse, setShowResponse] = useState(false);
-  const [waking, setWaking] = useState(false);
 
   // Warm up the free-tier backend on load so the first question isn't a cold start.
   useEffect(() => {
@@ -29,12 +28,9 @@ export default function PromptBox() {
     setIsSubmitting(true);
     setShowResponse(false);
 
-    // The backend runs on a free tier that can cold-start; hint if it's slow.
-    const wakingTimer = setTimeout(() => setWaking(true), 3000);
-
     try {
       // Free-tier backend can cold-start (~30-50s); retry a few times before giving up
-      // so a sleeping server shows "waking…" and then answers instead of erroring.
+      // so a sleeping server answers instead of erroring.
       // Only network failures and 502/503/504 (Render's "waking up" responses) are
       // retried; any other error (e.g. a 500 from the API) fails fast instead of
       // spinning for ~80s.
@@ -70,8 +66,6 @@ export default function PromptBox() {
       setResponse("Oops! Something went wrong. Please try again.");
       setShowResponse(true);
     } finally {
-      clearTimeout(wakingTimer);
-      setWaking(false);
       setIsSubmitting(false);
     }
   };
@@ -116,15 +110,6 @@ export default function PromptBox() {
           </button>
         </div>
       </form>
-
-      {waking && !showResponse && (
-        <div
-          className="waking-note"
-          style={{ marginTop: "10px", fontSize: "0.85rem", opacity: 0.75, textAlign: "center" }}
-        >
-          Waking the assistant… first request after idle can take ~30s.
-        </div>
-      )}
 
       {showResponse && (
         <div

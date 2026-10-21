@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./StyleSheet.css";
 import logo from "./navbar-logo.webp";
 import resumePdf from "./Rayyan_Moosani_Resume_EX.pdf";
@@ -14,7 +14,6 @@ const SECTIONS = [
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="navbar">
@@ -23,32 +22,14 @@ export default function Navbar() {
         <img src={logo} alt="Rayyan Moosani" fetchPriority="high" />
       </div>
 
-      {/* Menu toggle (phones only) */}
-      <button
-        className="navbar-menu-btn"
-        onClick={() => setMenuOpen((o) => !o)}
-        aria-label={menuOpen ? "Close menu" : "Open menu"}
-        aria-expanded={menuOpen}
-        aria-controls="navbar-links"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          {menuOpen ? (
-            <path d="M6 6l12 12M18 6L6 18" />
-          ) : (
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          )}
-        </svg>
-      </button>
-
-      {/* Navigation links (a dropdown on phones) */}
-      <ul id="navbar-links" className={`navbar-links${menuOpen ? " open" : ""}`}>
+      {/* Navigation links */}
+      <ul className="navbar-links">
         {SECTIONS.map(([id, label]) => (
           <li key={id}>
             <a
               href={`#${id}`}
               onClick={(e) => {
                 e.preventDefault();
-                setMenuOpen(false);
                 document.getElementById(id)?.scrollIntoView({
                   behavior: "smooth",
                   block: "start",

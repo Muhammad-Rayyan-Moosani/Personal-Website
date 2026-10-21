@@ -1,11 +1,14 @@
 import "./StyleSheet.css";
 import waterlooLogo from "./waterloo logo.png";
+import avatar from "./navbar-logo.webp";
 import resumePdf from "./Rayyan_Moosani_Resume_EX.pdf";
 import PromptBox from "./PromptBox";
 
 export default function Hero() {
   return (
     <section className="hero" id="home">
+      {/* Phones only: the photo sits above the name instead of in the navbar */}
+      <img src={avatar} alt="Rayyan Moosani" className="hero-avatar" />
       <h1 className="hero-title">Rayyan Moosani</h1>
 
       <p className="hero-role">
