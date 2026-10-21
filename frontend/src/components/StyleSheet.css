@@ -789,7 +789,7 @@
 @media (max-width: 768px) {
   /* Navbar - one straight row, items spread evenly; photo moves to the hero */
   .navbar {
-    padding: 10px 6px 8px;
+    padding: max(10px, env(safe-area-inset-top)) 6px 8px; /* clear notches */
     opacity: 1;              /* no hero buttons bleeding through the bar */
   }
 
@@ -1495,3 +1495,97 @@
 .proof-item { display: flex; flex-direction: column; text-align: center; }
 .proof-a { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
 .proof-b { color: var(--text-muted); font-size: 0.8rem; opacity: 0.85; }
+
+/* ── Phone hero: photo glow, softer tagline, stacked CTAs, assistant card ── */
+.hero-avatar-wrap {
+  display: contents; /* desktop: no wrapper box (the photo itself is hidden) */
+}
+@media (max-width: 768px) {
+  .hero {
+    height: auto;                       /* grow with the stacked content */
+    min-height: 100svh;
+    padding: 88px 16px 32px;            /* clear the fixed navbar */
+  }
+
+  /* Soft cyan glow behind the photo */
+  .hero-avatar-wrap {
+    display: block;
+    position: relative;
+    margin: 0 auto 18px;
+  }
+  .hero-avatar-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -36px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 234, 255, 0.28) 0%, rgba(0, 234, 255, 0.08) 45%, transparent 70%);
+    filter: blur(6px);
+    pointer-events: none;
+  }
+  .hero-avatar-wrap .hero-avatar {
+    position: relative;
+    margin: 0;
+  }
+
+  /* Tagline: quieter than the name, more breathing room */
+  .hero p.hero-subtitle {
+    font-size: clamp(15px, 4vw, 17px);
+    line-height: 1.65;
+    color: var(--text-primary);
+    opacity: 0.7;
+    max-width: 34ch;
+    margin: 4px auto 0;
+  }
+
+  /* CTAs: one full-width column; one filled primary, ghost secondaries */
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 360px;
+    gap: 10px;
+    margin: 26px auto 8px;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    min-width: 0;
+    padding: 14px 20px;
+    border-radius: 12px;
+  }
+  .hero-cta .btn:not(.btn-primary) {
+    background: transparent;
+    border: 1px solid rgba(0, 234, 255, 0.35);
+    color: var(--text-primary);
+  }
+  .hero-cta .btn:not(.btn-primary):hover,
+  .hero-cta .btn:not(.btn-primary):active {
+    border-color: var(--accent-glow);
+    color: var(--accent-glow);
+  }
+
+  /* Assistant: caption + input grouped in one glass card */
+  .hero-assistant {
+    max-width: 360px;
+    margin: 18px auto 0;
+    padding: 16px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .hero p.hero-assistant-caption {
+    margin: 0 0 12px;
+    text-align: center;
+  }
+  .hero-assistant .prompt-box-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  :root[data-theme="light"] .hero-assistant {
+    background: rgba(15, 23, 42, 0.03);
+  }
+}
+

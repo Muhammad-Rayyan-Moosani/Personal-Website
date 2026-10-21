@@ -8,7 +8,9 @@ export default function Hero() {
   return (
     <section className="hero" id="home">
       {/* Phones only: the photo sits above the name instead of in the navbar */}
-      <img src={avatar} alt="Rayyan Moosani" className="hero-avatar" />
+      <div className="hero-avatar-wrap">
+        <img src={avatar} alt="Rayyan Moosani" className="hero-avatar" />
+      </div>
       <h1 className="hero-title">Rayyan Moosani</h1>
 
       <p className="hero-role">

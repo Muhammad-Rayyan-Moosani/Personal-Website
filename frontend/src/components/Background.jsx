@@ -12,6 +12,9 @@ const isLowEndDevice = () => {
 const isMobile = typeof window !== 'undefined' && 
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+const isNarrow = () =>
+  typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+
 // Adaptive particle count - Optimized for mobile performance
 const getParticleCount = () => {
   if (isMobile) return 25; // Reduced from 40 for faster mobile
@@ -52,7 +55,10 @@ function Background() {
         bg: isDark ? '#000000' : '#ffffff',
         bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.3)',
         // Brighter, more visible grid in light mode
-        grid: isDark ? 'rgba(0, 234, 255, 0.1)' : 'rgba(8, 145, 178, 0.15)',
+        // Fainter on phones so the grid stays a backdrop behind the hero
+        grid: isNarrow()
+          ? (isDark ? 'rgba(0, 234, 255, 0.045)' : 'rgba(8, 145, 178, 0.07)')
+          : (isDark ? 'rgba(0, 234, 255, 0.1)' : 'rgba(8, 145, 178, 0.15)'),
         // Brighter particles in light mode
         particle: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.6)',
         shadow: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.4)',
@@ -221,7 +227,10 @@ function Background() {
     let resizeTimeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(setCanvasSize, 100);
+      resizeTimeout = setTimeout(() => {
+        updateColors(); // grid strength depends on viewport width
+        setCanvasSize();
+      }, 100);
     };
 
     // Theme change observer

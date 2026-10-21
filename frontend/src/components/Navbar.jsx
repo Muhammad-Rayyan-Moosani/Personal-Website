@@ -6,7 +6,7 @@ import { useTheme } from "../contexts/ThemeContext";
 
 const SECTIONS = [
   ["home", "Home"],
-  ["about", "About Me"],
+  ["about", "About"],
   ["experience", "Experience"],
   ["projects", "Projects"],
   ["contacts", "Contact"],
