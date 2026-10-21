@@ -133,11 +133,12 @@ body {
   --text-muted: #64748b;
   --text-heading: #0f172a;
 
-  /* Accent Colors - Cyan to Blue Gradient */
-  --accent-color: #0891b2;
-  --accent-secondary: #0284c7;
-  --accent-glow: #06b6d4;
-  --accent-gradient: linear-gradient(135deg, #0891b2 0%, #0284c7 100%);
+  /* Accent Colors - dark teal/sky so accent text passes WCAG AA on white
+     (cyan-700 5.4:1, cyan-800 7.3:1; the old cyan-500/600 were 2.4-3.7:1) */
+  --accent-color: #0e7490;
+  --accent-secondary: #0369a1;
+  --accent-glow: #155e75;
+  --accent-gradient: linear-gradient(135deg, #0e7490 0%, #0369a1 100%);
   --card-hover-fill: #cffafe;
 
   /* Borders & Dividers */
@@ -165,7 +166,7 @@ body {
   --grid-color: rgba(148, 163, 184, 0.05);
 
   /* Typing Effect */
-  --typing-color: #0891b2;
+  --typing-color: #0e7490;
 }
 
 /* Dark Mode - Pure Black (Default) */

@@ -31,17 +31,7 @@ export default function Hero() {
       </p>
 
       <div className="hero-cta">
-        <a
-          className="btn btn-primary"
-          href="#projects"
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-        >
-          View projects
-        </a>
-        <a className="btn" href={resumePdf} target="_blank" rel="noreferrer">
+        <a className="btn btn-primary" href={resumePdf} target="_blank" rel="noreferrer">
           Resume (PDF)
         </a>
         <a

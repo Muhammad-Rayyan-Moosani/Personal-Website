@@ -744,20 +744,6 @@
   opacity: 0.8;
 }
 
-.contacts .social-links {
-  margin-top: clamp(15px, 2vh, 20px);
-  display: flex;
-  gap: clamp(15px, 2vw, 20px);
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.contacts .social-links a img {
-  width: clamp(28px, 3vw, 32px);
-  height: clamp(28px, 3vw, 32px);
-  object-fit: contain;
-}
 
 /* =========================
    TYPING ANIMATION
@@ -805,14 +791,8 @@
   }
 
   .navbar ul li a {
-    font-size: clamp(9.5px, 2.65vw, 14px);
+    font-size: clamp(10.5px, 3vw, 14px);   /* 6 items now (no resume icon) */
     white-space: nowrap;
-  }
-
-  /* Icons stay 44px tall to tap, but narrower so the text links get room */
-  .navbar ul li .resume-btn,
-  .navbar ul li .theme-toggle {
-    min-width: 30px;
   }
 
   .theme-toggle svg,
@@ -1002,60 +982,6 @@
 /* StyleSheet.css */
 
 /* Contact box styling */
-.contact-box {
-  max-width: 500px;
-  width: 300px;
-  margin: 15px auto 0;
-  padding: 20px;
-  border-radius: 16px;
-  background-color: var(--bg-card);
-  border: 2px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-/* Hover effect */
-.contact-box:hover {
-  transform: translate3d(0, -5px, 0); /* lift effect - GPU accelerated */
-  box-shadow: 0 8px 20px rgba(0, 234, 255, 0.3); /* subtle shadow */
-}
-
-/* Apply to any link container */
-.contact-links {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.contact-links a {
-  color: var(--accent-color);
-  text-decoration: none;
-  position: relative;
-  padding-bottom: 2px;
-}
-
-.contact-links a:hover {
-  color: var(--accent-glow);
-}
-
-/* Create the underline */
-.contact-links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0%;
-  height: 2px;
-  background-color: var(--accent-color);
-}
-
-.contact-links a:hover::after {
-  width: 100%;
-}
-
 /* Webring container */
 .webring-container {
   display: flex;
@@ -1093,10 +1019,6 @@
   opacity: 1;
 }
 
-/* Animate on hover */
-.contact-links a:hover::after {
-  width: 100%;
-}
 
 /* =========================
    PREMIUM TYPOGRAPHY - LIGHT MODE
@@ -1563,14 +1485,14 @@
     color: var(--accent-glow);
   }
 
-  /* Assistant: caption + input grouped in one glass card */
+  /* Assistant: caption + input grouped in one elevated card */
   .hero-assistant {
     max-width: 360px;
     margin: 18px auto 0;
     padding: 16px;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.5);     /* slate-900/50 */
+    border: 1px solid #1e293b;              /* slate-800 */
     border-radius: 18px;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -1585,7 +1507,105 @@
     padding: 0;
   }
   :root[data-theme="light"] .hero-assistant {
-    background: rgba(15, 23, 42, 0.03);
+    background: rgba(248, 250, 252, 0.8);  /* slate-50/80 */
+    border-color: #e2e8f0;                  /* slate-200 */
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
   }
+
+  /* Experience: no timeline rail or dots on phones; cards use the full width */
+  .timeline::before,
+  .timeline-dot {
+    display: none !important;
+  }
+  .timeline-item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Light mode: white label on the filled primary CTA; readable tech-stack text */
+:root[data-theme="light"] .hero-cta .btn-primary {
+  color: #ffffff;
+}
+@media (max-width: 768px) {
+  :root[data-theme="light"] .hero-cta .btn:not(.btn-primary) {
+    border-color: rgba(14, 116, 144, 0.35);  /* teal outline instead of neon cyan */
+  }
+}
+:root[data-theme="light"] .tech-stack {
+  color: #1d4ed8;                           /* blue-700, 6.7:1 on white */
+}
+
+/* ── Contact: eyebrow, heading, big email, icon row, webring ── */
+.contacts p.contact-eyebrow {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 1;
+  margin: 0 0 6px;
+}
+.contacts p.contact-sub {
+  font-size: clamp(15px, 1.4vw + 0.5rem, 18px);
+  color: var(--text-secondary);
+  opacity: 0.85;
+  margin: 10px 0 0;
+}
+.contact-email {
+  display: inline-block;
+  margin-top: clamp(18px, 3vh, 26px);
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: clamp(18px, 1.6vw + 0.8rem, 26px);
+  font-weight: 600;
+  color: var(--accent-glow);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.contact-email:hover {
+  border-bottom-color: var(--accent-glow);
+}
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 36px);
+  margin-top: clamp(22px, 4vh, 34px);
+}
+.contact-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  color: var(--text-muted);
+  transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.contact-icons a:hover,
+.contact-icons a:focus-visible {
+  color: var(--accent-glow);
+  background: rgba(0, 234, 255, 0.08);
+  transform: translateY(-2px);
+}
+.contacts .webring-container {
+  margin-top: clamp(24px, 4vh, 36px);
+  gap: 14px;
+}
+.contacts .webring-arrow,
+.contacts .webring-icon {
+  margin: 0;
+}
+/* Centre each glyph/logo inside its link, so the logo sits exactly midway
+   between the arrows even when touch screens widen links to 44px */
+.contacts .webring-container a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.contacts .webring-arrow {
+  color: var(--text-muted);
 }
 
