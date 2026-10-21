@@ -1,5 +1,13 @@
 # Professional Experience
 
+## Work history in order — most recent first (latest internship, co-op, job or role)
+Rayyan's roles, newest to oldest. As a Waterloo student these are all his student work terms, so "most recent internship", "latest co-op", "current job" and "last role" all mean XORBIX, where he still works today. Right before XORBIX he was a Software Developer at IICUW; his first job was IT Intern at AGMC.
+1. Software Engineer – XORBIX — May 2026 – Present (current, most recent): AI and data engineering — File Guardian Agent (~50x faster validation), Xorbix Document Flow (~95% faster AI extraction), Kickstarter Cockpit, WorkAssist AI.
+2. Software Developer – IICUW — Sep 2025 – Dec 2025: React refactor, Python Discord bots.
+3. QA Analyst – MEDAD — July 2025 – Aug 2025: print and packaging quality.
+4. Software Automation Developer – SCITRA — Aug 2024 – Sep 2024: real-time reporting system, IoT digital twins.
+5. IT Intern – AGMC — June 2024 – July 2024 (his earliest role; the only one titled "Intern"): Microsoft 365 migration.
+
 ## Software Engineer – XORBIX
 **May 2026 – Present**
 

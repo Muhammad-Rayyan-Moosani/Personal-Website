@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import "./StyleSheet.css";
 import logo from "./navbar-logo.webp";
 import resumePdf from "./Rayyan_Moosani_Resume_EX.pdf";
 import { useTheme } from "../contexts/ThemeContext";
 
+const SECTIONS = [
+  ["home", "Home"],
+  ["about", "About Me"],
+  ["experience", "Experience"],
+  ["projects", "Projects"],
+  ["contacts", "Contact"],
+];
+
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="navbar">
@@ -14,82 +23,42 @@ export default function Navbar() {
         <img src={logo} alt="Rayyan Moosani" fetchPriority="high" />
       </div>
 
-      {/* Navigation links */}
-      <ul className="navbar-links">
-        <li>
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("home")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-          >
-            Home
-          </a>
-        </li>
+      {/* Menu toggle (phones only) */}
+      <button
+        className="navbar-menu-btn"
+        onClick={() => setMenuOpen((o) => !o)}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        aria-controls="navbar-links"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          {menuOpen ? (
+            <path d="M6 6l12 12M18 6L6 18" />
+          ) : (
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          )}
+        </svg>
+      </button>
 
-        <li>
-          <a
-            href="#about"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("about")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-          >
-            About Me
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#experience"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("experience")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-          >
-            Experience
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#projects"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("projects")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-          >
-            Projects
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#contacts"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("contacts")?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }}
-          >
-            Contact
-          </a>
-        </li>
+      {/* Navigation links (a dropdown on phones) */}
+      <ul id="navbar-links" className={`navbar-links${menuOpen ? " open" : ""}`}>
+        {SECTIONS.map(([id, label]) => (
+          <li key={id}>
+            <a
+              href={`#${id}`}
+              onClick={(e) => {
+                e.preventDefault();
+                setMenuOpen(false);
+                document.getElementById(id)?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
 
         <li>
           <a

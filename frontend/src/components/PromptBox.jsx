@@ -35,23 +35,32 @@ export default function PromptBox() {
     try {
       // Free-tier backend can cold-start (~30-50s); retry a few times before giving up
       // so a sleeping server shows "waking…" and then answers instead of erroring.
+      // Only network failures and 502/503/504 (Render's "waking up" responses) are
+      // retried; any other error (e.g. a 500 from the API) fails fast instead of
+      // spinning for ~80s.
       let data;
       for (let attempt = 0; ; attempt++) {
+        let res;
         try {
-          const res = await fetch(`${apiUrl}/chat`, {
+          res = await fetch(`${apiUrl}/chat`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ question: prompt }),
           });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          data = await res.json();
-          break;
         } catch (err) {
           if (attempt >= 12) throw err; // cover a full free-tier cold start (~80s)
           await new Promise((r) => setTimeout(r, 7000));
+          continue;
         }
+        if ([502, 503, 504].includes(res.status) && attempt < 12) {
+          await new Promise((r) => setTimeout(r, 7000));
+          continue;
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        data = await res.json();
+        break;
       }
       setResponse(data.answer || "Got your message! Thanks for reaching out.");
       setShowResponse(true);

@@ -593,7 +593,7 @@
   margin-bottom: 10px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
+  hyphens: manual;  /* no "desk-top"-style splits; overflow-wrap still guards long words */
 }
 
 /* =========================
@@ -696,6 +696,20 @@
   display: block;
 }
 
+/* Hamburger toggle: only shown on phones (see max-width: 768px) */
+.navbar-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
 /* =========================
    CONTACTS
    ========================= */
@@ -782,40 +796,64 @@
    RESPONSIVE - Mobile adjustments while keeping desktop layout
    ========================= */
 @media (max-width: 768px) {
-  /* Navbar - keep horizontal layout, prevent wrapping, scale down */
+  /* Navbar - compact bar (avatar + menu button); links open as a dropdown */
   .navbar {
-    padding: clamp(10px, 1.5vh, 20px) clamp(5px, 1vw, 10px) clamp(3px, 0.8vh, 8px);
-    font-size: clamp(10px, 1.2vw, 14px);
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    opacity: 1;              /* no hero buttons bleeding through the bar */
+    overflow: visible;       /* let the dropdown extend below the bar */
   }
-  
-  .navbar ul {
-    flex-direction: row;
-    gap: clamp(8px, 2vw, 20px);
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  
-  .navbar ul::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .navbar ul li a {
-    font-size: clamp(10px, 1.2vw, 14px);
-    white-space: nowrap;
-  }
-  
+
   .navbar img {
-    height: clamp(20px, 3vw, 30px);
-    width: clamp(20px, 3vw, 30px);
-    margin-right: clamp(10px, 4vw, 50px);
+    height: 34px;
+    width: 34px;
+    margin: 0;
   }
-  
-  .theme-toggle svg,
-  .resume-btn svg {
-    width: 16px;
-    height: 16px;
+
+  .navbar-menu-btn {
+    display: flex;
+  }
+
+  .navbar ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0 20px;
+    padding: 4px 16px 12px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 12px 24px var(--shadow-color);
+  }
+
+  .navbar ul.open {
+    display: flex;
+  }
+
+  /* Section links: one per row, full width, comfortable tap height */
+  .navbar ul li:not(:has(.resume-btn, .theme-toggle)) {
+    flex-basis: 100%;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .navbar ul li a {
+    font-size: 15px;
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Resume + theme icons sit side by side on the last row */
+  .navbar ul li .resume-btn,
+  .navbar ul li .theme-toggle {
+    width: 44px;
+    min-height: 44px;
   }
   
   /* Keep timeline centered layout on mobile */
@@ -858,7 +896,7 @@
     margin-bottom: clamp(6px, 1vh, 8px);
     word-wrap: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;  /* no "desk-top"-style splits; overflow-wrap still guards long words */
   }
   
   .timeline-item.left {
@@ -912,33 +950,12 @@
   .projects-grid .project-bullets li {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;  /* no "desk-top"-style splits; overflow-wrap still guards long words */
   }
 }
 
 /* Very small screens - ensure no overlap, maintain structure */
 @media (max-width: 480px) {
-  /* Navbar - even smaller but still one line */
-  .navbar ul {
-    gap: clamp(6px, 1.5vw, 12px);
-  }
-  
-  .navbar ul li a {
-    font-size: clamp(9px, 1.1vw, 12px);
-  }
-  
-  .navbar img {
-    height: clamp(18px, 2.5vw, 25px);
-    width: clamp(18px, 2.5vw, 25px);
-    margin-right: clamp(8px, 3vw, 40px);
-  }
-  
-  .theme-toggle svg,
-  .resume-btn svg {
-    width: 14px;
-    height: 14px;
-  }
-  
   /* Timeline - maintain structure, scale down */
   .timeline-item {
     padding: 8px 6px;
@@ -1306,25 +1323,6 @@
 
 /* Very small phones */
 @media (max-width: 480px) {
-  /* Ultra-compact navbar */
-  .navbar {
-    padding: 8px 5px 5px !important;
-  }
-  
-  .navbar img {
-    height: 24px !important;
-    width: 24px !important;
-  }
-  
-  .navbar ul {
-    gap: 8px !important;
-  }
-  
-  .navbar ul li a {
-    font-size: 11px !important;
-    padding: 4px 6px;
-  }
-  
   /* Compact hero */
   .hero {
     min-height: 85vh;
@@ -1349,7 +1347,7 @@
   .experience,
   .projects,
   .contacts {
-    padding: 1.5rem 0.75rem;
+    padding: 1.5rem 1rem;          /* 16px side gutter on phones */
     margin-top: 50px !important;
   }
   
