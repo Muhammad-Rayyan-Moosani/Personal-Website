@@ -12,4 +12,4 @@ if __name__ == "__main__":
         log_level="info"
     )
 # Redeploys rebuild the in-memory knowledge index on startup.
-# Reindex trigger: 2026-10-05 — added Circuit Guard knowledge (circuit-guard.md).
+# Reindex trigger: 2026-10-21 — XORBIX tech stack added to the work-history chunk.
