@@ -13,8 +13,19 @@ from zoneinfo import ZoneInfo
 
 from anthropic import Anthropic
 
+import re
+
 from config import settings
 from vectorstore import VectorStore
+
+# Questions about his work history ("previous internships", "past jobs",
+# "work experience") need every role, not just the top-scoring snippets.
+_CAREER_QUERY = re.compile(
+    r"\b(intern\w*|co-?ops?|jobs?|roles?|positions?|employ\w*|career|"
+    r"work(ed)?\s+(experience|history)|experience)\b",
+    re.IGNORECASE,
+)
+_CAREER_FILE = "experience.md"
 
 
 class ContextRetriever:
@@ -49,6 +60,14 @@ class ContextRetriever:
 
         # Apply diversity selection (MMR-like)
         selected_chunks = self._select_diverse_chunks(all_chunks, top_k)
+
+        # Career-history questions get the whole work history appended, so the
+        # answer can cover every role instead of whichever snippet ranked first.
+        if _CAREER_QUERY.search(query):
+            seen = {c["text"] for c in selected_chunks}
+            selected_chunks += [
+                c for c in self.store.chunks_from(_CAREER_FILE) if c["text"] not in seen
+            ]
 
         return selected_chunks
 
@@ -154,6 +173,7 @@ Keep it skimmable — short bullets, not walls of text. For simple questions (co
 - For questions about recency or order ("most recent", "latest", "current", "last", "first", "earliest", "before/after", "how long", "when"), compare the actual dates in the knowledge base and answer from the correct entry — never just the first match you see.
 - Treat "internship", "co-op", "job", "role", "position" and "work experience" as any of his work roles, since he is a student. "Most recent internship" means his most recent role by date. Only if someone explicitly asks about roles titled "Intern" should you single those out.
 - Compute durations by counting from the start date to today, and order lists newest first unless asked otherwise.
+- "Previous" or "past" internships/jobs/roles means every role except his current one (XORBIX). Cover each of them, newest first, with its dates and one or two of its strongest results.
 
 ## Routing
 - End answers to broad questions with one concise, targeted follow-up (e.g., "Want the system architecture of that project, or the deployment metrics?")."""
@@ -183,7 +203,7 @@ Keep it skimmable — short bullets, not walls of text. For simple questions (co
 Question:
 {query}
 
-Answer using only the context above. If it doesn't contain the answer, say so briefly and suggest what else you can help with."""
+Answer using only the information above. If it doesn't cover the question, say in one natural sentence that you don't have that detail and suggest what you can share instead. Never mention "context", "provided information" or "documents"."""
 
     def _is_off_topic(self, query: str) -> bool:
         """

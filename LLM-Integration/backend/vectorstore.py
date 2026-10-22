@@ -30,6 +30,19 @@ _STOPWORDS = {
 }
 
 
+def _stem(term: str) -> str:
+    """Strip a plural ending so "internships" still matches "internship".
+
+    Matching is by substring, so the singular stem also matches the plural
+    form in chunk text.
+    """
+    if len(term) > 4 and term.endswith("ies"):
+        return term[:-3] + "y"
+    if len(term) > 4 and term.endswith("s") and not term.endswith("ss"):
+        return term[:-1]
+    return term
+
+
 class VectorStore:
     """Holds L2-normalized chunk embeddings and answers similarity queries."""
 
@@ -94,7 +107,7 @@ class VectorStore:
         pull a named project's chunk into the results even on a weak embedding match.
         """
         terms = {
-            t for t in re.findall(r"[a-z0-9]+", query.lower())
+            _stem(t) for t in re.findall(r"[a-z0-9]+", query.lower())
             if len(t) > 2 and t not in _STOPWORDS
         }
         if not terms:
@@ -107,6 +120,14 @@ class VectorStore:
             dtype=np.float32,
         )
         return 0.4 * frac
+
+    def chunks_from(self, filename: str) -> List[Dict[str, Any]]:
+        """All chunks of one knowledge file, in document order."""
+        return [
+            {"text": c["text"], "metadata": c["metadata"], "distance": 1.0}
+            for c in self._chunks
+            if c["metadata"].get("filename") == filename
+        ]
 
     @property
     def size(self) -> int:
