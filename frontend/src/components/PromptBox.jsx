@@ -27,18 +27,18 @@ export default function PromptBox() {
 
     setIsSubmitting(true);
     setShowResponse(false);
+    setResponse("");
 
     try {
-      // Free-tier backend can cold-start (~30-50s); retry a few times before giving up
-      // so a sleeping server answers instead of erroring.
-      // Only network failures and 502/503/504 (Render's "waking up" responses) are
-      // retried; any other error (e.g. a 500 from the API) fails fast instead of
-      // spinning for ~80s.
-      let data;
+      // A sleeping backend can take a while to wake; retry before giving up so it
+      // answers instead of erroring. Short waits mean we reconnect within ~2s of
+      // it coming up. Only network failures and 502/503/504 (Render's "waking up"
+      // responses) are retried; any other error (e.g. a 500 from the API) fails
+      // fast instead of spinning for ~80s.
+      let res;
       for (let attempt = 0; ; attempt++) {
-        let res;
         try {
-          res = await fetch(`${apiUrl}/chat`, {
+          res = await fetch(`${apiUrl}/chat/stream`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -46,20 +46,44 @@ export default function PromptBox() {
             body: JSON.stringify({ question: prompt }),
           });
         } catch (err) {
-          if (attempt >= 12) throw err; // cover a full free-tier cold start (~80s)
-          await new Promise((r) => setTimeout(r, 7000));
+          if (attempt >= 40) throw err; // cover a full free-tier cold start (~80s)
+          await new Promise((r) => setTimeout(r, 2000));
           continue;
         }
-        if ([502, 503, 504].includes(res.status) && attempt < 12) {
-          await new Promise((r) => setTimeout(r, 7000));
+        if ([502, 503, 504].includes(res.status) && attempt < 40) {
+          await new Promise((r) => setTimeout(r, 2000));
           continue;
         }
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        data = await res.json();
         break;
       }
-      setResponse(data.answer || "Got your message! Thanks for reaching out.");
-      setShowResponse(true);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      // Show the answer as it is written. The server sends server-sent events:
+      // `text` for each piece of the answer, then `done` (or `error`).
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let buffer = "";
+      let answer = "";
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += value;
+        const events = buffer.split("\n\n");
+        buffer = events.pop(); // keep a partial event for the next read
+        for (const raw of events) {
+          const event = raw.match(/^event: (.*)$/m)?.[1];
+          const data = raw.match(/^data: (.*)$/m)?.[1];
+          if (event === "error") throw new Error("Answer stream failed");
+          if (event === "text" && data) {
+            answer += JSON.parse(data).text;
+            setResponse(answer);
+            setShowResponse(true);
+          }
+        }
+      }
+      if (!answer) {
+        setResponse("Got your message! Thanks for reaching out.");
+        setShowResponse(true);
+      }
       setPrompt("");
     } catch (error) {
       console.error("Error submitting prompt:", error);

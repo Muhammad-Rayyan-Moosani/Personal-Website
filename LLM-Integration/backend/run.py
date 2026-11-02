@@ -11,5 +11,5 @@ if __name__ == "__main__":
         port=port,
         log_level="info"
     )
-# Redeploys rebuild the in-memory knowledge index on startup.
+# Redeploys reload the knowledge base on startup.
 # Reindex trigger: 2026-10-21 — XORBIX tech stack added to the work-history chunk.

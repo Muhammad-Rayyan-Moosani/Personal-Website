@@ -19,24 +19,12 @@ class Settings(BaseSettings):
 
     anthropic_api_key: str
 
-    # Model configurations
-    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
-    claude_model: str = "claude-sonnet-4-5-20250929"
-
-    # Chunking parameters
-    chunk_size: int = 700
-    chunk_overlap: int = 100
-
-    # RAG parameters
-    top_k_results: int = 6  # Number of final chunks to use
-    fetch_k_multiplier: int = 3  # Fetch this many times top_k for diversity
+    # Model configuration. Haiku starts streaming its answer in well under a
+    # second, which keeps the chat feeling instant.
+    claude_model: str = "claude-haiku-5-5"
 
     # Paths
     knowledge_dir: Path = Path(__file__).parent.parent / "knowledge"
-    chroma_db_dir: Path = Path(__file__).parent.parent / "chroma_db"
-
-    # Collection name
-    collection_name: str = "rayyan_knowledge"
 
     # CORS settings
     allowed_origins: List[str] = [
