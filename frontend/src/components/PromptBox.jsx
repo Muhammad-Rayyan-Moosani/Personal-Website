@@ -10,6 +10,53 @@ const apiUrl =
     ? "http://localhost:8000"
     : "https://rayyan-ai.onrender.com");
 
+// Send-button loading state: a comet looping a faint track around a breathing
+// core. Until the first words arrive the core breathes; once the answer is
+// streaming (`writing`) it settles and the track brightens.
+function OrbitLoader({ writing }) {
+  return (
+    <svg
+      className={`orbit-loader${writing ? " is-writing" : ""}`}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle className="orbit-track" cx="12" cy="12" r="8.5" />
+      <g className="orbit-comet">
+        <circle className="orbit-tail orbit-tail-2" cx="12" cy="12" r="8.5" />
+        <circle className="orbit-tail orbit-tail-1" cx="12" cy="12" r="8.5" />
+        <circle className="orbit-head" cx="12" cy="12" r="8.5" />
+      </g>
+      <circle className="orbit-core" cx="12" cy="12" r="2.6" />
+    </svg>
+  );
+}
+
+// One tap asks a full question. Short labels for the chips, but the question
+// sent is worded the way the knowledge base answers best, and the set covers
+// his strongest areas plus one playful chip that leads into the easter eggs.
+const SUGGESTIONS = [
+  {
+    label: "Hackathon win",
+    question: "Tell me about Circuit Guard and how Rayyan's team won FormulaTechHacks.",
+  },
+  {
+    label: "Work at XORBIX",
+    question: "What has Rayyan built at XORBIX, and what impact did it have?",
+  },
+  {
+    label: "Tech stack",
+    question: "What is Rayyan's tech stack, and where has he used it?",
+  },
+  {
+    label: "Why hire him?",
+    question: "Why should we hire Rayyan for a software engineering co-op?",
+  },
+  {
+    label: "Tell me a joke",
+    question: "Tell me a joke about Rayyan's work.",
+  },
+];
+
 export default function PromptBox() {
   const [prompt, setPrompt] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,9 +68,8 @@ export default function PromptBox() {
     fetch(`${apiUrl}/health`).catch(() => {});
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
+  const ask = async (question) => {
+    if (!question.trim() || isSubmitting) return;
 
     setIsSubmitting(true);
     setShowResponse(false);
@@ -43,7 +89,7 @@ export default function PromptBox() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ question: prompt }),
+            body: JSON.stringify({ question }),
           });
         } catch (err) {
           if (attempt >= 40) throw err; // cover a full free-tier cold start (~80s)
@@ -94,6 +140,16 @@ export default function PromptBox() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    ask(prompt);
+  };
+
+  const askSuggestion = (question) => {
+    setPrompt(question); // show what was asked while it answers
+    ask(question);
+  };
+
   return (
     <div
       className="prompt-box-container"
@@ -111,11 +167,15 @@ export default function PromptBox() {
           />
           <button
             type="submit"
-            className="prompt-submit-btn"
+            className={`prompt-submit-btn${isSubmitting ? " is-loading" : ""}`}
             disabled={isSubmitting || !prompt.trim()}
+            aria-busy={isSubmitting}
+            aria-label={
+              !isSubmitting ? "Send" : showResponse ? "Writing answer" : "Thinking"
+            }
           >
             {isSubmitting ? (
-              <span className="spinner"></span>
+              <OrbitLoader writing={showResponse} />
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,6 +194,21 @@ export default function PromptBox() {
           </button>
         </div>
       </form>
+
+      <div className="prompt-suggestions" role="group" aria-label="Suggested questions">
+        {SUGGESTIONS.map(({ label, question }) => (
+          <button
+            key={label}
+            type="button"
+            className="prompt-suggestion"
+            onClick={() => askSuggestion(question)}
+            disabled={isSubmitting}
+            title={question}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
 
       {showResponse && (
         <div

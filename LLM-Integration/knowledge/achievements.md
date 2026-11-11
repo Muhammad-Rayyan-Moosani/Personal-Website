@@ -15,7 +15,8 @@
 
 ## Mathematics Competitions
 - Top position in school – TMUA Mathematics Competition (2025)
-- Top position in school – Canadian Senior Mathematics Competition (2025)
+- Top position in school – Canadian Senior Mathematics Competition (2025); scored 1 mark below the Certificate of Distinction
+- Top position in school – Euclid Mathematics Contest (Canada); scored 1 mark below the Certificate of Distinction
 
 ## Hackathons
 - Winner, Ampere Track (AI for Motorsport Safety) — FormulaTechHacks (September 2026), as team lead of a four-person team, for Circuit Guard, an AI race-control and insurance platform built on real Formula 1 data

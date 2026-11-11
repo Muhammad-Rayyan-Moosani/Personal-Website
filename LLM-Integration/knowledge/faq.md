@@ -29,7 +29,7 @@ He holds the University of Waterloo President's Scholarship and has earned the E
 At A-Level he earned an A* in Computer Science and an A in both Mathematics and Physics. He scored 780/800 on the SAT Mathematics section, and at IGCSE O-Level achieved four Grade 9s, two Grade 8s, and one Grade 7.
 
 ### Has Rayyan done well in mathematics competitions?
-Yes. He was a worldwide Gold Topper in the 5th and 6th World Abacus Mathematics Competitions and a Silver Topper in the 7th, and placed top in his school in the TMUA and Canadian Senior Mathematics Competitions in 2025.
+Yes. He was a worldwide Gold Topper in the 5th and 6th World Abacus Mathematics Competitions and a Silver Topper in the 7th, and placed top in his school in the TMUA and Canadian Senior Mathematics Competitions in 2025. He also placed top in his school in the Euclid Mathematics Contest. In both the Canadian Senior Mathematics Competition and the Euclid, he scored just 1 mark below the Certificate of Distinction.
 
 ## Experience
 
