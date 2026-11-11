@@ -61,17 +61,19 @@
   mask-composite: exclude;
   opacity: 0.55;
 }
+/* Back pane: the same size as the front one, offset evenly down and right,
+   so it reads as a deliberate stacked card rather than a stray border. */
 .holo-glass-back {
-  inset: 8% -6% 4% 10%;
-  transform: translate3d(0, 0, 0) skewY(-3deg);
-  opacity: 0.6;
+  inset: 2% 6% 10% -4%;
+  transform: translate3d(10px, 10px, 0);
+  opacity: 0.8;
 }
 .holo-glass-front {
   inset: 2% 6% 10% -4%;
   background: linear-gradient(160deg, rgba(0, 234, 255, 0.05), rgba(139, 92, 246, 0.04));
 }
-.holo:hover .holo-glass-back { transform: translate3d(6px, -4px, 0) skewY(-3deg); }
-.holo:hover .holo-glass-front { transform: translate3d(-4px, 3px, 0); }
+.holo:hover .holo-glass-back { transform: translate3d(13px, 13px, 0); }
+.holo:hover .holo-glass-front { transform: translate3d(-2px, -2px, 0); }
 
 /* Faint scanlines over the whole frame. */
 .holo::after {
@@ -179,6 +181,9 @@
 .hero .holo {
   width: clamp(170px, 27vh, 270px);   /* larger frame: the whole figure fits inside */
   flex: none;
+  /* The visible frame spans -4%..94% of the box (centre at 45%), so shift the
+     box right by 5% to put the frame itself on the page's centre line. */
+  transform: translateX(5%);
   margin: 0 auto clamp(10px, 2vh, 20px);
 }
 @media (max-width: 768px) {

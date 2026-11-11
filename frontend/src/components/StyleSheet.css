@@ -2058,3 +2058,74 @@
 @media (prefers-reduced-motion: reduce) {
   .message-dialog[open] .message-pane { animation: none; }
 }
+
+/* ── Experience: date on the open side of the timeline, at the middle of its card ── */
+.timeline-date {
+  display: none;
+}
+@media (min-width: 769px) {
+  /* --card-mid is set in Experience.jsx: the vertical middle of the card */
+  .timeline-item .timeline-dot,
+  .timeline-item.left .timeline-dot,
+  .timeline-item.right .timeline-dot {
+    top: var(--card-mid, 50%);
+  }
+  /* Centre the dot exactly on the rail (the rail sits on each item's inner edge) */
+  .timeline-item.left .timeline-dot {
+    right: 0;
+    left: auto;
+    transform: translate(50%, -50%);
+  }
+  .timeline-item.right .timeline-dot {
+    left: 0;
+    right: auto;
+    transform: translate(-50%, -50%);
+  }
+  /* Paint containment would clip the date, which sits outside the item's box */
+  .timeline .timeline-item {
+    contain: layout style;
+  }
+  .timeline-date {
+    display: block;
+    position: absolute;
+    top: var(--card-mid, 50%);
+    transform: translateY(-50%);
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(13px, 1.1vw, 16px);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: var(--accent-glow);
+  }
+  .timeline-item.left .timeline-date {
+    left: calc(100% + clamp(22px, 2.5vw, 34px));
+  }
+  .timeline-item.right .timeline-date {
+    right: calc(100% + clamp(22px, 2.5vw, 34px));
+    text-align: right;
+  }
+  /* Move with the card when it lifts on hover, so they stay level */
+  .timeline-item .timeline-dot,
+  .timeline-item .timeline-date {
+    transition: margin-top 0.3s ease;
+  }
+  .timeline-item:has(.card:hover) .timeline-dot,
+  .timeline-item:has(.card:hover) .timeline-date {
+    margin-top: -8px;
+  }
+  /* The date now lives beside the line, so don't repeat it inside the card */
+  .timeline-item .card-date {
+    display: none;
+  }
+}
+
+/* Links inside experience bullets use the accent, not browser blue */
+.timeline-item .card-bullets a {
+  color: var(--accent-glow);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent-glow) 45%, transparent);
+  text-underline-offset: 3px;
+}
+.timeline-item .card-bullets a:hover {
+  text-decoration-color: var(--accent-glow);
+}

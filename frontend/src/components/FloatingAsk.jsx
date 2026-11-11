@@ -1,17 +1,38 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
-// Bottom-right shortcut back to the assistant. Shown only while the hero's
-// assistant is scrolled out of view; a click scrolls to it and focuses the input.
+// Bottom-right shortcut back to the assistant.
+// - Rendered into <body> through a portal: the hero has a transform, which
+//   would otherwise pin this "fixed" button to the hero instead of the screen.
+// - Shown only once the visitor has scrolled past the hero's assistant, and
+//   hidden again at the Contact section (it would cover the message bubble).
 export default function FloatingAsk() {
-  const [visible, setVisible] = useState(false);
+  const [pastAssistant, setPastAssistant] = useState(false);
+  const [atContact, setAtContact] = useState(false);
 
   useEffect(() => {
-    const target = document.querySelector(".hero-assistant");
-    if (!target) return;
-    const io = new IntersectionObserver(([e]) => setVisible(!e.isIntersecting), { threshold: 0 });
-    io.observe(target);
-    return () => io.disconnect();
+    const assistant = document.querySelector(".hero-assistant");
+    const contact = document.querySelector("#contacts");
+    const observers = [];
+    if (assistant) {
+      const io = new IntersectionObserver(([e]) => {
+        // Out of view *because we scrolled below it* (its top is above the screen).
+        setPastAssistant(!e.isIntersecting && e.boundingClientRect.top < 0);
+      });
+      io.observe(assistant);
+      observers.push(io);
+    }
+    if (contact) {
+      const io = new IntersectionObserver(([e]) => setAtContact(e.isIntersecting), {
+        rootMargin: "0px 0px -25% 0px", // hide once Contact is properly on screen
+      });
+      io.observe(contact);
+      observers.push(io);
+    }
+    return () => observers.forEach((io) => io.disconnect());
   }, []);
+
+  const visible = pastAssistant && !atContact;
 
   const goToAssistant = () => {
     const box = document.querySelector(".hero-assistant");
@@ -22,7 +43,7 @@ export default function FloatingAsk() {
     setTimeout(() => input?.focus({ preventScroll: true }), reduced ? 0 : 450);
   };
 
-  return (
+  return createPortal(
     <button
       type="button"
       className={`floating-ask${visible ? " is-visible" : ""}`}
@@ -34,6 +55,7 @@ export default function FloatingAsk() {
         <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
       </svg>
       Ask AI about me
-    </button>
+    </button>,
+    document.body,
   );
 }

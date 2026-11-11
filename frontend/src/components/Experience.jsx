@@ -29,6 +29,27 @@ export default function Experience() {
     return () => observer.disconnect();
   }, []);
 
+  // Lock each card's timeline dot and date to the vertical middle of its
+  // card. Card heights change as text wraps at different widths, so this is
+  // recomputed on resize and once fonts are ready.
+  useEffect(() => {
+    const timeline = timelineRef.current;
+    if (!timeline) return;
+    const align = () => {
+      timeline.querySelectorAll(".timeline-item").forEach((item) => {
+        const card = item.querySelector(".card");
+        if (!card) return;
+        const y = card.offsetTop + card.offsetHeight / 2; // layout only, so animations can't skew it
+        item.style.setProperty("--card-mid", `${Math.round(y)}px`);
+      });
+    };
+    align();
+    const ro = new ResizeObserver(align);
+    ro.observe(timeline);
+    document.fonts?.ready.then(align);
+    return () => ro.disconnect();
+  }, []);
+
   // Open the full project list (the XORBIX work isn't all in the featured five).
   const showXorbixWork = () => window.dispatchEvent(new Event("projects:show-all"));
 
@@ -114,6 +135,8 @@ export default function Experience() {
             <div
               className="timeline-dot"
             />
+            {/* Desktop: the date sits across the line from its card */}
+            <span className="timeline-date">{exp.date}</span>
             <EnhancedCard
               title={exp.title}
               bullets={exp.bullets}

@@ -59,9 +59,9 @@ function App() {
         <MemoizedNavbar />
         <MemoizedHero />
         <ProofStrip />
+        <MemoizedAbout />
         <Experience />
         <Projects />
-        <MemoizedAbout />
         <MemoizedContacts />
       </div>
     </>
