@@ -9,7 +9,7 @@ const supportsHover = typeof window !== 'undefined' &&
 // Link label from where it points, instead of a generic "Repo/Site".
 const defaultLinkLabel = (url) => (/github\.com/.test(url) ? "GitHub ↗" : "Website ↗");
 
-export default function EnhancedCard({ title, bullets = [], description, date, link, linkLabel, live, writeup, image, badges = [] }) {
+export default function EnhancedCard({ title, subtitle, tags = [], bullets = [], description, date, link, linkLabel, live, writeup, extraLinks = [], linkTitle = true, image, badges = [] }) {
   const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -140,8 +140,14 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
         className="card-title"
         style={{ transform: supportsHover ? "translateZ(30px)" : "none" }}
       >
-        {link ? <a href={link} target="_blank" rel="noreferrer">{title}</a> : title}
+        {link && linkTitle ? <a href={link} target="_blank" rel="noreferrer">{title}</a> : title}
       </h3>
+
+      {subtitle && (
+        <p className="card-subtitle" style={{ transform: supportsHover ? "translateZ(28px)" : "none" }}>
+          {subtitle}
+        </p>
+      )}
 
       {date && (
         <p
@@ -150,6 +156,14 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
         >
           {date}
         </p>
+      )}
+
+      {tags.length > 0 && (
+        <ul className="card-tags" aria-label="Tech stack" style={{ transform: supportsHover ? "translateZ(22px)" : "none" }}>
+          {tags.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
       )}
 
       {hasBullets ? (
@@ -177,11 +191,14 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
         </div>
       )}
 
-      {(link || live || writeup) && (
+      {(link || live || writeup || extraLinks.length > 0) && (
         <div
           className="card-cta"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
+          {extraLinks.map(({ label, href, onClick }) => (
+            <a key={label} href={href} onClick={onClick}>{label}</a>
+          ))}
           {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
           {link && <a href={link} target="_blank" rel="noreferrer">{linkLabel || defaultLinkLabel(link)}</a>}
           {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}

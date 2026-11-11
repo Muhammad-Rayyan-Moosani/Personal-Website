@@ -55,66 +55,67 @@ export default function Experience() {
 
   const experiences = [
     {
-      title: "XORBIX - Software Engineer",
+      role: "Software Engineer",
+      company: "XORBIX",
       date: "May 2026 – Present",
       link: "https://www.xorbix.com/",
+      stack: ["C# / .NET 8", "Python", "Flask", "React", "pandas", "Azure OpenAI", "Azure AI Search", "Multi-provider LLMs"],
       bullets: [
-        <span className="tech-stack">C# / .NET 8, Python, Flask, React, pandas, Azure OpenAI, Azure AI Search, Multi-provider LLMs</span>,
-        "Built a vectorized pandas validation engine hitting ~442K rows/sec (~50× faster) and cut a REST API 3.1s→0.56s",
-        "Built AI document-processing & code-gen desktop apps in C#/.NET, cutting AI extraction latency ~95% (minutes→~5s)",
-        "Shipped a RAG assistant on Azure OpenAI/AI Search; QA'd a .NET/React app via a 167-case matrix, finding 15+ defects",
-        <>
-          Projects from this role: File Guardian Agent, Xorbix Document Flow, Kickstarter Cockpit, WorkAssist AI and Derse Vista,{" "}
-          <a href="#projects" onClick={showXorbixWork}>
-            tagged Work @ XORBIX in Projects ↓
-          </a>
-        </>
-      ]
+        <>Built a vectorized pandas validation engine hitting <strong>~442K rows/sec</strong> (<strong>~50× faster</strong>) and cut a REST API <strong>3.1s → 0.56s</strong></>,
+        <>Built AI document-processing & code-gen desktop apps in C#/.NET, cutting AI extraction latency <strong>~95%</strong> (<strong>minutes → ~5s</strong>)</>,
+        <>Shipped a RAG assistant on Azure OpenAI/AI Search; QA&apos;d a .NET/React app via a <strong>167-case matrix</strong>, finding <strong>15+ defects</strong></>,
+        "Projects from this role: File Guardian Agent, Xorbix Document Flow, Kickstarter Cockpit, WorkAssist AI and Derse Vista",
+      ],
+      extraLinks: [{ label: "View tagged projects ↓", href: "#projects", onClick: () => showXorbixWork() }],
     },
     {
-      title: "IICUW - Software Developer",
+      role: "Software Developer",
+      company: "IICUW",
       date: "Sep 2025 – Dec 2025",
-      link: "https://www.iicuwaterloo.com/",
+      link: "https://uwmsa.com/",
+      stack: ["GitHub", "Python", "Discord API", "React"],
       bullets: [
-        <span className="tech-stack">GitHub, Python, Discord API, React</span>,
-        "Optimized frontend performance by refactoring React (ES6+) components, reducing bundle size & improving team load times by ~20%",
+        <>Optimized frontend performance by refactoring React (ES6+) components, reducing bundle size & improving team load times by <strong>~20%</strong></>,
         "Developed Python-based Discord bots to automate internal workflows and streamline team operations",
-        "Supported 100+ active users by developing interactive bot features, significantly improving server engagement",
-        "Added 6 successful web pages by delivering clean, maintainable code and collaborating using Git/GitHub"
-      ]
+        <>Supported <strong>100+ active users</strong> by developing interactive bot features, significantly improving server engagement</>,
+        <>Added <strong>6 successful web pages</strong> by delivering clean, maintainable code and collaborating using Git/GitHub</>,
+      ],
     },
     {
-      title: "MEDAD - QA Analyst",
+      role: "QA Analyst",
+      company: "MEDAD",
       date: "July 2025 – Aug 2025",
       link: "https://www.albatha.com/medad-printing.htm",
+      stack: ["Adobe Photoshop"],
       bullets: [
-        <span className="tech-stack">Adobe Photoshop</span>,
         "Analyzed packaging workflow across design, printing, and quality teams to understand production pipeline",
         "Conducted print quality inspections, evaluating color accuracy, alignment, and packaging output using verification tools",
-        "Prepared print-ready artwork in Adobe Illustrator, ensuring files met production specifications and formatting standards"
-      ]
+        "Prepared print-ready artwork in Adobe Illustrator, ensuring files met production specifications and formatting standards",
+      ],
     },
     {
-      title: "SCITRA - Software Automation Developer",
+      role: "Software Automation Developer",
+      company: "SCITRA",
       date: "Aug 2024 – Sep 2024",
       link: "https://www.albatha.com/scitra.htm",
+      stack: ["Telegram Bot API", "Google Sheets API", "Unity", "C#", "IoT Systems"],
       bullets: [
-        <span className="tech-stack">Telegram bot API, Google Sheets API, Unity, C#, IOT Systems</span>,
-        "Developed and deployed a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across 30+ production lines. Reduced reporting latency by 40% by architecting a streamlined, automated issue-tracking workflow",
-        "Engineered high-fidelity 3D digital twins of factory machinery using Unity & C#, integrating real-time IoT sensor data to support predictive maintenance strategies. Automated intelligent error logging, improving the engineering team's fault diagnosis and resolution speed by 30%"
-      ]
+        <>Developed and deployed a Python-based Telegram chatbot integrated with the Google Sheets API to enable real-time reporting of machinery issues across <strong>30+ production lines</strong>. Reduced reporting latency by <strong>40%</strong> by architecting a streamlined, automated issue-tracking workflow</>,
+        <>Engineered high-fidelity 3D digital twins of factory machinery using Unity & C#, integrating real-time IoT sensor data to support predictive maintenance strategies. Automated intelligent error logging, improving the engineering team&apos;s fault diagnosis and resolution speed by <strong>30%</strong></>,
+      ],
     },
     {
-      title: "AGMC - IT Intern",
+      role: "IT Intern",
+      company: "AGMC",
       date: "June 2024 – July 2024",
       link: "https://www.bmw-dubai.com/",
+      stack: ["Microsoft Forms", "SharePoint", "Excel workflow", "Microsoft 365 systems"],
       bullets: [
-        <span className="tech-stack">Microsoft Forms, SharePoint, Excel workflow, Microsoft 365 systems</span>,
         "Designed and implemented a Microsoft Forms, SharePoint, and Excel workflow replacing a paper-based process and centralizing internal data collection",
         "Led the transition of internal requests to Microsoft 365 systems, improving information accessibility and reducing manual administrative steps",
-        "Supported IT operations by assisting staff with internal software tools, documentation, and troubleshooting, streamlining enterprise workflows"
-      ]
-    }
+        "Supported IT operations by assisting staff with internal software tools, documentation, and troubleshooting, streamlining enterprise workflows",
+      ],
+    },
   ];
 
   return (
@@ -138,11 +139,15 @@ export default function Experience() {
             {/* Desktop: the date sits across the line from its card */}
             <span className="timeline-date">{exp.date}</span>
             <EnhancedCard
-              title={exp.title}
+              title={exp.role}
+              subtitle={`@ ${exp.company}`}
+              tags={exp.stack}
               bullets={exp.bullets}
               date={exp.date}
               link={exp.link}
               linkLabel="Company site ↗"
+              linkTitle={false}
+              extraLinks={exp.extraLinks}
             />
           </div>
         ))}

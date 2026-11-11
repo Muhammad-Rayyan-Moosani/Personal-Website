@@ -2129,3 +2129,90 @@
 .timeline-item .card-bullets a:hover {
   text-decoration-color: var(--accent-glow);
 }
+
+/* ── Experience cards: role / company header, stack pills, metric-first bullets, footer links ── */
+.timeline-item .card-title {
+  font-size: clamp(18px, 1.6vw, 20px);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.timeline-item p.card-subtitle {
+  margin: 0 0 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent-glow);
+  opacity: 1;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+.card-tags li {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--accent-glow);
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+}
+:root[data-theme="light"] .card-tags li {
+  background: rgba(14, 116, 144, 0.07);
+  border-color: rgba(14, 116, 144, 0.28);
+}
+
+/* Bullets: cyan ▸ markers, softer body text, metrics in bold white */
+.timeline-item .card-bullets {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.timeline-item .card-bullets li {
+  position: relative;
+  padding-left: 20px;
+  margin: 0;
+  line-height: 1.55;
+  color: #cbd5e1;
+}
+.timeline-item .card-bullets li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent-glow);
+}
+.timeline-item .card-bullets strong {
+  color: #ffffff;
+  font-weight: 700;
+  white-space: nowrap;             /* keep "3.1s → 0.56s" on one line */
+}
+:root[data-theme="light"] .timeline-item .card-bullets li {
+  color: #475569;
+}
+:root[data-theme="light"] .timeline-item .card-bullets strong {
+  color: #0f172a;
+}
+
+/* Footer: both links on one row, divider above, company site on the right */
+.timeline-item .card-cta {
+  border-top: 1px solid rgba(0, 229, 255, 0.15);
+  justify-content: space-between;
+}
+.timeline-item .card-cta a:last-child {
+  margin-left: auto;
+}
+:root[data-theme="light"] .timeline-item .card-cta {
+  border-top-color: rgba(14, 116, 144, 0.18);
+}
