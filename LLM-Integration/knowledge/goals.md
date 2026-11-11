@@ -1,7 +1,7 @@
 # Goals and Aspirations
 
 ## Short-Term Goals
-- **Gain industry experience** through meaningful co-op positions in Waterloo's co-op program, working on real-world software challenges.
+- **Gain industry experience** through meaningful co-op positions in Waterloo's co-op program, working on real-world software challenges. His next co-op term is Summer 2027 (May to August 2027).
 - **Deepen technical expertise** in AI and machine learning, cloud and distributed systems, security engineering, and full-stack development at scale.
 - **Grow his portfolio** with ambitious projects that demonstrate strong engineering and measurable impact, such as StoryVerse.
 

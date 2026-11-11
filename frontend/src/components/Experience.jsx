@@ -29,6 +29,9 @@ export default function Experience() {
     return () => observer.disconnect();
   }, []);
 
+  // Open the full project list (the XORBIX work isn't all in the featured five).
+  const showXorbixWork = () => window.dispatchEvent(new Event("projects:show-all"));
+
   const experiences = [
     {
       title: "XORBIX - Software Engineer",
@@ -38,7 +41,13 @@ export default function Experience() {
         <span className="tech-stack">C# / .NET 8, Python, Flask, React, pandas, Azure OpenAI, Azure AI Search, Multi-provider LLMs</span>,
         "Built a vectorized pandas validation engine hitting ~442K rows/sec (~50× faster) and cut a REST API 3.1s→0.56s",
         "Built AI document-processing & code-gen desktop apps in C#/.NET, cutting AI extraction latency ~95% (minutes→~5s)",
-        "Shipped a RAG assistant on Azure OpenAI/AI Search; QA'd a .NET/React app via a 167-case matrix, finding 15+ defects"
+        "Shipped a RAG assistant on Azure OpenAI/AI Search; QA'd a .NET/React app via a 167-case matrix, finding 15+ defects",
+        <>
+          Projects from this role: File Guardian Agent, Xorbix Document Flow, Kickstarter Cockpit, WorkAssist AI and Derse Vista,{" "}
+          <a href="#projects" onClick={showXorbixWork}>
+            tagged Work @ XORBIX in Projects ↓
+          </a>
+        </>
       ]
     },
     {
@@ -110,6 +119,7 @@ export default function Experience() {
               bullets={exp.bullets}
               date={exp.date}
               link={exp.link}
+              linkLabel="Company site ↗"
             />
           </div>
         ))}

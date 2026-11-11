@@ -9,7 +9,7 @@ Loads environment variables and defines system constants.
 
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -22,6 +22,13 @@ class Settings(BaseSettings):
     # Model configuration. Haiku starts streaming its answer in well under a
     # second, which keeps the chat feeling instant.
     claude_model: str = "claude-haiku-5-5"
+
+    # Contact form (contact.py). Messages are emailed through Resend's API; the
+    # form stays switched off until RESEND_API_KEY is set. Resend's shared
+    # onboarding sender can only deliver to the email on the Resend account.
+    resend_api_key: Optional[str] = None
+    contact_to_email: str = "mrayyanm411@gmail.com"
+    contact_from: str = "Portfolio Contact Form <onboarding@resend.dev>"
 
     # Paths
     knowledge_dir: Path = Path(__file__).parent.parent / "knowledge"

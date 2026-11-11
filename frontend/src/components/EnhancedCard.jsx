@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import LazyImage from "./LazyImage";
 import "./StyleSheet.css";
 
@@ -6,7 +6,10 @@ import "./StyleSheet.css";
 const supportsHover = typeof window !== 'undefined' && 
   window.matchMedia('(hover: hover)').matches;
 
-export default function EnhancedCard({ title, bullets = [], description, date, link, live, writeup, image }) {
+// Link label from where it points, instead of a generic "Repo/Site".
+const defaultLinkLabel = (url) => (/github\.com/.test(url) ? "GitHub ↗" : "Website ↗");
+
+export default function EnhancedCard({ title, bullets = [], description, date, link, linkLabel, live, writeup, image, badges = [] }) {
   const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -117,7 +120,19 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
           className="card-image-container"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
-          <LazyImage src={image} alt={title} className="card-image" />
+          {/* Decorative: the title right below names it, so screen readers and crawlers don't read it twice */}
+          <LazyImage src={image} alt="" className="card-image" />
+        </div>
+      )}
+
+      {badges.length > 0 && (
+        <div className="card-badges" style={{ transform: supportsHover ? "translateZ(28px)" : "none" }}>
+          {badges.map((b) => (
+            <span key={b.label} className={`card-badge${b.kind ? ` card-badge-${b.kind}` : ""}`}>
+              {b.icon}
+              {b.label}
+            </span>
+          ))}
         </div>
       )}
 
@@ -142,10 +157,12 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
           className="card-bullets"
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
-          {bullets.slice(0, visibleCount).map((b, i) => (
+          {/* Every bullet is always in the page (for crawlers and screen
+              readers); the scroll-in reveal only animates their visibility. */}
+          {bullets.map((b, i) => (
             <li
               key={i}
-              className="bullet"
+              className={`bullet${i < visibleCount ? " is-visible" : ""}`}
             >
               {b}
             </li>
@@ -166,7 +183,7 @@ export default function EnhancedCard({ title, bullets = [], description, date, l
           style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
         >
           {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
-          {link && <a href={link} target="_blank" rel="noreferrer">Repo/Site ↗</a>}
+          {link && <a href={link} target="_blank" rel="noreferrer">{linkLabel || defaultLinkLabel(link)}</a>}
           {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}
         </div>
       )}

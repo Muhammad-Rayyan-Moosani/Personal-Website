@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import "./PromptBox.css";
 
-// Prefer an explicit build-time URL; otherwise use localhost in dev and the
-// deployed backend in production (so prod never falls back to localhost:8000).
-const apiUrl =
-  import.meta.env.VITE_API_URL ||
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://localhost:8000"
-    : "https://rayyan-ai.onrender.com");
+import { API_URL as apiUrl, fetchWaking } from "../api";
 
 // Send-button loading state: a comet looping a faint track around a breathing
 // core. Until the first words arrive the core breathes; once the answer is
@@ -33,27 +27,29 @@ function OrbitLoader({ writing }) {
 
 // One tap asks a full question. Short labels for the chips, but the question
 // sent is worded the way the knowledge base answers best, and the set covers
-// his strongest areas plus one playful chip that leads into the easter eggs.
+// my strongest areas, the hiring timeline recruiters need, and one playful
+// chip that leads into the easter eggs. The assistant answers as me in the
+// first person, so the questions address me directly ("you").
 const SUGGESTIONS = [
   {
     label: "Hackathon win",
-    question: "Tell me about Circuit Guard and how Rayyan's team won FormulaTechHacks.",
+    question: "Tell me about Circuit Guard and how your team won FormulaTechHacks.",
   },
   {
     label: "Work at XORBIX",
-    question: "What has Rayyan built at XORBIX, and what impact did it have?",
+    question: "What have you built at XORBIX, and what impact did it have?",
   },
   {
-    label: "Tech stack",
-    question: "What is Rayyan's tech stack, and where has he used it?",
+    label: "LLM & infra projects",
+    question: "What LLM pipelines and validation engines have you built, and how did you engineer them?",
   },
   {
-    label: "Why hire him?",
-    question: "Why should we hire Rayyan for a software engineering co-op?",
+    label: "Next co-op term?",
+    question: "When is your next co-op term, and what kind of role are you looking for?",
   },
   {
     label: "Tell me a joke",
-    question: "Tell me a joke about Rayyan's work.",
+    question: "Tell me a joke about your work.",
   },
 ];
 
@@ -81,27 +77,11 @@ export default function PromptBox() {
       // it coming up. Only network failures and 502/503/504 (Render's "waking up"
       // responses) are retried; any other error (e.g. a 500 from the API) fails
       // fast instead of spinning for ~80s.
-      let res;
-      for (let attempt = 0; ; attempt++) {
-        try {
-          res = await fetch(`${apiUrl}/chat/stream`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ question }),
-          });
-        } catch (err) {
-          if (attempt >= 40) throw err; // cover a full free-tier cold start (~80s)
-          await new Promise((r) => setTimeout(r, 2000));
-          continue;
-        }
-        if ([502, 503, 504].includes(res.status) && attempt < 40) {
-          await new Promise((r) => setTimeout(r, 2000));
-          continue;
-        }
-        break;
-      }
+      const res = await fetchWaking(`${apiUrl}/chat/stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       // Show the answer as it is written. The server sends server-sent events:

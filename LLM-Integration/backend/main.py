@@ -19,6 +19,7 @@ from pydantic import BaseModel, Field
 
 from config import settings
 from rag import create_rag_system, ClaudeRAG
+from contact import router as contact_router
 
 # Configure logging
 logging.basicConfig(
@@ -77,6 +78,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Contact form endpoint (POST /contact)
+app.include_router(contact_router)
 
 
 # Request/Response Models

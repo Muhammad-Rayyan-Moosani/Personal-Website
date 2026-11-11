@@ -1,271 +1,75 @@
 import { useEffect, useRef, memo } from "react";
-import { useTheme } from "../contexts/ThemeContext";
 
-// Detect low-end devices
-const isLowEndDevice = () => {
-  if (typeof navigator === 'undefined') return false;
-  const memory = navigator.deviceMemory;
-  const cores = navigator.hardwareConcurrency;
-  return (memory && memory < 4) || (cores && cores < 4);
-};
-
-const isMobile = typeof window !== 'undefined' && 
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const GRID_SIZE = 60;
 
 const isNarrow = () =>
-  typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
 
-// Adaptive particle count - Optimized for mobile performance
-const getParticleCount = () => {
-  if (isMobile) return 25; // Reduced from 40 for faster mobile
-  if (isLowEndDevice()) return 50;
-  return 80; // Reduced for overall better performance
-};
-
+// Static backdrop: a solid fill and a faint grid. No particles and no animation
+// loop, so nothing ever floats over the content and the page stays idle.
 function Background() {
   const canvasRef = useRef(null);
-  const { theme } = useTheme();
-  const animationRef = useRef(null);
-  const particlesRef = useRef([]);
-  const dimensionsRef = useRef({ width: 0, height: 0 });
-  const colorsRef = useRef({});
-  const lastFrameTime = useRef(0);
-  const gridPathRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
-    const ctx = canvas.getContext("2d", { 
-      alpha: false, // Opaque canvas = faster
-      desynchronized: true // Reduce latency
-    });
-    
-    const particleCount = getParticleCount();
-    const GRID_SIZE = 60;
-    const TARGET_FPS = isMobile ? 30 : 60;
-    const FRAME_DURATION = 1000 / TARGET_FPS;
+    const ctx = canvas.getContext("2d", { alpha: false });
 
-    // Pre-calculate colors based on theme
-    // Light mode = premium white, Dark mode = pure black background
-    const updateColors = () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      colorsRef.current = {
-        // Dark mode: pure black, Light mode: pure white
-        bg: isDark ? '#000000' : '#ffffff',
-        bgFade: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.3)',
-        // Brighter, more visible grid in light mode
-        // Fainter on phones so the grid stays a backdrop behind the hero
-        grid: isNarrow()
-          ? (isDark ? 'rgba(0, 234, 255, 0.045)' : 'rgba(8, 145, 178, 0.07)')
-          : (isDark ? 'rgba(0, 234, 255, 0.1)' : 'rgba(8, 145, 178, 0.15)'),
-        // Brighter particles in light mode
-        particle: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.6)',
-        shadow: isDark ? '#00eaff' : 'rgba(8, 145, 178, 0.4)',
-      };
-    };
-
-    // Particle class - optimized with object pooling
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-      
-      reset() {
-        const { width, height } = dimensionsRef.current;
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.speedX = (Math.random() - 0.5) * 0.7;
-        this.speedY = (Math.random() - 0.5) * 0.7;
-        this.size = Math.random() * 2 + 1;
-      }
-      
-      update() {
-        const { width, height } = dimensionsRef.current;
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        // Bounce from edges - branchless optimization
-        if (this.x <= 0 || this.x >= width) this.speedX = -this.speedX;
-        if (this.y <= 0 || this.y >= height) this.speedY = -this.speedY;
-        
-        // Clamp to bounds
-        this.x = Math.max(0, Math.min(width, this.x));
-        this.y = Math.max(0, Math.min(height, this.y));
-      }
-    }
-
-    // Pre-create grid path for reuse
-    const createGridPath = (width, height) => {
-      const path = new Path2D();
-      for (let x = 0; x <= width; x += GRID_SIZE) {
-        path.moveTo(x, 0);
-        path.lineTo(x, height);
-      }
-      for (let y = 0; y <= height; y += GRID_SIZE) {
-        path.moveTo(0, y);
-        path.lineTo(width, y);
-      }
-      return path;
-    };
-
-    // Set canvas size and initialize particles
-    const setCanvasSize = () => {
+    const draw = () => {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
       const width = Math.max(window.innerWidth, document.documentElement.clientWidth);
       const height = Math.max(window.innerHeight, document.documentElement.clientHeight);
-      
-      // Only resize if dimensions changed
-      if (width === dimensionsRef.current.width && height === dimensionsRef.current.height) {
-        return;
-      }
-      
-      dimensionsRef.current = { width, height };
-      
-      // Set canvas size with device pixel ratio for sharpness
-      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      ctx.scale(dpr, dpr);
-      
-      // Pre-create grid path
-      gridPathRef.current = createGridPath(width, height);
-      
-      // Initialize or reset particles
-      if (particlesRef.current.length === 0) {
-        for (let i = 0; i < particleCount; i++) {
-          particlesRef.current.push(new Particle());
-        }
-      } else {
-        particlesRef.current.forEach(p => p.reset());
-      }
-    };
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Optimized animation loop
-    const animate = (timestamp) => {
-      // Throttle to target FPS
-      const elapsed = timestamp - lastFrameTime.current;
-      if (elapsed < FRAME_DURATION) {
-        animationRef.current = requestAnimationFrame(animate);
-        return;
-      }
-      lastFrameTime.current = timestamp - (elapsed % FRAME_DURATION);
-
-      const { width, height } = dimensionsRef.current;
-      const colors = colorsRef.current;
-
-      // Clear with fade effect - single fill operation
-      ctx.fillStyle = colors.bgFade;
+      ctx.fillStyle = isDark ? "#000000" : "#ffffff";
       ctx.fillRect(0, 0, width, height);
 
-      // Draw grid using pre-created path - single stroke operation
-      ctx.strokeStyle = colors.grid;
+      // Fainter on phones so the grid stays a backdrop behind the hero.
+      ctx.strokeStyle = isNarrow()
+        ? (isDark ? "rgba(0, 234, 255, 0.045)" : "rgba(8, 145, 178, 0.07)")
+        : (isDark ? "rgba(0, 234, 255, 0.1)" : "rgba(8, 145, 178, 0.15)");
       ctx.lineWidth = 1;
-      if (gridPathRef.current) ctx.stroke(gridPathRef.current);
-
-      // Batch particle drawing - FAST path
-      ctx.fillStyle = colors.particle;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = colors.shadow;
-
-      // Begin single path for all particles - MUCH faster
       ctx.beginPath();
-      const particles = particlesRef.current;
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.update();
-        ctx.moveTo(p.x + p.size, p.y);
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      for (let x = 0; x <= width; x += GRID_SIZE) {
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
       }
-      ctx.fill();
-
-      // Reset shadow for next frame
-      ctx.shadowBlur = 0;
-
-      animationRef.current = requestAnimationFrame(animate);
+      for (let y = 0; y <= height; y += GRID_SIZE) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+      }
+      ctx.stroke();
     };
 
-    // Initialize
-    updateColors();
-    setCanvasSize();
+    draw();
 
-    // Respect reduced-motion: draw a single static frame instead of animating.
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      const { width, height } = dimensionsRef.current;
-      const colors = colorsRef.current;
-      ctx.fillStyle = colors.bg;
-      ctx.fillRect(0, 0, width, height);
-      ctx.strokeStyle = colors.grid;
-      ctx.lineWidth = 1;
-      if (gridPathRef.current) ctx.stroke(gridPathRef.current);
-      ctx.fillStyle = colors.particle;
-      ctx.beginPath();
-      for (const p of particlesRef.current) {
-        ctx.moveTo(p.x + p.size, p.y);
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      }
-      ctx.fill();
-    } else {
-      animationRef.current = requestAnimationFrame(animate);
-    }
-
-    // Pause the loop when the tab is hidden (saves CPU/battery).
-    const handleVisibility = () => {
-      if (prefersReducedMotion) return;
-      if (document.hidden) {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      } else {
-        lastFrameTime.current = 0;
-        animationRef.current = requestAnimationFrame(animate);
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-
-    // Debounced resize handler
     let resizeTimeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        updateColors(); // grid strength depends on viewport width
-        setCanvasSize();
-      }, 100);
+      resizeTimeout = setTimeout(draw, 100);
     };
-
-    // Theme change observer
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.attributeName === 'data-theme') {
-          updateColors();
-          break;
-        }
-      }
-    });
-    
-    observer.observe(document.documentElement, { 
-      attributes: true, 
-      attributeFilter: ['data-theme'] 
-    });
-
+    const observer = new MutationObserver(draw);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("orientationchange", handleResize, { passive: true });
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
       clearTimeout(resizeTimeout);
       observer.disconnect();
-      document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("orientationchange", handleResize);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       style={{
         position: "fixed",
         top: 0,
@@ -273,12 +77,11 @@ function Background() {
         width: "100%",
         height: "100%",
         zIndex: -1,
-        pointerEvents: "none", // CRITICAL: Never intercept cursor/pointer events
-        contain: "strict", // CSS containment for isolation
+        pointerEvents: "none", // never intercept cursor/pointer events
+        contain: "strict",
       }}
     />
   );
 }
 
-// Memo to prevent unnecessary re-renders
 export default memo(Background);

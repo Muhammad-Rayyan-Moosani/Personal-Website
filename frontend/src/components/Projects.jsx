@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./StyleSheet.css";
 import EnhancedCard from "./EnhancedCard.jsx";
 import gamesRandomImage from "./Games.Random.jpeg";
@@ -7,8 +7,37 @@ import directAidImage from "./SCR-20260317-czet.png";
 import storyVerseImage from "./StoryVerse.jpg";
 import circuitGuardImage from "./CircuitGuard.webp";
 
+// Monochrome outline icons (Lucide, ISC licence) instead of OS emoji.
+const iconProps = { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true };
+const TrophyIcon = (
+  <svg {...iconProps}>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </svg>
+);
+const BriefcaseIcon = (
+  <svg {...iconProps}>
+    <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+  </svg>
+);
+const XORBIX_WORK = [{ label: "Work @ XORBIX", icon: BriefcaseIcon }];
+const FEATURED = 5; // flagship projects shown before "View all"
+
 export default function Projects() {
   const gridRef = useRef(null);
+  const [showAll, setShowAll] = useState(false);
+
+  // The XORBIX role in Experience links here and asks for the full list.
+  useEffect(() => {
+    const open = () => setShowAll(true);
+    window.addEventListener("projects:show-all", open);
+    return () => window.removeEventListener("projects:show-all", open);
+  }, []);
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,11 +61,12 @@ export default function Projects() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [showAll]);
 
   const projects = [
     {
-      title: "Circuit Guard — Hackathon Winner 🏆",
+      title: "Circuit Guard",
+      badges: [{ label: "Hackathon winner · FormulaTechHacks 2026", icon: TrophyIcon, kind: "award" }],
       image: circuitGuardImage,
       description: (
         <ul className="project-bullets">
@@ -71,16 +101,16 @@ export default function Projects() {
             </span>
           </li>
           <li>
-            Built an automated regression-testing engine that runs untrusted test suites in a hardened Docker sandbox and reports what actually changed vs the last green run — not just pass/fail counts
+            <strong>Reports what changed, not just pass/fail:</strong> runs untrusted test suites in a hardened Docker sandbox and reports what actually changed vs the last green run — not just pass/fail counts
           </li>
           <li>
-            Hardened the sandbox — no root, all capabilities dropped, read-only rootfs, capped memory/CPU/pids, and network revoked before tests run (attached only for dependency install; the run aborts if the disconnect fails)
+            <strong>Locked-down Docker sandbox:</strong> no root, all capabilities dropped, read-only rootfs, capped memory/CPU/pids, and network revoked before tests run (attached only for dependency install; the run aborts if the disconnect fails)
           </li>
           <li>
-            Language-agnostic by contract: a project declares an image + command and leaves JUnit XML behind; results diff against the last fully-green baseline, and flaky tests are surfaced but never fail the build
+            <strong>Language-agnostic by contract:</strong> a project declares an image + command and leaves JUnit XML behind; results diff against the last fully-green baseline, and flaky tests are surfaced but never fail the build
           </li>
           <li>
-            Verified confinement with adversarial escape tests that run inside a live container in CI
+            <strong>Escape-tested in CI:</strong> verified confinement with adversarial escape tests that run inside a live container in CI
           </li>
         </ul>
       ),
@@ -92,17 +122,20 @@ export default function Projects() {
         <ul className="project-bullets">
           <li>
             <span className="tech-stack">
-              Tech-Stack: FastAPI, fastembed (ONNX), NumPy vector store, Anthropic Claude, Render
+              Tech-Stack: Python, FastAPI, Anthropic Claude (Haiku), prompt caching, server-sent events, React, Render
             </span>
           </li>
           <li>
-            Built the "Ask me anything" box on this site: a retrieval-augmented Claude assistant that answers only from a curated markdown knowledge base, with heading-aware chunking
+            <strong>The "Ask me anything" box on this site:</strong> Claude answers recruiters' questions in my voice from a curated markdown knowledge base, and only from it, with no invented employers, dates or numbers
           </li>
           <li>
-            Engineered retrieval that fetches top-k × fetch-k candidates then applies an MMR-style diversity pass before building the prompt, with a graceful "I don't have that" fallback instead of hallucinating
+            <strong>No retrieval step:</strong> the whole ~45 KB knowledge base (~11k tokens) rides in a prompt-cached system prompt, so every answer sees every role and project, repeat requests come from the cache (~10× cheaper), and dropping the embedding model cut server start-up to about a second
           </li>
           <li>
-            Re-architected to fit a 512MB free tier — replaced PyTorch/sentence-transformers + ChromaDB with ONNX embeddings and an in-memory NumPy cosine store after an OOM
+            <strong>Streams as it writes:</strong> answers arrive token by token over server-sent events; the frontend retries only cold-start errors (502/503/504) and fails fast on anything else
+          </li>
+          <li>
+            <strong>Time-aware and grounded:</strong> today's date is injected after the cache breakpoint so "most recent role" questions are right without invalidating the cache; prompt-injection attempts are ignored, and the easter eggs are opt-in
           </li>
         </ul>
       ),
@@ -119,16 +152,16 @@ export default function Projects() {
             </span>
           </li>
           <li>
-            Built a full-stack, AI-native platform that turns a written manuscript into a finished 45-second cinematic book trailer — visuals, camera motion, time-aligned narration, and lip-sync — in minutes
+            <strong>Manuscript → 45-second trailer in minutes:</strong> a full-stack, AI-native platform that turns a written manuscript into a finished cinematic book trailer with visuals, camera motion, time-aligned narration and lip-sync
           </li>
           <li>
-            Architected a declarative step-runner orchestrating ~10 AI providers behind one uniform interface across 8 model-agnostic tiers spanning a ~600× cost range ($0.03–$18 per trailer)
+            <strong>~10 AI providers, ~600× cost range:</strong> a declarative step-runner puts them behind one uniform interface across 8 model-agnostic tiers ($0.03–$18 per trailer)
           </li>
           <li>
-            Engineered a resumable, human-in-the-loop pipeline with database-persisted state — users pause, preview, edit prompts, regenerate a single asset, or swap models mid-run without restarting or re-paying for completed work
+            <strong>Resumable, human-in-the-loop pipeline:</strong> with database-persisted state, users pause, preview, edit prompts, regenerate a single asset, or swap models mid-run without restarting or re-paying for completed work
           </li>
           <li>
-            Raised AI character-consistency from ~22% to 100% of scenes by moving correctness out of unreliable LLM instructions into a deterministic prompt injector
+            <strong>Character consistency ~22% → 100% of scenes:</strong> moved correctness out of unreliable LLM instructions into a deterministic prompt injector
           </li>
         </ul>
       ),
@@ -136,6 +169,7 @@ export default function Projects() {
     },
     {
       title: "File Guardian Agent",
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
@@ -144,16 +178,16 @@ export default function Projects() {
             </span>
           </li>
           <li>
-            Engineered an agentic data-quality gatekeeper at XORBIX that watches folders, validates every file against per-column rules, and routes it to good, quarantine, or review
+            <strong>Agentic data-quality gatekeeper:</strong> watches folders, validates every file against per-column rules, and routes it to good, quarantine, or review
           </li>
           <li>
-            Rebuilt the validation core into a chunked, vectorized pandas engine hitting ~442,000 rows/second (~50× faster) with flat memory on multi-hundred-GB files
+            <strong>~442,000 rows/second (~50× faster):</strong> rebuilt the validation core into a chunked, vectorized pandas engine with flat memory on multi-hundred-GB files
           </li>
           <li>
-            Added an LLM explanation agent with a 5-provider abstraction that turns failures into plain-English summaries emailed to the responsible team
+            <strong>Plain-English failure reports:</strong> an LLM explanation agent with a 5-provider abstraction that turns failures into plain-English summaries emailed to the responsible team
           </li>
           <li>
-            Cut a REST API from 3.1s to 0.56s (~5.5×) by collapsing 301 N+1 queries into 3 bulk reads, and packaged the full stack as a single offline Windows executable
+            <strong>REST API 3.1s → 0.56s (~5.5×):</strong> collapsed 301 N+1 queries into 3 bulk reads, and packaged the full stack as a single offline Windows executable
           </li>
         </ul>
       ),
@@ -161,6 +195,7 @@ export default function Projects() {
     },
     {
       title: "Xorbix Document Flow",
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
@@ -185,6 +220,7 @@ export default function Projects() {
     },
     {
       title: "Kickstarter Cockpit",
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
@@ -209,6 +245,7 @@ export default function Projects() {
     },
     {
       title: "WorkAssist AI",
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
@@ -233,6 +270,7 @@ export default function Projects() {
     },
     {
       title: "Derse Vista (QA Engineering)",
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
@@ -424,7 +462,7 @@ export default function Projects() {
       
       {/* Container for cards */}
       <div className="projects-grid" ref={gridRef}>
-        {projects.map((project, index) => (
+        {(showAll ? projects : projects.slice(0, FEATURED)).map((project, index) => (
           <EnhancedCard
             key={index}
             title={project.title}
@@ -434,9 +472,19 @@ export default function Projects() {
             live={project.live}
             writeup={project.writeup}
             image={project.image}
+            badges={project.badges}
           />
         ))}
       </div>
+
+      <button
+        type="button"
+        className="projects-toggle"
+        aria-expanded={showAll}
+        onClick={() => setShowAll((v) => !v)}
+      >
+        {showAll ? "Show featured projects only" : `View all projects (${projects.length})`}
+      </button>
     </section>
   );
 }

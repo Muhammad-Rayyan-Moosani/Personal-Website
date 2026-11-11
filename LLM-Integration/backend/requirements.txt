@@ -8,3 +8,4 @@ anthropic==0.86.0
 python-dotenv==1.2.2
 pydantic==2.12.5
 pydantic-settings==2.13.1
+httpx>=0.25,<1  # contact form → Resend API (also used by the anthropic SDK)

@@ -3,7 +3,7 @@
    ========================= */
 .hero {
   min-height: 100vh;
-  height: 100vh;
+  height: auto;                 /* grows to fit the portrait above the name */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +11,7 @@
   color: var(--text-primary);
   text-align: center;
   font-family: 'Orbitron', sans-serif;
-  padding: 2rem 1rem;
+  padding: 84px 1rem 2rem;     /* clear the fixed navbar */
   box-sizing: border-box;
   position: relative;
   width: 100%;
@@ -1609,3 +1609,452 @@
   color: var(--text-muted);
 }
 
+
+/* ── Hero icon shortcuts (LinkedIn, Email) beside the CTAs ── */
+.hero-cta-icons {
+  display: flex;
+  gap: 10px;
+}
+.hero-cta .btn.btn-icon {
+  min-width: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-cta .btn.btn-icon svg {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 768px) {
+  .hero-cta-icons {
+    justify-content: center;
+  }
+  .hero-cta .btn.btn-icon {
+    width: 48px;
+    height: 48px;
+    flex: none;
+    padding: 0;
+  }
+}
+
+/* Assistant caption: a clear label for the input, not fine print */
+.hero p.hero-assistant-caption {
+  font-size: 14px;
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+/* Tighter vertical rhythm so the whole hero (with breathing room under the
+   chips) fits on a 13–14" laptop screen */
+@media (min-width: 769px) {
+  .hero {
+    padding-top: 72px;
+  }
+  .hero h1 {
+    margin: 0 0 6px;
+  }
+  .hero-cta {
+    margin: 18px 0 6px;
+  }
+  .hero-assistant {
+    margin-top: 10px;
+  }
+  .hero-assistant .prompt-box-container {
+    margin-top: 0;
+  }
+}
+
+/* ── Card bullets: always in the DOM, faded in as the card scrolls into view ── */
+.card-bullets .bullet {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.card-bullets .bullet.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-bullets .bullet {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Card badges ("Work @ XORBIX", "Hackathon winner") ── */
+.card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: var(--accent-glow);
+  border: 1px solid color-mix(in srgb, var(--accent-glow) 40%, transparent);
+  background: color-mix(in srgb, var(--accent-glow) 8%, transparent);
+}
+.card-badge svg {
+  width: 13px;
+  height: 13px;
+}
+.card-badge-award {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+}
+:root[data-theme="light"] .card-badge-award {
+  color: #b45309;
+}
+
+/* ── Hero: compact version of the Contact icon row ── */
+.contact-icons.hero-icons {
+  margin-top: 10px;
+  gap: clamp(14px, 3vw, 22px);
+}
+.contact-icons.hero-icons a {
+  width: 44px;
+  height: 44px;
+}
+.contact-icons.hero-icons svg {
+  width: 22px;
+  height: 22px;
+}
+.hero-icons + .hero-cta {
+  margin-top: 8px;
+}
+
+/* ── Projects: "View all" toggle ── */
+.projects-toggle {
+  display: block;
+  margin: clamp(10px, 2vh, 18px) auto 0;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: 1.5px solid var(--accent-glow);
+  color: var(--accent-glow);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.projects-toggle:hover {
+  background: color-mix(in srgb, var(--accent-glow) 10%, transparent);
+  transform: translateY(-1px);
+}
+
+/* ── Floating "Ask AI about me" shortcut ── */
+.floating-ask {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: none;
+  color: #05161a;
+  background: var(--accent-glow);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.floating-ask.is-visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.floating-ask svg {
+  width: 18px;
+  height: 18px;
+}
+:root[data-theme="light"] .floating-ask {
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-ask { transition: none; }
+}
+
+/* ── Icon rows (hero + Contact) in the site accent: cyan on dark, teal on light ── */
+.contact-icons a {
+  color: var(--accent-glow);
+}
+.contact-icons a:hover,
+.contact-icons a:focus-visible {
+  color: var(--accent-glow);
+  background: color-mix(in srgb, var(--accent-glow) 12%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent-glow) 25%, transparent);
+}
+:root[data-theme="light"] .contact-icons a:hover,
+:root[data-theme="light"] .contact-icons a:focus-visible {
+  box-shadow: none;
+}
+/* With the CTA buttons gone, give the icon row a little more presence */
+.contact-icons.hero-icons {
+  margin: 16px 0 6px;
+}
+
+/* ── Contact form ── */
+.contact-form {
+  width: 100%;
+  max-width: 560px;
+  margin: clamp(26px, 4vh, 36px) auto 0;
+  padding: clamp(18px, 3vw, 26px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
+}
+.contacts p.contact-form-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 1;
+}
+.contact-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.contact-field em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.contact-field input,
+.contact-field textarea {
+  font: inherit;
+  font-size: 16px;               /* 16px+ stops iOS zooming into the field */
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: 1px solid color-mix(in srgb, var(--accent-glow) 28%, transparent);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.contact-field textarea {
+  min-height: 110px;
+}
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+.contact-field input:focus,
+.contact-field textarea:focus {
+  border-color: var(--accent-glow);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-glow) 18%, transparent);
+}
+.contact-hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.contact-form-send,
+.contact-form-again {
+  align-self: flex-end;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: #05161a;
+  background: var(--accent-glow);
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+:root[data-theme="light"] .contact-form-send,
+:root[data-theme="light"] .contact-form-again {
+  color: #ffffff;
+}
+.contact-form-send:hover:not(:disabled),
+.contact-form-again:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.contact-form-send:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.contacts p.contact-form-error {
+  margin: 0;
+  font-size: 14px;
+  color: #f87171;
+  opacity: 1;
+}
+:root[data-theme="light"] .contacts p.contact-form-error {
+  color: #b91c1c;
+}
+.contact-form-error a {
+  color: var(--accent-glow);
+}
+.contact-form-sent {
+  text-align: center;
+  align-items: center;
+}
+.contact-form-sent p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+.contact-form-sent .contact-form-again {
+  align-self: center;
+}
+@media (max-width: 768px) {
+  .contact-form-row {
+    grid-template-columns: 1fr;
+  }
+  .contact-form-send {
+    align-self: stretch;
+  }
+}
+.contacts .contact-form-sent p:not(.contact-form-title) {
+  font-size: 15px;
+  opacity: 1;
+}
+
+/* ── Contact: message bubble + pop-up pane ── */
+.message-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(22px, 3.5vh, 30px);
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 13px 22px 13px 18px;
+  border: none;
+  border-radius: 999px 999px 999px 6px;     /* speech-bubble tail, bottom-left */
+  color: #05161a;
+  background: var(--accent-glow);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-glow) 30%, transparent);
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+.message-bubble svg {
+  width: 20px;
+  height: 20px;
+}
+.message-bubble:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+.message-bubble:active {
+  transform: scale(0.97);
+}
+:root[data-theme="light"] .message-bubble {
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(14, 116, 144, 0.25);
+}
+
+.message-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;                     /* centre it (a global reset zeroes dialog margins) */
+  height: fit-content;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+.message-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+:root[data-theme="light"] .message-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.35);
+}
+.message-dialog[open] .message-pane {
+  animation: message-pop 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes message-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+.message-pane {
+  position: relative;
+}
+.message-pane .contact-form {
+  margin: 0;
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  background: var(--bg-card);
+  border-color: color-mix(in srgb, var(--accent-glow) 35%, transparent);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+:root[data-theme="light"] .message-pane .contact-form {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+}
+.message-pane p.contact-form-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 18px;
+  padding-right: 40px;            /* room for the close button */
+}
+.message-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+.message-close:hover {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent-glow) 12%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .message-dialog[open] .message-pane { animation: none; }
+}

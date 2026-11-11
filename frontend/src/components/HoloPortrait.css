@@ -1,0 +1,216 @@
+/* Holographic portrait — glass planes, HUD frame and the WebGL canvas. */
+.holo {
+  --holo-a: #00eaff;
+  --holo-b: #8b5cf6;
+  --holo-ink: rgba(229, 247, 255, 0.72);
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  touch-action: pan-y;               /* vertical scrolling still works on phones */
+  cursor: pointer;                   /* click skips to the next photo */
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.holo-canvas,
+.holo-fallback {
+  position: absolute;
+  inset: 2% 6% 10% -4%;        /* exactly the front glass pane, so nothing draws outside it */
+  width: 98%;                  /* canvas is a replaced element: size it explicitly */
+  height: 88%;
+  display: block;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.holo.is-ready .holo-canvas,
+.holo-fallback {
+  opacity: 1;
+}
+.holo-fallback {
+  object-fit: cover;
+  border-radius: 14px;
+  filter: grayscale(1) contrast(1.1);
+}
+
+/* Two translucent, iridescent glass planes floating behind the figure. */
+.holo-glass {
+  position: absolute;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 40%),
+    rgba(10, 14, 22, 0.18);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.holo-glass::before {               /* hairline iridescent border */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from 210deg, var(--holo-a), transparent 25%, var(--holo-b) 50%, transparent 75%, var(--holo-a));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+}
+.holo-glass-back {
+  inset: 8% -6% 4% 10%;
+  transform: translate3d(0, 0, 0) skewY(-3deg);
+  opacity: 0.6;
+}
+.holo-glass-front {
+  inset: 2% 6% 10% -4%;
+  background: linear-gradient(160deg, rgba(0, 234, 255, 0.05), rgba(139, 92, 246, 0.04));
+}
+.holo:hover .holo-glass-back { transform: translate3d(6px, -4px, 0) skewY(-3deg); }
+.holo:hover .holo-glass-front { transform: translate3d(-4px, 3px, 0); }
+
+/* Faint scanlines over the whole frame. */
+.holo::after {
+  content: "";
+  position: absolute;
+  inset: 2% 6% 10% -4%;
+  border-radius: 16px;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px);
+  mix-blend-mode: overlay;
+}
+
+/* HUD corner brackets. */
+.holo-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  z-index: 4;
+  pointer-events: none;
+  border-color: var(--holo-a);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.8;
+}
+.holo-corner.tl { top: 0; left: -4%; border-top-width: 1.5px; border-left-width: 1.5px; }
+.holo-corner.tr { top: 0; right: 6%; border-top-width: 1.5px; border-right-width: 1.5px; }
+.holo-corner.bl { bottom: 8%; left: -4%; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.holo-corner.br { bottom: 8%; right: 6%; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+/* HUD text. */
+.holo-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--holo-ink);
+  text-shadow: 0 0 2px #000, 0 0 6px #000, 0 0 10px rgba(0, 0, 0, 0.8); /* legible over the figure */
+}
+.holo-hud-top {
+  position: absolute;
+  top: 10px;
+  left: calc(-4% + 12px);
+  right: calc(6% + 12px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.holo-hud-bottom {
+  position: absolute;
+  bottom: calc(8% + 10px);
+  left: calc(-4% + 12px);
+  right: calc(6% + 12px);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.holo-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--holo-a);
+  box-shadow: 0 0 8px var(--holo-a);
+  animation: holo-blink 1.6s steps(2, jump-none) infinite;
+}
+@keyframes holo-blink {
+  50% { opacity: 0.25; }
+}
+
+/* Light theme: ink on frosted glass instead of light on dark. */
+:root[data-theme="light"] .holo {
+  --holo-a: #0e7490;
+  --holo-b: #6d28d9;
+  --holo-ink: rgba(15, 23, 42, 0.7);
+}
+:root[data-theme="light"] .holo-hud {
+  text-shadow: 0 0 2px #fff, 0 0 6px #fff, 0 0 10px rgba(255, 255, 255, 0.8);
+}
+:root[data-theme="light"] .holo-glass {
+  /* Same near-clear glass as dark mode: a faint frost, so the grid shows through. */
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06) 55%),
+    rgba(241, 245, 249, 0.1);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+:root[data-theme="light"] .holo-glass-front {
+  background: linear-gradient(160deg, rgba(14, 116, 144, 0.06), rgba(109, 40, 217, 0.05));
+}
+:root[data-theme="light"] .holo::after {
+  background: repeating-linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 0 1px, transparent 1px 3px);
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-live { animation: none; }
+  .holo-glass { transition: none; }
+}
+
+/* ── Hero placement: above the name, sized by the viewport height so the
+   whole hero (portrait, name, buttons, assistant) still fits on one screen ── */
+.hero .holo {
+  width: clamp(170px, 27vh, 270px);   /* larger frame: the whole figure fits inside */
+  flex: none;
+  margin: 0 auto clamp(10px, 2vh, 20px);
+}
+@media (max-width: 768px) {
+  .hero .holo {
+    width: min(240px, 64vw);
+    margin-bottom: 16px;
+  }
+}
+
+/* Countdown bar along the bottom edge of the frame. */
+.holo-progress {
+  position: absolute;
+  left: -4%;
+  right: 6%;
+  bottom: 8%;
+  height: 1.5px;
+  background: color-mix(in srgb, var(--holo-a) 18%, transparent);
+  overflow: hidden;
+}
+.holo-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--holo-a);
+  box-shadow: 0 0 6px var(--holo-a);
+  transform-origin: left;
+  transform: scaleX(1);
+}
+.holo-frame {
+  margin-left: auto;
+  color: var(--holo-a);
+}
+.holo-timer {
+  color: var(--holo-a);
+  font-variant-numeric: tabular-nums;
+}

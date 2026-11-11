@@ -4,7 +4,7 @@
 
 .prompt-box-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 680px;            /* room for all five suggestion chips on one row */
   margin: clamp(25px, 3vh, 35px) auto 0;
   padding: 0 1rem;
   box-sizing: border-box;
@@ -491,3 +491,33 @@
   .prompt-suggestion:active:not(:disabled) { transform: none; }
 }
 
+
+/* ── Send button: quiet tint when there's nothing to send, solid when ready ── */
+.prompt-submit-btn {
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.prompt-submit-btn:not(:disabled):active {
+  transform: scale(0.95);
+}
+:root .prompt-submit-btn:disabled:not(.is-loading) {
+  opacity: 1;
+  background: rgba(0, 234, 255, 0.1);
+  box-shadow: none;
+}
+:root .prompt-submit-btn:disabled:not(.is-loading) .send-icon {
+  color: rgba(0, 234, 255, 0.55);
+}
+/* Light: ready = the same solid teal as the Resume button */
+:root[data-theme="light"] .prompt-submit-btn:not(:disabled) {
+  background: var(--accent-glow);
+}
+:root[data-theme="light"] .prompt-submit-btn:not(:disabled):hover {
+  background: var(--accent-color);
+  transform: translateY(-1px);
+}
+:root[data-theme="light"] .prompt-submit-btn:disabled:not(.is-loading) {
+  background: rgba(14, 116, 144, 0.08);
+}
+:root[data-theme="light"] .prompt-submit-btn:disabled:not(.is-loading) .send-icon {
+  color: rgba(14, 116, 144, 0.5);
+}

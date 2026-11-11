@@ -101,5 +101,8 @@ Short term, he aims to gain industry experience through co-op roles and deepen h
 ### What kind of opportunities is Rayyan looking for?
 Software engineering and AI-focused roles, including co-op positions through Waterloo's co-op program, where he can work on impactful, technically challenging products.
 
+### When is Rayyan's next co-op term? When is he available?
+Rayyan's next co-op term is Summer 2027, Waterloo's May to August work term. He is looking for a software engineering or AI-focused co-op role for that term.
+
 ### How can I get in touch with Rayyan?
 You can reach him by email at rmoosani@uwaterloo.ca or mrayyanm411@gmail.com, connect on LinkedIn (linkedin.com/in/rayyan-moosani) or GitHub (github.com/Muhammad-Rayyan-Moosani), or explore more at his portfolio, rayyanmoosani.com.
