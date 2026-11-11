@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import portrait1 from "./holo-1.png";
 import portrait2 from "./holo-2.png";
 import portrait3 from "./holo-3.png";
-import portrait1Light from "./holo-1-light.png";
 import fallbackPhoto from "./navbar-logo.webp";
 import "./HoloPortrait.css";
 
@@ -263,13 +262,9 @@ const PALETTE = {
   dark: { a: hex("#00eaff"), b: hex("#8b5cf6"), core: [0.86, 0.96, 1.0] },
   light: { a: hex("#0e7490"), b: hex("#6d28d9"), core: hex("#0f172a") },
 };
-// Same order in both themes; light mode opens on the headphones photo instead
-// of the office one.
-const PORTRAITS = {
-  dark: [portrait1, portrait2, portrait3],
-  light: [portrait1Light, portrait2, portrait3],
-};
-const COUNT = 3;
+// Headphones, group, sunglasses — the same three in both themes.
+const PORTRAITS = [portrait1, portrait2, portrait3];
+const COUNT = PORTRAITS.length;
 const HOLD = 30;      // seconds on each portrait
 const MORPH = 1.8;    // seconds for a morph
 const ONE_HOT = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
@@ -317,8 +312,7 @@ export default function HoloPortrait() {
       lastSecond: -1,
     };
 
-    const isLight = () => document.documentElement.dataset.theme === "light";
-    Promise.all([...PORTRAITS.dark, portrait1Light].map(loadImage)).then(([img1, img2, img3, img1Light]) => {
+    Promise.all(PORTRAITS.map(loadImage)).then((imgs) => {
       if (disposed) return;
       let prog;
       try {
@@ -334,41 +328,28 @@ export default function HoloPortrait() {
       }
       gl.useProgram(prog);
 
-      // One point cloud per theme (full detail everywhere, ~40k points); only
-      // the active theme's cloud is on the GPU, swapped when the theme changes.
-      const clouds = {
-        dark: buildCloud([img1, img2, img3], 1),
-        light: buildCloud([img1Light, img2, img3], 1),
-      };
-      const attribs = [["a_p01", 4], ["a_p2", 2], ["a_d0", 4], ["a_d1", 3], ["a_d2", 3]].map(([name, size]) => {
+      const cloud = buildCloud(imgs, 1); // full detail everywhere (~40k points)
+      const attrib = (name, data, size) => {
         const buf = gl.createBuffer();
         buffers.push(buf);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
         const loc = gl.getAttribLocation(prog, name);
         gl.enableVertexAttribArray(loc);
-        return { buf, loc, size };
-      });
-      const lines = [0, 1, 2].map(() => {
+        gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+      };
+      attrib("a_p01", cloud.p01, 4);
+      attrib("a_p2", cloud.p2, 2);
+      attrib("a_d0", cloud.d[0], 4);
+      attrib("a_d1", cloud.d[1], 3);
+      attrib("a_d2", cloud.d[2], 3);
+      const lines = cloud.lines.map((data) => {
         const buf = gl.createBuffer();
         buffers.push(buf);
-        return { buf, count: 0 };
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
+        return { buf, count: data.length };
       });
-      let cloud = null;
-      const upload = (next) => {
-        if (next === cloud) return;
-        cloud = next;
-        [cloud.p01, cloud.p2, cloud.d[0], cloud.d[1], cloud.d[2]].forEach((data, k) => {
-          const { buf, loc, size } = attribs[k];
-          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-          gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-          gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
-        });
-        cloud.lines.forEach((data, k) => {
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, lines[k].buf);
-          gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
-          lines[k].count = data.length;
-        });
-      };
-      upload(isLight() ? clouds.light : clouds.dark);
 
       const U = {};
       for (const name of ["from", "to", "time", "mix", "tilt", "mouse", "hover", "aspect", "scale", "offset", "size", "lines", "lineFade", "glitch", "color", "color2", "light"])
@@ -522,10 +503,7 @@ export default function HoloPortrait() {
       io.observe(wrap);
       const onVis = () => !document.hidden && kick();
       document.addEventListener("visibilitychange", onVis);
-      const mo = new MutationObserver(() => {
-        upload(isLight() ? clouds.light : clouds.dark);
-        draw(0);
-      });
+      const mo = new MutationObserver(() => draw(0));
       mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
       // Pointer → model space (same mapping as the vertex shader).
