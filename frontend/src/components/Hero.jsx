@@ -31,7 +31,7 @@ export default function Hero() {
       <p className="hero-role">
         Software Engineer @ XORBIX &nbsp;·&nbsp; CS @{" "}
         <span className="hero-waterloo-wrap">
-          Waterloo
+          UWaterloo
           {/* Decorative: "Waterloo" is already in the text, so it isn't read twice */}
           <img src={waterlooLogo} alt="" aria-hidden="true" className="hero-waterloo-logo" />
         </span>{" "}
