@@ -44,8 +44,11 @@ export default function Experience() {
       });
     };
     align();
+    // Re-align whenever the timeline or any card changes size (wrapping text,
+    // or a card expanding / collapsing its details).
     const ro = new ResizeObserver(align);
     ro.observe(timeline);
+    timeline.querySelectorAll(".card").forEach((card) => ro.observe(card));
     document.fonts?.ready.then(align);
     return () => ro.disconnect();
   }, []);
@@ -147,6 +150,7 @@ export default function Experience() {
               link={exp.link}
               linkLabel="Company site ↗"
               linkTitle={false}
+              collapsible
               extraLinks={exp.extraLinks}
             />
           </div>

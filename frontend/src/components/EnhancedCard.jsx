@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useId } from "react";
+import { createPortal } from "react-dom";
 import LazyImage from "./LazyImage";
 import "./StyleSheet.css";
 
@@ -6,10 +7,47 @@ import "./StyleSheet.css";
 const supportsHover = typeof window !== 'undefined' && 
   window.matchMedia('(hover: hover)').matches;
 
+// "Derse Vista (QA Engineering)" -> "derse-vista"
+const slugify = (title) =>
+  String(title).replace(/\(.*?\)/g, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+// Pop-up for a card's details (same pattern as the contact form's dialog).
+// Portalled to <body> so the card's 3D hover effects never touch it, and
+// always rendered so the details stay in the page for crawlers.
+function DetailsDialog({ open, onClose, label, children }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
+  return createPortal(
+    <dialog
+      ref={ref}
+      className="details-dialog"
+      aria-label={label}
+      onClose={onClose}
+      onClick={(e) => e.target === ref.current && onClose()} // backdrop click
+    >
+      <div className="details-pane">
+        <button type="button" className="details-close" onClick={onClose} aria-label="Close">
+          ✕
+        </button>
+        {children}
+      </div>
+    </dialog>,
+    document.body,
+  );
+}
+
 // Link label from where it points, instead of a generic "Repo/Site".
 const defaultLinkLabel = (url) => (/github\.com/.test(url) ? "GitHub ↗" : "Website ↗");
 
-export default function EnhancedCard({ title, subtitle, tags = [], bullets = [], description, date, link, linkLabel, live, writeup, extraLinks = [], linkTitle = true, image, badges = [] }) {
+export default function EnhancedCard({ title, subtitle, tags = [], bullets = [], description, date, link, linkLabel, live, writeup, extraLinks = [], linkTitle = true, collapsible = false, detailsMode = "inline", image, thumb = false, badges = [] }) {
+  const modal = collapsible && detailsMode === "modal";
+  const [open, setOpen] = useState(!collapsible);
+  const detailsId = useId();
   const ref = useRef(null);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -96,6 +134,51 @@ export default function EnhancedCard({ title, subtitle, tags = [], bullets = [],
     };
   }, [bullets, hasBullets]);
 
+  // Bullets (or description) and links; `reveal` keeps the scroll-in fade
+  // for inline cards, the pop-up shows everything at once.
+  const detailsBody = (reveal) => (
+    <>
+      {hasBullets ? (
+        <ul
+          className="card-bullets"
+          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+        >
+          {/* Every bullet is always in the page (for crawlers and screen
+              readers); the scroll-in reveal only animates their visibility. */}
+          {bullets.map((b, i) => (
+            <li
+              key={i}
+              className={reveal ? `bullet${i < visibleCount ? " is-visible" : ""}` : undefined}
+            >
+              {b}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div
+          className="card-description"
+          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+        >
+          {description}
+        </div>
+      )}
+
+      {(link || live || writeup || extraLinks.length > 0) && (
+        <div
+          className="card-cta"
+          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+        >
+          {extraLinks.map(({ label, href, onClick }) => (
+            <a key={label} href={href} onClick={onClick}>{label}</a>
+          ))}
+          {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
+          {link && <a href={link} target="_blank" rel="noreferrer">{linkLabel || defaultLinkLabel(link)}</a>}
+          {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div
       ref={ref}
@@ -113,6 +196,22 @@ export default function EnhancedCard({ title, subtitle, tags = [], bullets = [],
           className="card-glow"
           style={{ opacity: isHovered ? 1 : 0 }}
         />
+      )}
+
+      {!image && thumb && (
+        // No screenshot: a mini terminal on the blueprint grid, same 16:9
+        // frame as the image cards so every card has the same shape.
+        <div className="card-thumb" aria-hidden="true" style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}>
+          <div className="card-thumb-bar">
+            <span /><span /><span />
+          </div>
+          <div className="card-thumb-body">
+            <p>
+              <em>~/projects $</em> ./{slugify(title)}
+            </p>
+            {tags.length > 0 && <p className="card-thumb-dim">{tags.slice(0, 2).join(" · ")}</p>}
+          </div>
+        </div>
       )}
 
       {image && (
@@ -166,43 +265,61 @@ export default function EnhancedCard({ title, subtitle, tags = [], bullets = [],
         </ul>
       )}
 
-      {hasBullets ? (
-        <ul
-          className="card-bullets"
-          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+      {collapsible && (
+        <button
+          type="button"
+          className="card-toggle"
+          {...(modal
+            ? { "aria-haspopup": "dialog" }
+            : { "aria-expanded": open, "aria-controls": detailsId })}
+          onClick={() => setOpen((v) => !v)}
+          style={{ transform: supportsHover ? "translateZ(24px)" : "none" }}
         >
-          {/* Every bullet is always in the page (for crawlers and screen
-              readers); the scroll-in reveal only animates their visibility. */}
-          {bullets.map((b, i) => (
-            <li
-              key={i}
-              className={`bullet${i < visibleCount ? " is-visible" : ""}`}
-            >
-              {b}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div
-          className="card-description"
-          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
-        >
-          {description}
-        </div>
+          {!modal && open ? "Hide details" : "Show details"}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {modal ? <path d="M7 17 17 7M8 7h9v9" /> : <path d="m6 9 6 6 6-6" />}
+          </svg>
+        </button>
       )}
 
-      {(link || live || writeup || extraLinks.length > 0) && (
-        <div
-          className="card-cta"
-          style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
-        >
-          {extraLinks.map(({ label, href, onClick }) => (
-            <a key={label} href={href} onClick={onClick}>{label}</a>
-          ))}
-          {live && <a href={live} target="_blank" rel="noreferrer">Live ↗</a>}
-          {link && <a href={link} target="_blank" rel="noreferrer">{linkLabel || defaultLinkLabel(link)}</a>}
-          {writeup && <a href={writeup} target="_blank" rel="noreferrer">Write-up</a>}
+      {/* Collapsible cards keep their details in the page (for crawlers) and
+          animate the height; `inert` hides them from keyboard and screen
+          readers while closed. */}
+      {!modal && (
+      <div
+        id={detailsId}
+        className={`card-details${collapsible ? " is-collapsible" : ""}${open ? " is-open" : ""}`}
+        inert={!open || undefined}
+        style={{ transform: supportsHover ? "translateZ(20px)" : "none" }}
+      >
+        <div className="card-details-inner">
+          {detailsBody(true)}
         </div>
+      </div>
+      )}
+
+      {modal && (
+        <DetailsDialog open={open} onClose={() => setOpen(false)} label={`${title} details`}>
+          {badges.length > 0 && (
+            <div className="card-badges">
+              {badges.map((b) => (
+                <span key={b.label} className={`card-badge${b.kind ? ` card-badge-${b.kind}` : ""}`}>
+                  {b.icon}
+                  {b.label}
+                </span>
+              ))}
+            </div>
+          )}
+          <h3 className="details-title">{title}</h3>
+          {tags.length > 0 && (
+            <ul className="card-tags" aria-label="Tech stack">
+              {tags.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
+          {detailsBody(false)}
+        </DetailsDialog>
       )}
     </div>
   );

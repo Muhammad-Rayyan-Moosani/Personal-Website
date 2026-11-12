@@ -25,8 +25,8 @@ const BriefcaseIcon = (
     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
   </svg>
 );
-const XORBIX_WORK = [{ label: "Work @ XORBIX", icon: BriefcaseIcon }];
-const FEATURED = 5; // flagship projects shown before "View all"
+const XORBIX_WORK = [{ label: "Work @ XORBIX", icon: BriefcaseIcon, kind: "work" }];
+const FEATURED = 6; // flagship projects shown before "View all" (two full rows of three)
 
 export default function Projects() {
   const gridRef = useRef(null);
@@ -66,15 +66,11 @@ export default function Projects() {
   const projects = [
     {
       title: "Circuit Guard",
+      stack: ["Python 3.12", "FastAPI", "NumPy/SciPy", "Next.js 16", "React 19", "TypeScript", "three.js / React Three Fiber", "Claude (Anthropic SDK)", "Hugging Face Whisper", "MiniLM embeddings", "SSE"],
       badges: [{ label: "Hackathon winner · FormulaTechHacks 2026", icon: TrophyIcon, kind: "award" }],
       image: circuitGuardImage,
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Python 3.12, FastAPI, NumPy/SciPy, Next.js 16, React 19, TypeScript, three.js / React Three Fiber, Claude (Anthropic SDK), Hugging Face Whisper, MiniLM embeddings, SSE
-            </span>
-          </li>
           <li>
             <strong>Won the Ampere Track (AI for Motorsport Safety) at FormulaTechHacks 2026</strong> — led a 4-person team to build Circuit Guard, an AI race-control and insurance platform running on real Formula 1 data
           </li>
@@ -93,13 +89,9 @@ export default function Projects() {
     },
     {
       title: "TestGuard Platform",
+      stack: ["Python 3.12", "Docker SDK", "SQLAlchemy", "JUnit XML", "Click CLI", "GitHub Actions"],
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Python 3.12, Docker SDK, SQLAlchemy, JUnit XML, Click CLI, GitHub Actions
-            </span>
-          </li>
           <li>
             <strong>Reports what changed, not just pass/fail:</strong> runs untrusted test suites in a hardened Docker sandbox and reports what actually changed vs the last green run — not just pass/fail counts
           </li>
@@ -118,13 +110,9 @@ export default function Projects() {
     },
     {
       title: "Portfolio RAG Assistant",
+      stack: ["Python", "FastAPI", "Anthropic Claude (Haiku)", "prompt caching", "server-sent events", "React", "Render"],
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Python, FastAPI, Anthropic Claude (Haiku), prompt caching, server-sent events, React, Render
-            </span>
-          </li>
           <li>
             <strong>The "Ask me anything" box on this site:</strong> Claude answers recruiters' questions in my voice from a curated markdown knowledge base, and only from it, with no invented employers, dates or numbers
           </li>
@@ -143,14 +131,10 @@ export default function Projects() {
     },
     {
       title: "StoryVerse",
+      stack: ["TypeScript", "Node.js", "Express", "React", "PostgreSQL (Drizzle ORM)", "Cloudflare R2", "FFmpeg", "Multi-Model AI (Claude, GPT-4o-mini, FLUX, Runway, Veo 3, ElevenLabs)"],
       image: storyVerseImage,
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: TypeScript, Node.js, Express, React, PostgreSQL (Drizzle ORM), Cloudflare R2, FFmpeg, Multi-Model AI (Claude, GPT-4o-mini, FLUX, Runway, Veo 3, ElevenLabs)
-            </span>
-          </li>
           <li>
             <strong>Manuscript → 45-second trailer in minutes:</strong> a full-stack, AI-native platform that turns a written manuscript into a finished cinematic book trailer with visuals, camera motion, time-aligned narration and lip-sync
           </li>
@@ -169,14 +153,10 @@ export default function Projects() {
     },
     {
       title: "File Guardian Agent",
+      stack: ["Python", "Flask", "pandas/NumPy", "SQLite", "watchdog", "Anthropic/OpenAI", "React", "PyInstaller"],
       badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Python, Flask, pandas/NumPy, SQLite, watchdog, Anthropic/OpenAI, React, PyInstaller
-            </span>
-          </li>
           <li>
             <strong>Agentic data-quality gatekeeper:</strong> watches folders, validates every file against per-column rules, and routes it to good, quarantine, or review
           </li>
@@ -194,115 +174,11 @@ export default function Projects() {
       link: "https://github.com/Muhammad-Rayyan-Moosani/file-guardian"
     },
     {
-      title: "Xorbix Document Flow",
-      badges: XORBIX_WORK,
-      description: (
-        <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: C# / .NET 8, WPF (MVVM), JSON Schema, PdfPig, OpenXML, Multi-provider LLMs (Anthropic, OpenAI, LM Studio)
-            </span>
-          </li>
-          <li>
-            Built a local-first document-intelligence desktop app at XORBIX that turns RFQ PDFs into structured, priced customer quotes across 10+ document workflows
-          </li>
-          <li>
-            Designed an "AI recommends, deterministic C# decides" pipeline — the LLM extracts fields against a strict schema while all pricing math runs in code, keeping quotes auditable
-          </li>
-          <li>
-            Re-architected the AI extraction path to single-turn streaming over stdin, cutting per-document latency ~95% (from 3–6 minutes to ~5 seconds)
-          </li>
-          <li>
-            Built a 5-provider LLM abstraction with hardened JSON-Schema outputs and reduced hot-path disk I/O ~8× via state-transition-only persistence
-          </li>
-        </ul>
-      )
-    },
-    {
-      title: "Kickstarter Cockpit",
-      badges: XORBIX_WORK,
-      description: (
-        <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: C# / .NET 8, WPF (MVVM), Claude Code CLI, ASP.NET Core, EF Core, PostgreSQL (pgvector), React/Vite, xUnit
-            </span>
-          </li>
-          <li>
-            Helped build an internal AI application generator at XORBIX that drives Claude through a governed 6-step pipeline to produce full .NET + React apps with human approval at each step
-          </li>
-          <li>
-            Engineered a "Finalize & Launch" agentic pass that makes generated code actually build and run — creating glue files, installing dependencies, and iterating until it compiles
-          </li>
-          <li>
-            Built a unit-tested rollback and start-over safety subsystem with path-boundary checks that guarantee deletions never escape the generated-code folder
-          </li>
-          <li>
-            Designed a feature-to-feature handoff-contract document so isolated generations integrate cleanly, producing 200+ file apps across 10 features in a single run
-          </li>
-        </ul>
-      )
-    },
-    {
-      title: "WorkAssist AI",
-      badges: XORBIX_WORK,
-      description: (
-        <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: React 19, Python/Flask, Supabase (PostgreSQL), Azure OpenAI, Azure AI Search, JWT
-            </span>
-          </li>
-          <li>
-            Built an end-to-end RAG assistant at XORBIX that answers shop-floor questions only from approved SOPs, with source citations, confidence scores, and a decline path to avoid hallucination
-          </li>
-          <li>
-            Engineered access-scoped hybrid (keyword + vector) search that injects team-based filters into the query, so users never receive answers from documents they can't access
-          </li>
-          <li>
-            Added an AI quiz generator and a supervisor analytics dashboard that surfaces documentation gaps from the query log, with CSV export
-          </li>
-          <li>
-            Shipped 35 REST endpoints across a 13-module backend with JWT role-gating over 1,536-dimension embeddings on a ~1,200-chunk document corpus
-          </li>
-        </ul>
-      )
-    },
-    {
-      title: "Derse Vista (QA Engineering)",
-      badges: XORBIX_WORK,
-      description: (
-        <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: .NET 10, C#, EF Core, PostgreSQL, React 19, Azure DevOps, Python (openpyxl)
-            </span>
-          </li>
-          <li>
-            Led QA at XORBIX for a full-stack, multi-role logistics platform, authoring a 167-case test matrix mapped to requirements, roles, and acceptance criteria
-          </li>
-          <li>
-            Validated all 10 application roles against a permission matrix and ran API-level authorization tests with spoofed division IDs to confirm server-side scoping
-          </li>
-          <li>
-            Identified 15+ documented defects, including a silent client-save data-loss bug and a server-side authorization gap that the UI and automated tests missed
-          </li>
-          <li>
-            Built Python (openpyxl) automation to turn findings into repeatable QA reports and used a repo→Figma→task traceability method to cut mis-filed bugs
-          </li>
-        </ul>
-      )
-    },
-    {
       title: "Games.Random",
+      stack: ["React", "Node.js", "MongoDB", "Phaser 3", "p5.js"],
       image: gamesRandomImage,
       description: (
           <ul className="project-bullets">
-            <li>
-              <span className="tech-stack">
-                Tech-Stack: React, Node.js, MongoDB, Phaser 3, p5.js
-              </span>
-            </li>
             <li>
               Built an AI-powered game platform enabling users to design, play,
               and modify custom games in real time
@@ -321,14 +197,94 @@ export default function Projects() {
       live: "https://games-random.onrender.com"
     },
     {
-      title: "VoiceAI Web Agent",
+      title: "Xorbix Document Flow",
+      stack: ["C# / .NET 8", "WPF (MVVM)", "JSON Schema", "PdfPig", "OpenXML", "Multi-provider LLMs (Anthropic, OpenAI, LM Studio)"],
+      badges: XORBIX_WORK,
       description: (
         <ul className="project-bullets">
           <li>
-            <span className="tech-stack">
-              Tech-Stack: Python, Flask, JavaScript, Chrome Extension (Manifest V3), SmallestAI (STT/TTS), LLM Integration
-            </span>
+            Built a local-first document-intelligence desktop app at XORBIX that turns RFQ PDFs into structured, priced customer quotes across 10+ document workflows
           </li>
+          <li>
+            Designed an "AI recommends, deterministic C# decides" pipeline — the LLM extracts fields against a strict schema while all pricing math runs in code, keeping quotes auditable
+          </li>
+          <li>
+            Re-architected the AI extraction path to single-turn streaming over stdin, cutting per-document latency ~95% (from 3–6 minutes to ~5 seconds)
+          </li>
+          <li>
+            Built a 5-provider LLM abstraction with hardened JSON-Schema outputs and reduced hot-path disk I/O ~8× via state-transition-only persistence
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "Kickstarter Cockpit",
+      stack: ["C# / .NET 8", "WPF (MVVM)", "Claude Code CLI", "ASP.NET Core", "EF Core", "PostgreSQL (pgvector)", "React/Vite", "xUnit"],
+      badges: XORBIX_WORK,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            Helped build an internal AI application generator at XORBIX that drives Claude through a governed 6-step pipeline to produce full .NET + React apps with human approval at each step
+          </li>
+          <li>
+            Engineered a "Finalize & Launch" agentic pass that makes generated code actually build and run — creating glue files, installing dependencies, and iterating until it compiles
+          </li>
+          <li>
+            Built a unit-tested rollback and start-over safety subsystem with path-boundary checks that guarantee deletions never escape the generated-code folder
+          </li>
+          <li>
+            Designed a feature-to-feature handoff-contract document so isolated generations integrate cleanly, producing 200+ file apps across 10 features in a single run
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "WorkAssist AI",
+      stack: ["React 19", "Python/Flask", "Supabase (PostgreSQL)", "Azure OpenAI", "Azure AI Search", "JWT"],
+      badges: XORBIX_WORK,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            Built an end-to-end RAG assistant at XORBIX that answers shop-floor questions only from approved SOPs, with source citations, confidence scores, and a decline path to avoid hallucination
+          </li>
+          <li>
+            Engineered access-scoped hybrid (keyword + vector) search that injects team-based filters into the query, so users never receive answers from documents they can't access
+          </li>
+          <li>
+            Added an AI quiz generator and a supervisor analytics dashboard that surfaces documentation gaps from the query log, with CSV export
+          </li>
+          <li>
+            Shipped 35 REST endpoints across a 13-module backend with JWT role-gating over 1,536-dimension embeddings on a ~1,200-chunk document corpus
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "Derse Vista (QA Engineering)",
+      stack: [".NET 10", "C#", "EF Core", "PostgreSQL", "React 19", "Azure DevOps", "Python (openpyxl)"],
+      badges: XORBIX_WORK,
+      description: (
+        <ul className="project-bullets">
+          <li>
+            Led QA at XORBIX for a full-stack, multi-role logistics platform, authoring a 167-case test matrix mapped to requirements, roles, and acceptance criteria
+          </li>
+          <li>
+            Validated all 10 application roles against a permission matrix and ran API-level authorization tests with spoofed division IDs to confirm server-side scoping
+          </li>
+          <li>
+            Identified 15+ documented defects, including a silent client-save data-loss bug and a server-side authorization gap that the UI and automated tests missed
+          </li>
+          <li>
+            Built Python (openpyxl) automation to turn findings into repeatable QA reports and used a repo→Figma→task traceability method to cut mis-filed bugs
+          </li>
+        </ul>
+      )
+    },
+    {
+      title: "VoiceAI Web Agent",
+      stack: ["Python", "Flask", "JavaScript", "Chrome Extension (Manifest V3)", "SmallestAI (STT/TTS)", "LLM Integration"],
+      description: (
+        <ul className="project-bullets">
           <li>
             Engineered a Manifest V3 Chrome extension featuring a custom STT/TTS pipeline for real-time, voice-directed browser automation
           </li>
@@ -347,13 +303,9 @@ export default function Projects() {
     },
     {
       title: "TrackerFlow AI",
+      stack: ["Python (Flask API)", "Supabase", "Chrome Extensions (MV3)", "React.js"],
  description: (
   <ul className="project-bullets">
-    <li>
-      <span className="tech-stack">
-        Tech-Stack: Python (Flask API), Supabase, Chrome Extensions (MV3), React.js
-      </span>
-    </li>
     <li>
       Built a Chrome extension that uses an AI backend to generate custom,
       dynamic trackers from simple natural-language prompts
@@ -372,13 +324,9 @@ export default function Projects() {
     },
     {
       title: "Anr Awaaz",
+      stack: ["Python", "FastAPI", "Whisper (OpenAI)", "Claude (Anthropic)", "ElevenLabs", "PHOIBLE", "Pandas", "JavaScript"],
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Python, FastAPI, Whisper (OpenAI), Claude (Anthropic), ElevenLabs, PHOIBLE, Pandas, JavaScript
-            </span>
-          </li>
           <li>
             Engineered a phoneme-level diagnostic engine using PHOIBLE and CMU Dict to identify language-specific articulation gaps for real-time phonetic feedback
           </li>
@@ -397,14 +345,10 @@ export default function Projects() {
     },
     {
       title: "DirectAid",
+      stack: ["Next.js", "TypeScript", "Supabase", "TailwindCSS", "Recharts", "Zod"],
       image: directAidImage,
       description: (
         <ul className="project-bullets">
-          <li>
-            <span className="tech-stack">
-              Tech-Stack: Next.js, TypeScript, Supabase, TailwindCSS, Recharts, Zod
-            </span>
-          </li>
           <li>
             Architected a multi-rail disbursement engine in TypeScript to automate high-integrity fund transfers across mobile wallets, bank APIs, and USSD claim codes
           </li>
@@ -424,14 +368,10 @@ export default function Projects() {
     },
     {
       title: "Barakah-Link",
+      stack: ["Twilio", "React", "Flask"],
       image: barakahLinkImage,
       description: (
   <ul className="project-bullets">
-    <li>
-      <span className="tech-stack">
-        Tech-Stack: Twilio, React, Flask
-      </span>
-    </li>
     <li>
       Fighting hunger systemically — Turns food surplus into life-saving resources for those in need.
     </li>
@@ -462,17 +402,21 @@ export default function Projects() {
       
       {/* Container for cards */}
       <div className="projects-grid" ref={gridRef}>
-        {(showAll ? projects : projects.slice(0, FEATURED)).map((project, index) => (
+        {(showAll ? projects : projects.slice(0, FEATURED)).map((project) => (
           <EnhancedCard
-            key={index}
+            key={project.title}
             title={project.title}
+            tags={project.stack}
             description={project.description}
             date={project.date}
             link={project.link}
             live={project.live}
             writeup={project.writeup}
             image={project.image}
+            thumb
             badges={project.badges}
+            collapsible
+            detailsMode="modal"
           />
         ))}
       </div>

@@ -2216,3 +2216,281 @@
 :root[data-theme="light"] .timeline-item .card-cta {
   border-top-color: rgba(14, 116, 144, 0.18);
 }
+
+/* ── Collapsible cards (Experience): header + stack first, details on demand ── */
+.card-details.is-collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+}
+.card-details.is-collapsible.is-open {
+  grid-template-rows: 1fr;
+}
+.card-details.is-collapsible > .card-details-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.card-details.is-collapsible > .card-details-inner > :first-child {
+  margin-top: 6px;
+}
+.card-toggle {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-glow);
+  cursor: pointer;
+}
+.card-toggle svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s ease;
+}
+.card-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.card-toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.timeline-item .card-tags {
+  margin-bottom: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-details.is-collapsible,
+  .card-toggle svg {
+    transition: none;
+  }
+}
+
+/* ── Projects: even 3-column grid, equal-height rows ── */
+.projects .projects-grid {
+  columns: auto;
+  column-count: auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.2vw, 26px);
+  align-items: stretch;
+}
+@media (max-width: 1100px) {
+  .projects .projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .projects .projects-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.projects .projects-grid .card {
+  margin: 0;
+  align-self: stretch;
+  height: 100%;
+}
+/* "Show details" sits at the bottom of every card in a row */
+.projects-grid .card-toggle {
+  margin-top: auto;
+}
+/* Same 16:9 frame for screenshots and placeholder thumbnails */
+.projects-grid .card-image-container,
+.card-thumb {
+  aspect-ratio: 16 / 9;
+  max-height: none;
+}
+.projects-grid .card-image-container .card-image,
+.projects-grid .card-image-container .card-image img {
+  height: 100% !important;
+  object-fit: cover;
+}
+.card-thumb {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: clamp(15px, 2vh, 20px);
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(0, 234, 255, 0.14), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(0, 234, 255, 0.06) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(0, 234, 255, 0.06) 0 1px, transparent 1px 22px),
+    #050b0f;
+}
+.card-thumb-bar {
+  display: flex;
+  gap: 6px;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(0, 234, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+}
+.card-thumb-bar span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+.card-thumb-bar span:nth-child(2) { background: #febc2e; }
+.card-thumb-bar span:nth-child(3) { background: #28c840; }
+.card-thumb-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px 14px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: clamp(12px, 1vw, 14px);
+  color: #e2f8ff;
+}
+.card-thumb-body p {
+  margin: 0;
+  font-size: inherit;
+  opacity: 1;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-thumb-body em {
+  font-style: normal;
+  color: var(--accent-glow);
+}
+.card-thumb-body .card-thumb-dim {
+  color: rgba(226, 248, 255, 0.55);
+}
+:root[data-theme="light"] .card-thumb {
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(14, 116, 144, 0.16), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(14, 116, 144, 0.08) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(14, 116, 144, 0.08) 0 1px, transparent 1px 22px),
+    #0b1f27;
+}
+.projects-grid .card-tags {
+  margin-bottom: 8px;
+}
+
+/* Project cards have a centred title: centre the badge, stack pills and
+   toggle with it (the bullets stay left-aligned for reading). */
+.projects-grid .card-badges,
+.projects-grid .card-tags {
+  justify-content: center;
+}
+.projects-grid .card-toggle {
+  align-self: center;
+}
+.projects-grid .card-details {
+  text-align: left;
+}
+
+/* "Work @ XORBIX" badge: the hologram's violet, so it stands apart from the
+   cyan title, pills and toggle instead of everything being one colour */
+.card-badge-work {
+  color: #c4b5fd;
+  border-color: rgba(167, 139, 250, 0.45);
+  background: rgba(139, 92, 246, 0.1);
+}
+:root[data-theme="light"] .card-badge-work {
+  color: #6d28d9;
+  border-color: rgba(109, 40, 217, 0.35);
+  background: rgba(109, 40, 217, 0.07);
+}
+
+/* ── Project details pop-up (same feel as the message dialog) ── */
+html:has(dialog[open]) {
+  overflow: hidden;                 /* page behind doesn't scroll while a pop-up is open */
+}
+.details-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  height: fit-content;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+.details-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+:root[data-theme="light"] .details-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.35);
+}
+.details-dialog[open] .details-pane {
+  animation: message-pop 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.details-pane {
+  position: relative;
+  box-sizing: border-box;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: clamp(20px, 3vw, 30px);
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent-glow) 40%, transparent);
+  background: var(--bg-card);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  color: var(--text-secondary);
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  text-align: left;
+}
+:root[data-theme="light"] .details-pane {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+}
+.details-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: var(--accent-glow);
+  margin: 0 44px 12px 0;            /* room for the close button */
+  line-height: 1.25;
+}
+.details-pane .card-badges {
+  margin-right: 44px;
+}
+.details-pane .card-tags {
+  margin-bottom: 18px;
+}
+.details-pane .project-bullets,
+.details-pane .card-bullets {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.details-pane .card-cta {
+  margin-top: 20px;
+}
+.details-close {
+  /* Sticky, so it stays reachable while a long pane scrolls (phones) */
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  margin: -8px -8px 0 8px;
+  background: var(--bg-card);
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+.details-close:hover {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--accent-glow) 16%, var(--bg-card));
+}
+:root[data-theme="light"] .details-close {
+  background: #ffffff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .details-dialog[open] .details-pane { animation: none; }
+}
