@@ -89,7 +89,7 @@ export default function Experience() {
       company: "MEDAD",
       date: "July 2025 – Aug 2025",
       link: "https://www.albatha.com/medad-printing.htm",
-      stack: ["Adobe Photoshop"],
+      stack: ["Adobe Illustrator", "Adobe Photoshop"],
       bullets: [
         "Analyzed packaging workflow across design, printing, and quality teams to understand production pipeline",
         "Conducted print quality inspections, evaluating color accuracy, alignment, and packaging output using verification tools",
