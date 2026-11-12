@@ -2494,3 +2494,15 @@ html:has(dialog[open]) {
 @media (prefers-reduced-motion: reduce) {
   .details-dialog[open] .details-pane { animation: none; }
 }
+
+/* Pop-up close button: no focus box on tap/click, a clear ring for keyboard users */
+.details-dialog:focus {
+  outline: none;
+}
+.details-close:focus {
+  outline: none;
+}
+.details-close:focus-visible {
+  outline: 2px solid var(--accent-glow);
+  outline-offset: 2px;
+}

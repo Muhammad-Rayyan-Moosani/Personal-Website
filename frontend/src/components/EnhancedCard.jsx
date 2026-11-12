@@ -19,12 +19,18 @@ function DetailsDialog({ open, onClose, label, children }) {
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
+    if (open && !dialog.open) {
+      dialog.showModal();
+      // Focus the pane itself, not the close button: otherwise phones draw a
+      // focus ring around the ✕ the moment the pop-up opens.
+      dialog.focus();
+    }
     if (!open && dialog.open) dialog.close();
   }, [open]);
   return createPortal(
     <dialog
       ref={ref}
+      tabIndex={-1}
       className="details-dialog"
       aria-label={label}
       onClose={onClose}

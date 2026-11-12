@@ -7,7 +7,7 @@ import "./HoloPortrait.css";
 
 /*
  * Holographic portrait: three photos rebuilt as one WebGL point cloud that
- * morphs from one to the next every 30 seconds, in order.
+ * morphs from one to the next every 10 seconds, in order.
  *
  * holo-1/2/3.png are baked data textures (not pictures): R = tone, G = depth,
  * B = subject mask. All are framed identically around the face (same size,
@@ -265,7 +265,7 @@ const PALETTE = {
 // Headphones, group, sunglasses — the same three in both themes.
 const PORTRAITS = [portrait1, portrait2, portrait3];
 const COUNT = PORTRAITS.length;
-const HOLD = 30;      // seconds on each portrait
+const HOLD = 10;      // seconds on each portrait
 const MORPH = 1.8;    // seconds for a morph
 const ONE_HOT = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const pad = (k) => String(k + 1).padStart(2, "0");
@@ -391,7 +391,7 @@ export default function HoloPortrait() {
         const light = document.documentElement.dataset.theme === "light";
         const pal = light ? PALETTE.light : PALETTE.dark;
 
-        // 30-second timer per portrait, then morph to the next one in order.
+        // 10-second timer per portrait, then morph to the next one in order.
         const left = HOLD - (t - state.shownAt);
         if (left <= 0) advance();
         state.mix = reduced ? 1 : Math.min(1, state.mix + dt / MORPH);
@@ -560,7 +560,7 @@ export default function HoloPortrait() {
     <figure
       className="holo"
       ref={wrapRef}
-      aria-label="Holographic portrait of Rayyan Moosani; changes every 30 seconds, click for the next one"
+      aria-label="Holographic portrait of Rayyan Moosani; changes every 10 seconds, click for the next one"
       title="Click for the next photo"
     >
       <div className="holo-glass holo-glass-back" aria-hidden="true" />
@@ -581,7 +581,7 @@ export default function HoloPortrait() {
         </span>
         <span className="holo-hud-bottom">
           <span>SYS / LLM INFRA</span>
-          <span className="holo-timer" ref={timerRef}>0:30</span>
+          <span className="holo-timer" ref={timerRef}>0:10</span>
         </span>
         <span className="holo-progress"><span ref={barRef} /></span>
       </figcaption>
